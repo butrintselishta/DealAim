@@ -19,7 +19,7 @@
     <!-- GOOGLE WEB FONT -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch" crossorigin="anonymous">
+    <link rel="preload" href="css/css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch" crossorigin="anonymous">
     <script>
         ! function(e, n, t) {
             "use strict";
@@ -56,7 +56,7 @@
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- SPECIFIC CSS -->
     <link href="css/home_1.css" rel="stylesheet">
 
@@ -74,10 +74,10 @@
                     <div class="row small-gutters">
                         <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                             <div id="logo">
-                                <a href="index.html"><img src="img/logo.svg" alt="" width="100" height="35"></a>
+                                <a href="index.php"><img src="img/logo.svg" alt="" width="100" height="35"></a>
                             </div>
                         </div>
-                        <nav class="col-xl-6 col-lg-7">
+                        <nav class="col-xl-7 col-lg-7">
                             <a class="open_close" href="javascript:void(0);">
                                 <div class="hamburger hamburger--spin">
                                     <div class="hamburger-box">
@@ -88,7 +88,7 @@
                             <!-- Mobile menu button -->
                             <div class="main-menu">
                                 <div id="header_menu">
-                                    <a href="index.html"><img src="img/logo_black.svg" alt="" width="100" height="35"></a>
+                                    <a href="index.php"><img src="img/logo_black.svg" alt="" width="100" height="35"></a>
                                     <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                 </div>
                                 <ul>
@@ -112,7 +112,7 @@
                             </div>
                             <!--/main-menu -->
                         </nav>
-                        <div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-right">
+                        <div class="col-xl-2 col-lg-1 d-lg-flex align-items-center justify-content-end text-right">
                             <a class="phone_top" href="tel://9438843343"><strong><span>Kërkoni ndihmë?</span>+383-44-111-222</strong></a>
                         </div>
                     </div>
