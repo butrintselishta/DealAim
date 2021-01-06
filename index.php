@@ -1,5 +1,5 @@
 ﻿<?php 
-    require "header.php";
+require "header.php";
 ?>
 <main>
     <div id="carousel-home">
@@ -277,7 +277,11 @@
         <!-- /row -->
     </div>
     <!-- /container -->
+
+    
     <!-- /container -->
+
+    
     <!-- /bg_gray -->
     <!-- /container -->
 </main>

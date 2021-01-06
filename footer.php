@@ -93,8 +93,19 @@
 <script src="js/main.js"></script>
 
 <!-- SPECIFIC SCRIPTS -->
-<script src="js/carousel-home.min.js"></script>
-
+<script src="js/carousel-home.min.js"></script> <!-- INDEX -->
+<script src="js/carousel_with_thumbs.js"></script> <!-- DETAJET -->
+<script src="js/sticky_sidebar.min.js"></script>
+<script src="js/specific_listing.js"></script> <!-- PRODUKTET ||| e dyta per --->
+    <script>
+    	// Client type Panel
+		$('input[name="client_type"]').on("click", function() {
+		    var inputValue = $(this).attr("value");
+		    var targetBox = $("." + inputValue);
+		    $(".box").not(targetBox).hide();
+		    $(targetBox).show();
+		});
+	</script>
 </body>
 
 </html>

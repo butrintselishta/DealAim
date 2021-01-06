@@ -2,6 +2,7 @@
 	require "header.php";
 ?>
  
+ 
  <main>
             <div class="container margin_30">
                 <div class="countdown_inner"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
@@ -143,24 +144,36 @@
                                 <h5 style="text-align: center; padding-top: 1em;">Ofertusit e fundit</h5>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-striped">
-                                        <tbody>
+                                        <thead>
                                             <tr>
-                                                <td><strong>27.01.2021 13:58</strong></td>
-                                                <td>1200&nbsp;<i>$</i></td>
+                                                <th scope="col"> Koha </th>
+                                                <th scope="col"> Ofertuesi </th>
+                                                <th scope="col"> Çmimi </th>
                                             </tr>
                                             <tr>
-                                                <td><strong>27.01.2021 16:28</strong></td>
-                                                <td>1190&nbsp;<i>$</i></td>
+                                                <th scope="col"> 27.01.2021 13:58 </th>
+                                                <th scope="col"> B.......t </th>
+                                                <th scope="col"> 1200 &nbsp;<i>€</i></th>
                                             </tr>
                                             <tr>
-                                                <td><strong>27.01.2021 09:44</strong></td>
-                                                <td>1180&nbsp;<i>$</i></td>
+                                                <th></th>
                                             </tr>
                                             <tr>
-                                                <td><strong>27.01.2021 13:58</strong></td>
-                                                <td>1170&nbsp;<i>$</i></td>
+                                                <th scope="col"> 27.01.2021 13:58 </th>
+                                                <th scope="col"> B.......t </th>
+                                                <th scope="col"> 1100 &nbsp;<i>€</i></th>
                                             </tr>
-                                        </tbody>
+                                            <tr>
+                                                <th scope="col"> 27.01.2021 13:58 </th>
+                                                <th scope="col"> B.......t </th>
+                                                <th scope="col"> 1050 &nbsp;<i>€</i></th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"> 27.01.2021 13:58 </th>
+                                                <th scope="col"> B.......t </th>
+                                                <th scope="col"> 1000 &nbsp;<i>€</i></th>
+                                            </tr>
+                                        </thead>
                                     </table>
                                 </div>
                                 <!-- /table-responsive -->

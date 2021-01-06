@@ -19,7 +19,7 @@
     <!-- GOOGLE WEB FONT -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link rel="preload" href="css/css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch" crossorigin="anonymous">
+    <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch" crossorigin="anonymous">
     <script>
         ! function(e, n, t) {
             "use strict";
@@ -52,14 +52,16 @@
         }(window, document, localStorage);
     </script>
 
-
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+
     <!-- SPECIFIC CSS -->
     <link href="css/home_1.css" rel="stylesheet">
-
+    <link href="css/product_page.css" rel="stylesheet">
+    <link href="css/listing.css" rel="stylesheet">
+    <link href="css/account.css" rel="stylesheet">
 </head>
 
 <body>
@@ -93,7 +95,7 @@
                                 </div>
                                 <ul>
                                     <li>
-                                        <a href="../item/allaia-ecommerce-html-template/25781982.html" target="_parent">Ballina</a>
+                                        <a href="index.php" target="_parent">Ballina</a>
                                     </li>
                                     <li>
                                         <a href="../item/allaia-ecommerce-html-template/25781982.html" target="_parent">Të shitura</a>
@@ -141,20 +143,20 @@
                                             <ul>
                                                 <li><span><a href="#0">Makina</a></span>
                                                     <ul>
-                                                        <li><a href="listing-grid-1-full.html">Vetura</a></li>
-                                                        <li><a href="listing-grid-2-full.html">Motoçikleta (mbi 50cc)</a></li>
-                                                        <li><a href="listing-grid-3.html">Moped (nën 50cc)</a></li>
+                                                        <li><a href="produktet.php">Vetura</a></li>
+                                                        <li><a href="produktet.php">Motoçikleta (mbi 50cc)</a></li>
+                                                        <li><a href="produktet.php">Moped (nën 50cc)</a></li>
                                                     </ul>
                                                 </li>
                                                 <li><span><a href="#">Elektronik</a></span>
                                                     <ul>
-                                                        <li><a href="listing-grid-6-sidebar-left.html">Kompjuter</a></li>
-                                                        <li><a href="listing-grid-7-sidebar-right.html">Telefon</a></li>
+                                                        <li><a href="produktet.php">Kompjuter</a></li>
+                                                        <li><a href="produktet.php">Telefon</a></li>
                                                     </ul>
                                                 </li>
                                                 <li><span><a href="#">Afarizëm</a></span>
                                                     <ul>
-                                                        <li><a href="listing-grid-2-full.html">Hapësirë afariste</a></li>
+                                                        <li><a href="produktet.php">Hapësirë afariste</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -169,7 +171,7 @@
                                 <button type="submit"><i class="header-icon_search_custom"></i></button>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-2 col-md-3">
+                        <div class="col-xl-2 col-lg-2 col-md-3">
                             <ul class="top_tools">
                                 <li>
                                     <!-- /dropdown-cart-->
@@ -190,6 +192,9 @@
                                         </div>
                                         <!-- /dropdown-access-->
                                     </li>
+                                    <!-- <li>
+                                        <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
+                                    </li> -->
                                     <li>
                                         <a href="javascript:void(0);" class="btn_search_mob_HIDDEN"><span>Search</span></a>
                                     </li>
