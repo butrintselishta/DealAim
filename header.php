@@ -57,6 +57,11 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- DatePicker -->
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/datepicker.css" type="text/css">
+    <script src="jquery-1.12.0.min.js" type="text/javascript"></script>
+
     <!-- SPECIFIC CSS -->
     <link href="css/home_1.css" rel="stylesheet">
     <link href="css/product_page.css" rel="stylesheet">
@@ -177,12 +182,12 @@
                                     <!-- /dropdown-cart-->
                                     <li>
                                         <div class="dropdown dropdown-access">
-                                            <a href="account.html" class="access_link"><span>Account</span></a>
+                                            <a href="#sign-in-dialog" id="sign-in" class="access_link"><span>Account</span></a>
                                             <div class="dropdown-menu">
-                                                <a href="account.html" class="btn_1">Kyçu ose Regjistrohu</a>
+                                                <a href="kyçu.php" class="btn_1">Kyçu ose Regjistrohu</a>
                                                 <ul>
                                                     <li>
-                                                        <a href="account.html"><i class="ti-user"></i>Profili im</a>
+                                                        <a href="#"><i class="ti-user"></i>Profili im</a>
                                                     </li>
                                                     <!-- <li>
 												<a href="help.html"><i class="ti-help-alt"></i>Help and Faq</a>

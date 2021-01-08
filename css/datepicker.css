@@ -1,248 +1,63 @@
-      .button {
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 700;
-        padding: 12px 0;
-        padding-left: 34px;
-        padding-right: 64px;
-        color: #fff;
-        font-family: "Open Sans", sans-serif;
-        text-transform: uppercase;
-        border: 2px solid #AE954B;
-        position: relative;
-        background-color:#AE9548;
-        border-radius: 5px;     
-    }
-    .button:hover {
-      background-color:#fff;
-      color: #081624;
-    }
+/*DATEPICKER-3 designe i inputit*/
 
-    .button-1 {
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 10px 0;
-        padding-left: 27px;
-        padding-right: 27px;
-        color: #fff;
-        font-family: "Open Sans", sans-serif;
-        text-transform: uppercase;
-        border: 2px solid #AE954B;
-        position: relative;
-        background-color:#AE9548;
-        border-radius: 5px;     
-    }
-    .button-1:hover {
-        background-color:#fff;
-        color: #081624;
-    }
+.probootstrap-form .datepicker-3 {
+    height: 46px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #e6e5e5;
+    background: #fafafa;
+    -webkit-transition: .3s all ease-out;
+    transition: .3s all ease-out;
+}
 
-    /* CSS i datepicker*/
-    .probootstrap-form .datepicker-1 {
-      height: 46px;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      font-size: 16px;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      border: 2px solid #e6e5e5;
-      background: #fafafa;
-      -webkit-transition: .3s all ease-out;
-      transition: .3s all ease-out;
-    }
+.probootstrap-form .datepicker-3:active,
+.probootstrap-form .datepicker-3:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #AE954B;
+    background: #ffffff;
+}
 
-    .probootstrap-form .datepicker-1:active, .probootstrap-form .datepicker-1:focus {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      border-color: #AE954B;
-      background: #ffffff;
-    }
+.probootstrap-form .form-group .form-field .datepicker-3 {
+    padding-right: 50px;
+}
 
-    .probootstrap-form .form-group .form-field .datepicker-1 {
-      padding-right: 50px;
-    }
+.probootstrap-form textarea.datepicker-3 {
+    height: inherit;
+    resize: vertical;
+}
 
-    .probootstrap-form textarea.datepicker-1 {
-      height: inherit;
-      resize: vertical;
-    }
+.datepicker-3 {
+    padding: 10px;
+    font-size: 14px;
+    font-size: 0.875rem;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    height: calc(1.75em + .75rem + 2px)
+}
 
-    .datepicker-1 {
-      display: block;
-      width: 100%;
-      height: 34px;
-      padding: 6px 12px;
-      font-size: 14px;
-      line-height: 1.42857143;
-      color: #555;
-      background-color: #fff;
-      background-image: none;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    }
+.datepicker-3:focus {
+    border-color: #ccc;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.05)
+}
 
-    .datepicker-1:focus {
-      border-color: #66afe9;
-      outline: 0;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    }
+.datepicker-3::-moz-placeholder {
+    color: rgb(112, 112, 112);
+    opacity: 1;
+}
 
-    .datepicker-1::-moz-placeholder {
-      color: #999;
-      opacity: 1;
-    }
+.datepicker-3:-ms-input-placeholder {
+    color: #999;
+}
 
-    .datepicker-1:-ms-input-placeholder {
-      color: #999;
-    }
-
-    .datepicker-1::-webkit-input-placeholder {
-      color: #999;
-    }
-
-  /* DATEPICKER-2 design i inputit */
-    .probootstrap-form .datepicker-2 {
-      height: 46px;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      font-size: 16px;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      border: 2px solid #e6e5e5;
-      background: #fafafa;
-      -webkit-transition: .3s all ease-out;
-      transition: .3s all ease-out;
-    }
-
-    .probootstrap-form .datepicker-2:active, .probootstrap-form .datepicker-2:focus {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      border-color: #AE954B;
-      background: #ffffff;
-    }
-
-    .probootstrap-form .form-group .form-field .datepicker-2 {
-      padding-right: 50px;
-    }
-
-    .probootstrap-form textarea.datepicker-2 {
-      height: inherit;
-      resize: vertical;
-    }
-
-    .datepicker-2 {
-      display: block;
-      width: 100%;
-      height: 34px;
-      padding: 6px 12px;
-      font-size: 14px;
-      line-height: 1.42857143;
-      color: #555;
-      background-color: #fff;
-      background-image: none;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    }
-
-    .datepicker-2:focus {
-      border-color: #66afe9;
-      outline: 0;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    }
-
-    .datepicker-2::-moz-placeholder {
-      color: #999;
-      opacity: 1;
-    }
-
-    .datepicker-2:-ms-input-placeholder {
-      color: #999;
-    }
-
-    .datepicker-2::-webkit-input-placeholder {
-      color: #999;
-    }
-
-    /*DATEPICKER-3 designe i inputit*/
-
-
-    .probootstrap-form .datepicker-3 {
-      height: 46px;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      font-size: 16px;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      border: 2px solid #e6e5e5;
-      background: #fafafa;
-      -webkit-transition: .3s all ease-out;
-      transition: .3s all ease-out;
-    }
-
-    .probootstrap-form .datepicker-3:active, .probootstrap-form .datepicker-3:focus {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      border-color: #AE954B;
-      background: #ffffff;
-    }
-
-    .probootstrap-form .form-group .form-field .datepicker-3 {
-      padding-right: 50px;
-    }
-
-    .probootstrap-form textarea.datepicker-3 {
-      height: inherit;
-      resize: vertical;
-    }
-
-    .datepicker-3 {
-      display: block;
-      width: 100%;
-      height: 34px;
-      padding: 6px 12px;
-      font-size: 14px;
-      line-height: 1.42857143;
-      color: #555;
-      background-color: #fff;
-      background-image: none;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-      -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    }
-
-    .datepicker-3:focus {
-      border-color: #66afe9;
-      outline: 0;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    }
-
-    .datepicker-3::-moz-placeholder {
-      color: #999;
-      opacity: 1;
-    }
-
-    .datepicker-3:-ms-input-placeholder {
-      color: #999;
-    }
-
-    .datepicker-3::-webkit-input-placeholder {
-      color: #999;
-    }
+.datepicker-3::-webkit-input-placeholder {
+    color: #999;
+}

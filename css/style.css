@@ -6278,7 +6278,7 @@ a#forgot {
     top: 0;
     width: 100%;
     z-index: 99;
-    min-height: 430px;
+    min-height: 245px;
     display: none
 }
 
@@ -6856,8 +6856,8 @@ footer .links ul li a:after {
 }
 
 .follow_us ul li a img {
-    width: 30px;
-    height: 30px
+    width: 33.3333px;
+    height: 33.3333x
 }
 
 .follow_us ul li a:hover {
