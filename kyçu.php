@@ -5,75 +5,82 @@
   
 	if(isset($_POST['signup'])){
 		$user = $_POST['username']; $password_1 = $_POST['password_1']; $password_2 = $_POST['password_2']; $fname = $_POST['first_name']; $lname = $_POST['last_name']; $email = $_POST['email']; $phone = $_POST['phone']; $bday = $_POST['bday']; $city = $_POST['city']; $post = $_POST['postcode'];
-		if(empty($user) || empty($password_1) || empty($password_2)){
-			die ("Shkruaj fushat e nevojshme");
-		}else {
+	
+	
+	$userError = false;
+	$passwordError = false;
+	$fnameError = false;
+	$_SESSION['signup_errors'] = array();
+  
+	//USERNAME ERRORS
+	if (empty($user)) {
+		$userError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Kjo fushë nuk mund të jetë e zbrazët </small>"];
+	} elseif (strlen($user) < 5) {
+		$userError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nofka është shumë e shkurtë (minimumi është 5 karaktere)</small>"];
+	} elseif (strlen($user) > 20) {
+		$userError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nofka është shumë e gjatë (maksimumi është 20 karaktere)</small>"];
+	} 
 
+	//PASSWORD ERRORS
+	if($password_1 !== 'a'){
+		if (empty($password_1)) {
+			$passwordError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazet</small>"];
+		} elseif (strlen($password_1) < 8) {
+			$passwordError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"];
+		} elseif (strlen($password_1) > 50) {
+			$passwordError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"];
+		} elseif (!preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $password_1)) {
+			$passwordError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['signup_errors'] += ["passwordError" => "<small style='color:red; font-weight:bold; text-align:left;'> Fjalëkalimi duhet të përmbaj së paku: <div style='text-align:left;'><ul> <li>Një shkronjë të madhe (A-Z)</li><li>Një shkronjë të vogel (a-z)</li><li>Një numer (1-9)</li><li>Një simbol (!-#$^?>)</li> </ul></div></small>"];
+		} elseif($password_1 !== $password_2){
+			$passwordError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Fjalëkalimet nuk përputhen </small>"];
+		}
+	}
 
+	//FIRST NAME ERRORS
+	if (empty($fname)) {
+		$fnameError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+	  } elseif (strlen($fname) < 2) {
+		$fnameError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i shkurtë</small>"];
+	  } elseif (strlen($fname) > 15) {
+		$fnameError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i gjatë</small>"];
+	  } 
+	  if ((!ctype_alpha($fname)) && ((strpos($fname,'ë') === true) || (strpos($fname,'Ë') === true) || (strpos($fname,'ç') ===true) || 	(strpos($fname, 'Ç') ===true))) {
+		$fnameError = true;
+		$_SESSION['save_user'] = $user;
+		$_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri duhet të jetë në rangun A-ZH</small>"];
+	  }
+	//LAST NAME ERRORS
+	if($userError || $passwordError || $fnameError){
+		header('location: kyçu.php'); die();
+	}
+	else {
+
+			// PAPERCUT email confirmation
 			$to = 'butrintse@gmail.com';
 			$subject = "My subject";
-			$txt = "<html lang='en'>
-      <head>
-       <meta http-equiv='content-type' content='text/html; charset=utf-8'>
-      
-        <title>Email Confirmation</title>
-        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
-      
-        <!--[if lt IE 9]>
-          <script src='https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js'></script>
-        <![endif]-->
-        
-        <style>
-          body {
-            background-color: #ccc;
-          }
-          .card {
-            width: 65%;
-            background-color: #f1f1f1;
-            margin:  50px auto;
-            text-align: center;
-            padding: 35px 15px;
-            border-radius: 4px;   
-          }
-          .message {
-            padding-bottom: 30px;
-          }
-          .button {
-            color: #fff;
-            background-color: #6435c9;
-            text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 4px;
-          }
-          .link-text {
-            margin-top: 30px;
-          }
-          .footer {
-            margin-top: 30px;
-            text-align: center;
-          }
-        </style>
-      </head>
-      <body>
-        <div class='card'>
-          <h1 class='h1-font'>Konfirmimi i Emailit</h1>
-          <p class='message'>
-            Përshëndetje @USER, ju falemnderojmë që dëshironi të bashkoheni me <b>DealAim</b>.  
-            Ju lutem klikoni në butonin e më poshtëm për të verifikuar emailin.
-          </p>  
-          <a class='button' href='#'>Verifiko emailin</a>
-          <p class='link-text'>
-            ose kopjojeni linkun e mëposhtem dhe vendoseni ne një nga browseret tuaj:<br />
-            @LINK
-          </p>
-        </div>
-        <p class='footer'>
-          Email i dërguar nga DealAim <br />
-          Copyright © 2021 DealAim. Të gjitha të drejtat e rezervuara
-        </p>
-      </body>
-      </html>";
+			$txt = "<head> <style type='text/css'> /* CLIENT-SPECIFIC STYLES */ body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; } img { -ms-interpolation-mode: bicubic; } /* RESET STYLES */ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; } table { border-collapse: collapse !important; } body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; } /* iOS BLUE LINKS */ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } /* MOBILE STYLES */ @media screen and (max-width:600px) { h1 { font-size: 32px !important; line-height: 32px !important; } } /* ANDROID CENTER FIX */ div[style*='margin: 16px 0;'] { margin: 0 !important; } </style> </head> <body> <!-- HIDDEN PREHEADER TEXT --> <div style='display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;'> This email was sent automatically. </div> <table border='0' cellpadding='0' cellspacing='0' width='100%'> <!-- LOGO --> <tr> <td bgcolor='#2C4EDA' align='center'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <tr> <td align='center' valign='top' style='padding: 40px 10px 40px 10px;'> <a href='#' target='_blank'> <img alt='Logo' src='https://i.ibb.co/KjK19sr/logo.png' width='200' style='display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 18px;' border='0'> </a> </td> </tr> </table> </td> </tr> <!-- HERO --> <tr> <td bgcolor='#2C4EDA' border='0' align='center' style='padding: 0px 10px 0px 10px;'> <table cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; margin-bottom: -3px;'> <tr> <td bgcolor='#ffffff' align='left' valign='top' style='padding: 40px 30px 20px 30px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;'> <h1 style='font-size: 30px; font-weight: 400; margin: 0; text-align:center;'>Konfirmo Emailin</h1> </td> </tr> </table> </td> </tr> <!-- COPY BLOCK --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- COPY --> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Tap the button below to reset your customer account password. If you didn't request a new password, you can safely delete this email.</p> </td> </tr> <!-- BULLETPROOF BUTTON --> <tr> <td bgcolor='#ffffff' align='left'> <table width='100%' border='0' cellspacing='0' cellpadding='0'> <tr> <td bgcolor='#ffffff' align='center' style='padding: 15px 30px 15px px;'> <table border='0' cellspacing='0' cellpadding='0'> <tr> <td align='center' style='border-radius: 3px;' bgcolor='#1a82e2'><a href='#' target='_blank' style='font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; display: inline-block;'>KONFIRMO</a></td> </tr> </table> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 20px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Nese butoni nuk funksionon atehere mereni linkun e meposhtem dhe vendoseni ne browser:<br> <a href='#'>http//127.0.0.1/dealaim/xxxxx-xxxx-xxxx</a> </p> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Ju faleminderit,<br> <strong>DEALAIM</strong> </p> </td> </tr> </table> </td> </tr> </table> </td> </tr> <!-- FOOTER --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- ADDRESS --> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>You received this email because we received a request for reseting the password for your account. If you didn't request that, you can safely delete this email.</p> </td> </tr> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>To stop receiving these emails, you can unsuscribe at anytime.<br> Colven - Ruta 11 Km 814 - (S3574XAB) Guadalupe Norte - Santa Fe, Argentina <br> Teléfono: (+54 3482) 498800 - colven@colven.com.ar </p> </td> </tr> </table> </td> </tr> </table> </body> </html>";
 			$headers = "From: email_confirm@dealaim.com" . "\r\n" ;
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -156,13 +163,27 @@
 						<h3 class="new_client">Përdorues i ri</h3> <small class="float-right pt-2" style="color:red;">* - Fushat që duhet mbushur detyrimisht</small>
 						<div class="form_container">
 							<div class="form-group">
-								<input type="text" class="form-control" name="username" id="email_2" placeholder="Nickname *">
+								<?php if(isset($_SESSION['signup_errors'])){
+										if(array_key_exists('userError', $_SESSION['signup_errors'])){
+											echo $_SESSION['signup_errors']['userError'];
+										}
+									} 
+								?>
+								<input type="text" class="form-control" name="username" id="email_2" placeholder="Nofka *" value="<?php if(isset($_SESSION['save_user'])){echo $_SESSION['save_user']; } unset($_SESSION['save_user']);?>" <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('userError', $_SESSION['signup_errors'])){ echo "style='border-color:red'"; } } ?>>
 							</div>
+							
 							<div class="form-group">
-								<input type="password" class="form-control" name="password_1" id="password_in_2" value="" placeholder="Fjalëkalimi *">
+								<?php if(isset($_SESSION['signup_errors'])){
+										if(array_key_exists('passwordError', $_SESSION['signup_errors'])){
+											echo $_SESSION['signup_errors']['passwordError'];
+										}
+									} 
+								?>
+								<input type="password" class="form-control" name="password_1" id="password_in_2" value="" placeholder="Fjalëkalimi *" <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('passwordError', $_SESSION['signup_errors'])){ echo "style='border-color:red'"; } } ;?>>
 							</div>
+
 							<div class="form-group">
-								<input type="password" class="form-control" name="password_2" id="password_in_2" value="" placeholder="Rishkruaj fjalëkalimin *">
+								<input type="password" class="form-control" name="password_2" id="password_in_2" value="" placeholder="Rishkruaj fjalëkalimin *" <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('passwordError', $_SESSION['signup_errors'])){ echo "style='border-color:red'"; } }?>>
 							</div>
 							<hr>
 							
@@ -170,7 +191,14 @@
 								<div class="row no-gutters">
 									<div class="col-6 pr-1">
 										<div class="form-group">
-											<input type="text" class="form-control" name="first_name" placeholder="Emri *">
+											<?php if(isset($_SESSION['signup_errors'])){
+											if(array_key_exists('fnameError', $_SESSION['signup_errors'])){
+														echo $_SESSION['signup_errors']['fnameError'];
+													}
+												} 
+											?>
+											<input type="text" class="form-control" name="first_name" placeholder="Emri *" <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('fnameError', $_SESSION['signup_errors'])){ echo "style='border-color:red'"; } } 
+											unset($_SESSION['signup_errors']);?>>
 										</div>
 									</div>
 									<div class="col-6 pl-1">
