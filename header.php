@@ -1,3 +1,6 @@
+<?php 
+    require_once "db.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,7 +54,16 @@
             }).then(f).catch(a)) : a()
         }(window, document, localStorage);
     </script>
-
+    <style>
+        .shites{
+            font-weight:bold !important; 
+            color:#172134 !important;
+            font-size: 15px !important;
+        }
+        .shites:hover{
+            color:white !important;
+        }
+    </style>
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -67,6 +79,7 @@
     <link href="css/product_page.css" rel="stylesheet">
     <link href="css/listing.css" rel="stylesheet">
     <link href="css/account.css" rel="stylesheet">
+    <link href="css/checkout.css" rel="stylesheet">
 </head>
 
 <body>
@@ -79,12 +92,21 @@
             <div class="main_header">
                 <div class="container">
                     <div class="row small-gutters">
+                    <?php  if(isset($_SESSION['user_buyer']) || isset($_SESSION['user_seller'])){ ?>
+                        <div class="col-xl-2 col-lg-2 d-lg-flex align-items-center">
+                    <?php } else { ?> 
                         <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
+                    <?php } ?>
                             <div id="logo">
                                 <a href="index.php"><img src="img/logo.svg" alt="" width="100" height="35"></a>
                             </div>
                         </div>
-                        <nav class="col-xl-7 col-lg-7">
+                        <?php  if(isset($_SESSION['user_buyer'])){ ?>
+                            <nav class="col-xl-8 col-lg-8">
+                        <?php } else { ?> 
+                            <nav class="col-xl-7 col-lg-7">
+                        <?php } ?>
+                        
                             <a class="open_close" href="javascript:void(0);">
                                 <div class="hamburger hamburger--spin">
                                     <div class="hamburger-box">
@@ -114,6 +136,13 @@
                                     <li>
                                         <a href="../item/allaia-ecommerce-html-template/25781982.html" target="_parent">Kontakti</a>
                                     </li>
+                                    <?php
+                                        if(isset($_SESSION['user_buyer'])){
+                                            echo "<li>";
+                                            echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për shitës</a>";
+                                            echo "</li>";
+                                        }
+                                    ?>
 
                                 </ul>
                             </div>
@@ -184,15 +213,19 @@
                                         <div class="dropdown dropdown-access">
                                             <a href="#sign-in-dialog" id="sign-in" class="access_link"><span>Account</span></a>
                                             <div class="dropdown-menu">
-                                                <a href="kyçu.php" class="btn_1">Kyçu ose Regjistrohu</a>
-                                                <ul>
-                                                    <li>
-                                                        <a href="#"><i class="ti-user"></i>Profili im</a>
-                                                    </li>
-                                                    <!-- <li>
-												<a href="help.html"><i class="ti-help-alt"></i>Help and Faq</a>
-											</li> -->
-                                                </ul>
+                                                 <?php if(!isset($_SESSION['logged'])){  ?>
+                                                     <a href="kyçu.php" class="btn_1">Kyçu ose Regjistrohu</a>
+                                                <?php } else { ?>
+                                                    <a style="font-size: 15px;font-weight:italic;">Përshëndetje <?php echo ucfirst($_SESSION['user_buyer']);?></a>
+                                                    <ul>
+                                                        <li>
+                                                            <a href="#"><i class="ti-user"></i>Profili im</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="logout.php"><i class="ti-shift-left-alt"></i>Ç'kyçu</a>
+                                                        </li>
+                                                    </ul>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <!-- /dropdown-access-->

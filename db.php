@@ -1,11 +1,80 @@
-<?php 
-
+<?php
+header('Content-type: text/html; charset=utf-8');
 session_start();
 
-$db = mysqli_connect("localhost","root","", "dealaim");
-
-if(mysqli_connect_errno($db)){
-    die ("Deshtim në lidhjen me databazë: ". mysqli_connect_error());
-}
+	DEFINE('DEVELOPMENT', 1);
+	if (DEVELOPMENT == 1) {
+		ini_set('display_errors', 1);
+		error_reporting(E_ALL);
+	 } else {
+		ini_set('display_errors', 0);
+		error_reporting(~0);
+	 }
+    //konektimi me databaze.
+    function db(){
+        static $conn;
+        if($conn == null){
+            $conn = mysqli_connect("localhost", "root", "", "dealaim");
+            if(mysqli_connect_errno()){
+                die ("Deshtoi lidhja me server: ". mysqli_connect_error() . "( " . mysqli_connect_errno() . " )");
+            }
+        }
+        return $conn;
+    }
+    
+    //prepared statments
+    //1 parameter -> $test1 = prep_stmt("SELECT * FROM `users` WHERE id=?", $id, "i");
+	//pa parameter -> $test2 = prep_stmt("SELECT id FROM users", null, null);
+	//ma shume se 1 parameter -> $test3 = prep_stmt("SELECT * FROM users WHERE username = ? AND password = ?", array($user, $pass), "ss");
+    function prep_stmt($query, $args = NULL, $types = NULL)
+	{
+		$conn = db();
+		$select = false;
+		$query2 = explode(" ", $query)[0];
+		if($query2 == "SELECT"){
+			$select = true;
+		}
+		$query = mysqli_prepare($conn, "$query");
+		if(!$query) {
+			if(DEVELOPMENT == 1){
+				die ("ERROR :" .mysqli_error($conn));
+			}
+			else {
+				return false;
+			}
+		}
+		if(!is_null($args)){
+			if(is_array($args)) {
+				$stmt_bp = mysqli_stmt_bind_param($query, $types, ...$args);
+			} else {
+				$stmt_bp = mysqli_stmt_bind_param($query, $types, $args);
+			}
+			if(!$stmt_bp) {
+				if(DEVELOPMENT == 1 ){
+					die("ERROR : Probleme me bind_param()");	
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		$stmt_exec = mysqli_stmt_execute($query);
+		if(!$stmt_exec) {
+			if(DEVELOPMENT == 1 ){
+				die ("ERROR : Gabim tek ekzekutimi i prepared statements.");
+			}
+			else {
+				return false;
+			}
+		}
+		$result = mysqli_stmt_get_result($query);		
+		if($select){
+			return $result;
+		}
+		else {
+			return mysqli_stmt_affected_rows($query);
+		}
+		mysqli_stmt_close($query);
+	}
 
 ?>

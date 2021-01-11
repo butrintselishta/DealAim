@@ -1,6 +1,10 @@
 ﻿<?php 
-require "header.php";
+require "db.php";
+if(isset($_SESSION['user_unconfirmed'])){
+    header("location:kyçu.php");die();
+}
 ?>
+<?php require "header.php"; ?>
 <main>
     <div id="carousel-home">
         <div class="owl-carousel owl-theme">

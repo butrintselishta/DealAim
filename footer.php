@@ -1,4 +1,6 @@
-
+<?php 
+   
+?>
 <footer class="revealed">
     <div class="container">
         <div class="row">
@@ -88,38 +90,36 @@
 		<div class="modal_header">
 			<h3>Kyçu</h3>
 		</div>
-		<form>
 			<div class="sign-in-wrapper">
-				<div class="form-group">
-					<label>Përdoruesi</label>
-					<input type="text" class="form-control" name="username" id="email" placeholder="përdoruesi...">
-					<i class="ti-email"></i>
-				</div>
-				<div class="form-group">
-					<label>Fjalëkalimi</label>
-					<input type="password" class="form-control" name="password" id="password" value="" placeholder="fjalëkalimi...">
-					<i class="ti-lock"></i>
-				</div>
-				<div class="clearfix add_bottom_15">
-					<div class="checkboxes float-left">
-					</div>
-					<div class="float-right mt-1"><a id="forgot" href="javascript:void(0);">Keni harruar fjalëkalimin?</a></div>
-				</div>
-				<div class="text-center">
-					<input type="submit" value="Kyçu" name="login" class="btn_1 full-width">
-					Nuk keni llogari? <a href="account.html">Sign up</a>
-				</div>
-				<div id="forgot_pw">
-					<div class="form-group">
-						<label>Ju lutemi konfirmojeni emailin tuaj!</label>
-						<input type="email" class="form-control" name="email_forgot" id="email_forgot">
-						<i class="ti-email"></i>
-					</div>
-					<p>Ju do e pranoni një email që përmban një link ku i'u mundësohet ndryshimi i fjalkalimit në një të ri të dëshiruar.</p>
-					<div class="text-center"><input type="submit" name="change_pass" value="Ndrysho fjalëkalimin" class="btn_1"></div>
-				</div>
-			</div>
-		</form>
+                <form action="kyçu.php" method="post">
+                    <div class="form-group">
+                        <label> Përdoruesi ose Email * </label>
+                        <input type="text" class="form-control" name="username" placeholder="përdoruesi ose emaili..." <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
+                    </div>
+                    <div class="form-group">
+                    <label> Fjalëkalimi * </label>
+                        <input type="password" class="form-control" name="password" placeholder="********" <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
+                    </div>
+                    <div class="clearfix add_bottom_15">
+                        <div class="checkboxes float-left">
+                        </div>
+                        <div class="float-right mt-1"><a id="forgot" href="javascript:void(0);">Keni harruar fjalëkalimin?</a></div>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Kyçu" name="signin" class="btn_1 full-width">
+                        Nuk keni llogari? <a href="kyçy.php">Regjistrohuni</a>
+                    </div>
+                    <div id="forgot_pw">
+                        <div class="form-group">
+                            <label>Ju lutemi konfirmojeni emailin tuaj!</label>
+                            <input type="email" class="form-control" name="email_forgot" id="email_forgot">
+                            <i class="ti-email"></i>
+                        </div>
+                        <p>Ju do e pranoni një email që përmban një link ku i'u mundësohet ndryshimi i fjalkalimit në një të ri të dëshiruar.</p>
+                        <div class="text-center"><input type="submit" name="change_pass" value="Ndrysho fjalëkalimin" class="btn_1"></div>
+                    </div>
+                </form>
+            </div>
 		<!--form -->
 	</div>
 <!-- COMMON SCRIPTS -->
