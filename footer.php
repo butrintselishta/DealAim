@@ -91,7 +91,7 @@
 			<h3>Kyçu</h3>
 		</div>
 			<div class="sign-in-wrapper">
-                <form action="kyçu.php" method="post">
+                <form action="signin.php" method="post">
                     <div class="form-group">
                         <label> Përdoruesi ose Email * </label>
                         <input type="text" class="form-control" name="username" placeholder="përdoruesi ose emaili..." <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="text-center">
                         <input type="submit" value="Kyçu" name="signin" class="btn_1 full-width">
-                        Nuk keni llogari? <a href="kyçy.php">Regjistrohuni</a>
+                        Nuk keni llogari? <a href="signin.php">Regjistrohuni</a>
                     </div>
                     <div id="forgot_pw">
                         <div class="form-group">

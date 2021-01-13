@@ -1,7 +1,7 @@
 ﻿<?php 
 require "db.php";
 if(isset($_SESSION['user_unconfirmed'])){
-    header("location:kyçu.php");die();
+    header("location:signin.php");die();
 }
 ?>
 <?php require "header.php"; ?>

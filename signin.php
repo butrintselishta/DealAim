@@ -1,5 +1,7 @@
 ﻿<?php
   require_once("db.php");
+
+	
 	if(isset($_SESSION['user_buyer']) || isset($_SESSION['user_seller'])){ 
 		header("location:index.php"); 
 	}
@@ -78,21 +80,25 @@
 		$password_signin = $_POST['password'];
 		
 		$sel_user = prep_stmt("SELECT * FROM users WHERE username = ? OR email=?", array($user_signin,$user_signin), 'ss');
-		$_SESSION['logged'] = false; $_SESSION['status'] = "";
+		$_SESSION['logged'] = false;
 
 		if(mysqli_num_rows($sel_user) > 0){
 			while($row = mysqli_fetch_array($sel_user)){
 				if($password_verify = password_verify( $password_signin, $row['password'])){
 					if($row['status'] === 0){
-						$_SESSION['logged'] = true;
 						$_SESSION['user_unconfirmed'] = $user_signin;
 						header("location:kyçu.php"); die();
 					}
 					elseif($row['status'] === 1){
 						$_SESSION['logged'] = true;
+						$_SESSION['user_confirmed'] = $user_signin;
+						header("location:index.php"); die();
+					}
+					elseif($row['status'] === 2){
+						$_SESSION['logged'] = true;
 						$_SESSION['user_buyer'] = $user_signin;
 						header("location:index.php"); die();
-					}elseif($row['status'] === 2){
+					}elseif($row['status'] === 3){
 						$_SESSION['logged'] = true;
 						$_SESSION['user_seller'] = $user_signin;
 						header("location:index.php");die();
@@ -413,7 +419,7 @@
 		<script src="js/datepicker/jquery-ui.min.js"></script>
 		<script src="js/datepicker/jquery.slicknav.js"></script>
 		<script src="js/datepicker/main.js"></script>	
-	<?php } ?>
+	<?php } unset($_SESSION['user_unconfirmed']);?>
 </main>
 	<!--/main-->
 <?php unset($_SESSION['signup_errors']); ?>
