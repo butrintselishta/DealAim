@@ -41,7 +41,7 @@
 		if (!(is_numeric($bday)) && !(strpos($bday, '/'))) { $bdayError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_address'] = $address; $_SESSION['signup_errors'] += ["bdayError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Datëlindja nuk është në formatin e duhur</small>"]; }
 
 		if($userError || $passwordError || $fnameError || $lnameError || $emailError || $phoneError || $bdayError || $cityError || $postnrError || $addressError){
-			header("location:kyçu.php"); die();
+			header("location:signin.php"); die();
 		}
 
 		else 
@@ -53,7 +53,7 @@
 			$select_user = prep_stmt("SELECT username from users WHERE username = ?",$user,'s');
 			if(mysqli_num_rows($select_user) > 0){
 				$_SESSION['user_exist'] = "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Ky përdorues ekziston!</small>";
-				header("location:kyçu.php");
+				header("location:signin.php");
 			}
 
 			$stmt = prep_stmt("INSERT INTO users (username,password,first_name,last_name,email,tel_nr,birthday,city,postal_code,address,status) VALUES(?,?,?,?,?,?,?,?,?,?,?)", array($user,$password_hash,$fname,$lname,$email,$phone,$birthday,$city,$post,$address,$status),'ssssssssisi');
@@ -81,32 +81,38 @@
 		
 		$sel_user = prep_stmt("SELECT * FROM users WHERE username = ? OR email=?", array($user_signin,$user_signin), 'ss');
 		$_SESSION['logged'] = false;
+		$_SESSION['user'] = array();
 
 		if(mysqli_num_rows($sel_user) > 0){
 			while($row = mysqli_fetch_array($sel_user)){
 				if($password_verify = password_verify( $password_signin, $row['password'])){
-					if($row['status'] === 0){
-						$_SESSION['user_unconfirmed'] = $user_signin;
-						header("location:kyçu.php"); die();
+					if($row['status'] === UNCONFIRMED){
+						$_SESSION['unconfirmed'] = UNCONFIRMED;
+						header("location:signin.php"); die();
 					}
-					elseif($row['status'] === 1){
+					elseif($row['status'] === CONFIRMED){
 						$_SESSION['logged'] = true;
-						$_SESSION['user_confirmed'] = $user_signin;
+						$_SESSION['user'] += ["username"=>"{$user_signin}"];
+						$_SESSION['user'] += ["status"=>CONFIRMED];
 						header("location:index.php"); die();
 					}
-					elseif($row['status'] === 2){
+					elseif($row['status'] === BUYER){
 						$_SESSION['logged'] = true;
-						$_SESSION['user_buyer'] = $user_signin;
+						$_SESSION['user'] += ["username"=>"{$user_signin}"];
+						$_SESSION['user'] += ["status"=>BUYER];
 						header("location:index.php"); die();
-					}elseif($row['status'] === 3){
+					}elseif($row['status'] === SELLER){
 						$_SESSION['logged'] = true;
-						$_SESSION['user_seller'] = $user_signin;
-						header("location:index.php");die();
-					}elseif($row['status'] === 100){
+						$_SESSION['user'] += ["username"=>"{$user_signin}"];
+						$_SESSION['user'] += ["status"=>SELLER];
+						header("location:index.php"); die();
+					}elseif($row['status'] === ADMIN){
 						$_SESSION['logged'] = true;
-						$_SESSION['user_admin'] = $user_signin;
+						$_SESSION['user'] += ["username"=>ADMIN];
+						$_SESSION['user'] += ["status"=>ADMIN];
 						header("location:admin.php");die();
 					}
+					
 				}
 				else {
 					$_SESSION['user_exist_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Përdoruesi ose fjalëkalimi janë të shkruara gabim!</small>";
@@ -119,30 +125,32 @@
 			header("kyçu.php");
 		}
 	}
+	
 ?>
 <?php require "header.php"; ?>
 <main class="bg_gray">
-	<?php if(isset($_SESSION['user_unconfirmed'])){ ?>
-		<div class="container">
-            <div class="row justify-content-center">
-				<div class="col-md-5">
-					<div id="confirm">
-						<div class="icon icon--order-success svg add_bottom_15">
-							<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-								<g fill="none" stroke="#8EC343" stroke-width="2">
-									<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
-									<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
-								</g>
-							</svg>
+	<?php if(isset($_SESSION['unconfirmed'])){
+			if($_SESSION['unconfirmed']== UNCONFIRMED){ ?>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-5">
+						<div id="confirm">
+							<div class="icon icon--order-success svg add_bottom_15">
+								<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+									<g fill="none" stroke="#8EC343" stroke-width="2">
+										<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
+										<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
+									</g>
+								</svg>
+							</div>
+						<h2>Jeni një hap larg</h2>
+						<p>Ju lutem konfirmojeni llogarinë tuaj në linkun qe ju kemi dërguar në email!</p>
 						</div>
-					<h2>Jeni një hap larg</h2>
-					<p>Ju lutem konfirmojeni llogarinë tuaj në linkun qe ju kemi dërguar në email!</p>
 					</div>
 				</div>
+				<!-- /row -->
 			</div>
-			<!-- /row -->
-		</div>
-	<?php } else{ ?>	
+	<?php } } else{ ?>	
 	<div class="container margin_30">
 		<div class="page_header">
 			<div class="breadcrumbs">
@@ -419,7 +427,7 @@
 		<script src="js/datepicker/jquery-ui.min.js"></script>
 		<script src="js/datepicker/jquery.slicknav.js"></script>
 		<script src="js/datepicker/main.js"></script>	
-	<?php } unset($_SESSION['user_unconfirmed']);?>
+	<?php } unset($_SESSION['unconfirmed']);?>
 </main>
 	<!--/main-->
 <?php unset($_SESSION['signup_errors']); ?>

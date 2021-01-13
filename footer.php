@@ -139,6 +139,10 @@
 		    $(".box").not(targetBox).hide();
 		    $(targetBox).show();
 		});
+
+		$('#image').click(function(){
+            $('#myfile').click()
+        })
 	</script>
 </body>
 

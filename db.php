@@ -1,7 +1,8 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
 session_start();
-
+	
+	DEFINE('UNCONFIRMED',0);DEFINE('CONFIRMED',1); DEFINE('BUYER',2); DEFINE('SELLER',3);
 	DEFINE('DEVELOPMENT', 1);
 	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);

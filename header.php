@@ -1,5 +1,10 @@
 <?php 
     require_once "db.php";
+
+    // if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+    //     $sts = array_search(BUYER, $_SESSION['user']);
+	// 	die(var_dump($sts));
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -149,20 +154,22 @@
                                                     target="_parent">Kontakti</a>
                                             </li>
                                             <?php
-                                        if(isset($_SESSION['user_confirmed'])){
-                                            echo "<li>";
-                                            echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për blerës</a>";
-                                            echo "</li>";
-                                        }elseif(isset($_SESSION['user_buyer'])){
-                                            echo "<li>";
-                                            echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për shitës</a>";
-                                            echo "</li>";
-                                        }elseif(isset($_SESSION['user_seller'])){
-                                            echo "<li>";
-                                            echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Shto një produkt</a>";
-                                            echo "</li>";
-                                        }
-                                    ?>
+                                                if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+                                                    if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
+                                                        echo "<li>";
+                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për blerës</a>";
+                                                        echo "</li>";
+                                                    }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
+                                                        echo "<li>";
+                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për shitës</a>";
+                                                        echo "</li>";
+                                                    }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == SELLER){
+                                                        echo "<li>";
+                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Shto një produkt</a>";
+                                                        echo "</li>";
+                                                    }
+                                                }
+                                            ?>
 
                                         </ul>
                                     </div>
@@ -229,16 +236,26 @@
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-3">
                                 <ul class="top_tools">
-                                    <li>
+                                    <li> </li>
                                         <!-- /dropdown-cart-->
                                     <li>
                                         <div class="dropdown dropdown-access">
-                                            <a href="#sign-in-dialog" id="sign-in"
-                                                class="access_link"><span>Account</span></a>
+                                            <a href="<?php if(isset($_SESSION['logged'])){ echo "profile.php ";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
                                             <div class="dropdown-menu">
                                                 <?php if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){   ?>
                                                 <a style="font-size: 15px;font-weight:italic;">Përshëndetje
-                                                    <?php if(isset($_SESSION['user_confirmed'])) {echo ucfirst($_SESSION['user_confirmed']);} elseif(isset($_SESSION['user_buyer'])){ echo ucfirst($_SESSION['user_buyer']);} else{ echo ucfirst($_SESSION['user_seller']); }?></a>
+                                                    <?php
+                                                        if(isset($_SESSION['user'])){
+                                                            if($_SESSION['user']['status'] == CONFIRMED){
+                                                                echo ucfirst($_SESSION['user']['username']);
+                                                            }elseif($_SESSION['user']['status'] == BUYER){
+                                                                echo ucfirst($_SESSION['user']['username']);
+                                                            }else{
+                                                                echo ucfirst($_SESSION['user']['username']);
+                                                            }
+                                                        }
+                                                    ?> 
+                                                </a>
                                                 <ul>
                                                     <li>
                                                         <a href="profile.php"><i class="ti-user"></i>Profili im</a>
