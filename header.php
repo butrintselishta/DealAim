@@ -18,6 +18,10 @@
     <title>Allaia | Bootstrap eCommerce Template - ThemeForest</title>
 
     <!-- Favicons-->
+    <link href="css/card.css" rel="stylesheet">
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="js/jquery.card.js"></script>
+
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
@@ -65,6 +69,9 @@
         }(window, document, localStorage);
     </script>
     <style>
+        .jp-card {
+            height: 90% !important;
+        }
         .shites {
             font-weight: bold !important;
             color: #172134 !important;
@@ -157,7 +164,7 @@
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
                                                     if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
                                                         echo "<li>";
-                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për blerës</a>";
+                                                        echo "<a  id='showForm' class='shites' target='_parent'>Apliko për blerës</a>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";
