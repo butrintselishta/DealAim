@@ -151,7 +151,7 @@
 						<div id="confirm">
 							<div class="icon icon--order-success svg add_bottom_15">
 								<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-									<g fill="none" stroke="#8EC343" stroke-width="2">
+									<g fill="none" stroke="#D06079" stroke-width="2">
 										<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
 										<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
 									</g>
@@ -166,6 +166,7 @@
 			</div>
 	<?php } } 
 	
+	//USER CONFIRM (from email)
 	elseif(isset($_GET['user_confirm'])){ 
 		$user = $_GET['user_confirm'];
 		function decrypt_txt($ivHashCiphertext, $password = KEY) {
@@ -178,55 +179,35 @@
 			return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
 		  }	
 		  
-		  if(ctype_xdigit($user)){
-		  	$dec_email = hex2bin($user);
-		  }else {
-			  header("location:signin.php"); die();
-		  }
-		  $decrypted_email = decrypt_txt($dec_email); 
-		  if($decrypted_email !== NULL){
-			$stmt = prep_stmt("SELECT status FROM users WHERE email = ?", $decrypted_email,"s");
-			while($row_sts = mysqli_fetch_array($stmt)){
-				if($row_sts['status'] === 0){?>
-					<div class="container">
-						<div class="row justify-content-center">
-							<div class="col-md-5">
-								<div id="confirm">
-									<div class="icon icon--order-success svg add_bottom_15">
-										<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-											<g fill="none" stroke="#8EC343" stroke-width="2">
-												<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
-												<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
-											</g>
-										</svg>
-									</div>
-								<h2>JENI KONFIRMUAR</h2>
-								<p>Emaili juaj është konfirmuar, klikoni <a href="signin.php"> këtu </a> për kyçje në sistem</p>
-								</div>
+		  $dec_email = hex2bin($user);
+		  $decrypted_email = decrypt_txt($dec_email); //dekriptimi emailit
+
+		  $stmt = prep_stmt("SELECT status FROM users WHERE email = ?", $decrypted_email,"s");
+		  $row_sts = mysqli_fetch_array($stmt);
+		  if($decrypted_email !== NULL && $row_sts['status'] == 0){ ?>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-5">
+						<div id="confirm">
+							<div class="icon icon--order-success svg add_bottom_15">
+								<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+									<g fill="none" stroke="#8EC343" stroke-width="2">
+										<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
+										<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
+									</g>
+								</svg>
 							</div>
+						<h2>JENI KONFIRMUAR</h2>
+						<p>Emaili juaj është konfirmuar, klikoni <a href="signin.php"> këtu </a> për kyçje në sistem</p>
 						</div>
-						<!-- /row -->
 					</div>
-		<?php 
-		$stmt_confirmed = prep_stmt("UPDATE users SET status=? WHERE email=?", array(CONFIRMED,		$decrypted_email), "is");
-		} else{ ?> <div id="error_page">
-		<div class="container">
-			<div class="row justify-content-center text-center">
-				<div class="col-xl-7 col-lg-9">
-					<img src="img/404.svg" alt="" class="img-fluid" width="400" height="212">
-					<p>Linku që keni kërkuar nuk është valid!</p>
-					<form>
-						<div class="search_bar">
-							<input type="text" class="form-control" placeholder="What are you looking for?">
-							<input type="submit" value="Search">
-						</div>
-					</form>
 				</div>
+				<!-- /row -->
 			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div> <?php } } } else { ?>
+		<?php 
+		//rrit statusin e userit nese konfirmohet emaili
+		$stmt_confirmed = prep_stmt("UPDATE users SET status=? WHERE email=?", array(CONFIRMED,		$decrypted_email), "is");
+		} else { ?>
 		<div id="error_page">
 			<div class="container">
 				<div class="row justify-content-center text-center">

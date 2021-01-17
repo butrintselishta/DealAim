@@ -3,7 +3,7 @@ header('Content-type: text/html; charset=utf-8');
 session_start();
 	
 	DEFINE('UNCONFIRMED',0);DEFINE('CONFIRMED',1); DEFINE('BUYER',2); DEFINE('SELLER',3);
-	DEFINE('DEVELOPMENT', 1);
+	DEFINE('DEVELOPMENT', 0);
 	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
@@ -62,7 +62,7 @@ session_start();
 		$stmt_exec = mysqli_stmt_execute($query);
 		if(!$stmt_exec) {
 			if(DEVELOPMENT == 1 ){
-				die ("ERROR : Gabim tek ekzekutimi i prepared statements.");
+				die ("ERROR : Gabim tek ekzekutimi i prepared statements." . mysqli_stmt_errno($query));
 			}
 			else {
 				return false;
