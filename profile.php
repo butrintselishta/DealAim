@@ -107,39 +107,44 @@
 					</div>
 
 
-					<div class="private box formL" style="display">
+					<div class="private box formL" style="display:none">
 						<div class="divider">
 							<span style="background-color:#fff">Të dhënat bankare</span>
 						</div>
 						<center><div class="row no-gutters form-container active" id="">
 							<div class="card-wrapper"></div>
 							<form action="">
-								<div class="col-12 pr-1">
-									<div class="form-group">
-										<input type="text" name='number' class="form-control" placeholder="numri gjirollogarise" style="text-align:center;">
+                                <div class="col-12 pl-1">
+									<div class="form-group form-group1">
+                                        <label> Numri i xhirollogarisë </label>
+										<input type="text" name="number" id="number" class="form-control"  placeholder="xxxx xxxx xxxx xxxx" style="text-align:center;">
 									</div>
 								</div>
 								<div class="col-12 pl-1">
-									<div class="form-group">
-										<input type="text" name="name" class="form-control"  style="text-align:center;">
+									<div class="form-group form-group1">
+                                        <label> Emri dhe Mbiemri </label>
+										<input type="text" name="name" class="form-control"  placeholder="Emri dhe Mbiemri" style="text-align:center;">
 									</div>
 								</div>
 								<div class="col-12 pl-1">
-									<div class="form-group">
-										<input type="tel" name="expiry" class="form-control"  style="text-align:center;">
+									<div class="form-group form-group1">
+                                        <label> Data skadencës </label>
+										<input type="tel" name="expiry" class="form-control" placeholder="MM/YY"  style="text-align:center;">
 									</div>
 								</div>
 								<div class="col-12 pl-1">
-									<div class="form-group">
-										<input type="number" name="cvc" class="form-control"  style="text-align:center;">
+									<div class="form-group form-group1">
+                                         <label> CVV Kodi </label>
+										<input type="number" name="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
 									</div>
-								</div>
+                                </div>
+                                <div class="text-center btn_center"><input type="submit" name="signup" value="Vazhdo" class="btn_1 "></div>
 							</form>
 							</div>
-						</div>	</center>
+                        </div>	</center>
+                        
 					</div>
 					<hr>
-					<div class="text-center"><input type="submit" name="signup" value="Regjistrohu" class="btn_1 full-width"></div>
 					<!-- /form_container -->
 					
                 </form>
@@ -149,6 +154,7 @@
 			</div>			
         </div>
     </div>
+  
     <script>
         $('form').card({
             ontainer: '.card-wrapper'
@@ -199,102 +205,8 @@
 
         });
     </script>
-    <script>
-        var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
-        var elements = stripe.elements();
-
-        var style = {
-            base: {
-                iconColor: '#666EE8',
-                color: '#31325F',
-                lineHeight: '40px',
-                fontWeight: 300,
-                fontFamily: 'Helvetica Neue',
-                fontSize: '15px',
-
-                '::placeholder': {
-                    color: '#CFD7E0',
-                },
-            },
-        };
-
-        var cardNumberElement = elements.create('cardNumber', {
-            style: style
-        });
-        cardNumberElement.mount('#card-number-element');
-
-        var cardExpiryElement = elements.create('cardExpiry', {
-            style: style
-        });
-        cardExpiryElement.mount('#card-expiry-element');
-
-        var cardCvcElement = elements.create('cardCvc', {
-            style: style
-        });
-        cardCvcElement.mount('#card-cvc-element');
-
-
-        function setOutcome(result) {
-            var successElement = document.querySelector('.success');
-            var errorElement = document.querySelector('.error');
-            successElement.classList.remove('visible');
-            errorElement.classList.remove('visible');
-
-            if (result.token) {
-                // In this example, we're simply displaying the token
-                successElement.querySelector('.token').textContent = result.token.id;
-                successElement.classList.add('visible');
-
-                // In a real integration, you'd submit the form with the token to your backend server
-                //var form = document.querySelector('form');
-                //form.querySelector('input[name="token"]').setAttribute('value', result.token.id);
-                //form.submit();
-            } else if (result.error) {
-                errorElement.textContent = result.error.message;
-                errorElement.classList.add('visible');
-            }
-        }
-
-        var cardBrandToPfClass = {
-            'visa': 'pf-visa',
-            'mastercard': 'pf-mastercard',
-            'amex': 'pf-american-express',
-            'discover': 'pf-discover',
-            'diners': 'pf-diners',
-            'jcb': 'pf-jcb',
-            'unknown': 'pf-credit-card',
-        }
-
-        function setBrandIcon(brand) {
-            var brandIconElement = document.getElementById('brand-icon');
-            var pfClass = 'pf-credit-card';
-            if (brand in cardBrandToPfClass) {
-                pfClass = cardBrandToPfClass[brand];
-            }
-            for (var i = brandIconElement.classList.length - 1; i >= 0; i--) {
-                brandIconElement.classList.remove(brandIconElement.classList[i]);
-            }
-            brandIconElement.classList.add('pf');
-            brandIconElement.classList.add(pfClass);
-        }
-
-        cardNumberElement.on('change', function(event) {
-            // Switch brand logo
-            if (event.brand) {
-                setBrandIcon(event.brand);
-            }
-
-            setOutcome(event);
-        });
-
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var options = {
-                address_zip: document.getElementById('postal-code').value,
-            };
-            stripe.createToken(cardNumberElement, options).then(setOutcome);
-        });
-
+     <script>
+         //credit card max length
     </script>
 </main>
 <?php require "footer.php"; ?>

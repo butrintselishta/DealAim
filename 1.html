@@ -1,251 +1,51 @@
 <html>
 
 <head>
-    <link href="css/card.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery.min.js"></script>
-    <script src="js/jquery.card.js"></script>
-
+    <title>number validation</title>
+    <style>
+        input {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            outline: none;
+            border: 1px solid black;
+        }
+        
+        input.valid {
+            border: 1px solid green;
+        }
+        
+        input.invalid {
+            border: 1px solid red;
+        }
+        
+        input.invalid+.error-message {
+            display: initial;
+        }
+        
+        .error-message {
+            display: none;
+        }
+    </style>
 </head>
 
-</html>
-
-
 <body>
-    <div class="form-container active">
-        <form action="">
-            <input type="text" name="number">
-            <input type="text" name="first-name" />
-            <input type="text" name="last-name" />
-            <input type="text" name="expiry" />
-            <input type="text" name="cvc" />
-        </form>
-    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <input type="text" id="some-number">
     <script>
-        $('form').card({
-            ontainer: '.card-wrapper'
-        });
-        // Vanilla JavaScript
-        new Card({
-            form: document.querySelector('form'),
-            container: '.card-wrapper'
-        });
+        $('#some-number').on('input', function(evt) {
+            var value = evt.target.value
 
-        $('form').card({
-            formatting: true,
-            formSelectors: {
-                numberInput: 'input[name="number"]',
-                expiryInput: 'input[name="expiry"]',
-                cvcInput: 'input[name="cvc"]',
-                nameInput: 'input[name="name"]'
-            },
-            cardSelectors: {
-                cardContainer: '.jp-card-container',
-                card: '.jp-card',
-                numberDisplay: '.jp-card-number',
-                expiryDisplay: '.jp-card-expiry',
-                cvcDisplay: '.jp-card-cvc',
-                nameDisplay: '.jp-card-name'
-            },
-            // custom message
-            messages: {
-
-                validDate: 'valid\nthru',
-                monthYear: 'month/year'
-            },
-
-            placeholders: {
-                number: '&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;',
-                cvc: '&bull;&bull;&bull;',
-                expiry: '&bull;&bull;/&bull;&bull;',
-                name: 'Full Name'
-            },
-            masks: {
-                cardNumber: false
-            },
-            classes: {
-                valid: 'jp-card-valid',
-                invalid: 'jp-card-invalid'
-            },
-            debug: false
-
-        });
-    </script>
-    <script>
-        var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
-        var elements = stripe.elements();
-
-        var style = {
-            base: {
-                iconColor: '#666EE8',
-                color: '#31325F',
-                lineHeight: '40px',
-                fontWeight: 300,
-                fontFamily: 'Helvetica Neue',
-                fontSize: '15px',
-
-                '::placeholder': {
-                    color: '#CFD7E0',
-                },
-            },
-        };
-
-        var cardNumberElement = elements.create('cardNumber', {
-            style: style
-        });
-        cardNumberElement.mount('#card-number-element');
-
-        var cardExpiryElement = elements.create('cardExpiry', {
-            style: style
-        });
-        cardExpiryElement.mount('#card-expiry-element');
-
-        var cardCvcElement = elements.create('cardCvc', {
-            style: style
-        });
-        cardCvcElement.mount('#card-cvc-element');
-
-
-        function setOutcome(result) {
-            var successElement = document.querySelector('.success');
-            var errorElement = document.querySelector('.error');
-            successElement.classList.remove('visible');
-            errorElement.classList.remove('visible');
-
-            if (result.token) {
-                // In this example, we're simply displaying the token
-                successElement.querySelector('.token').textContent = result.token.id;
-                successElement.classList.add('visible');
-
-                // In a real integration, you'd submit the form with the token to your backend server
-                //var form = document.querySelector('form');
-                //form.querySelector('input[name="token"]').setAttribute('value', result.token.id);
-                //form.submit();
-            } else if (result.error) {
-                errorElement.textContent = result.error.message;
-                errorElement.classList.add('visible');
-            }
-        }
-
-        var cardBrandToPfClass = {
-            'visa': 'pf-visa',
-            'mastercard': 'pf-mastercard',
-            'amex': 'pf-american-express',
-            'discover': 'pf-discover',
-            'diners': 'pf-diners',
-            'jcb': 'pf-jcb',
-            'unknown': 'pf-credit-card',
-        }
-
-        function setBrandIcon(brand) {
-            var brandIconElement = document.getElementById('brand-icon');
-            var pfClass = 'pf-credit-card';
-            if (brand in cardBrandToPfClass) {
-                pfClass = cardBrandToPfClass[brand];
-            }
-            for (var i = brandIconElement.classList.length - 1; i >= 0; i--) {
-                brandIconElement.classList.remove(brandIconElement.classList[i]);
-            }
-            brandIconElement.classList.add('pf');
-            brandIconElement.classList.add(pfClass);
-        }
-
-        cardNumberElement.on('change', function(event) {
-            // Switch brand logo
-            if (event.brand) {
-                setBrandIcon(event.brand);
+            if (value.length === 0) {
+                evt.target.className = ''
+                return
             }
 
-            setOutcome(event);
-        });
-
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var options = {
-                address_zip: document.getElementById('postal-code').value,
-            };
-            stripe.createToken(cardNumberElement, options).then(setOutcome);
-        });
+            if (value.Element(0) == '4') {
+                evt.target.className = 'valid'
+            } else {
+                evt.target.className = 'invalid'
+            }
+        })
     </script>
 </body>
-
-</html>
-
-
-<!-- 
-<div class="private box formL" style="display:none">
-    <div class="divider">
-        <span style="background-color:#fff">Të dhënat bankare</span>
-    </div>
-    <div class="row no-gutters" id="">
-        <div class="col-12 pr-1">
-            <div class="form-group">
-                <input type="text" id="bank_acc" onKeyPress="if(this.value.length==20) return false;" class="form-control" placeholder="numri gjirollogarise" style="text-align:center;">
-            </div>
-        </div>
-        <script>
-            function space(str, after) {
-
-                if (!str) {
-                    return false;
-                }
-                after = after || 4;
-                var v = str.replace(/[^\dA-ZH]/g, ''),
-                    reg = new RegExp(".{" + after + "}", "g");
-                return v.replace(reg, function(a) {
-                    return a + ' ';
-                });
-            }
-            var el = document.getElementById('bank_acc');
-            el.addEventListener('keyup', function() {
-                this.value = space(this.value, 4);
-            });
-        </script>
-        <div class="col-6 pl-1">
-            <div class="form-group">
-                <input type="text" class="form-control" id="skadenca" placeholder="MM/YYYY" placeholder="data skadences" style="text-align:center;">
-            </div>
-        </div>
-        <script>
-            window.addEventListener("load", function() {
-                var length = 0;
-                document.getElementById("skadenca").addEventListener("input", function() {
-                    if (length > (length = this.value.length)) return;
-                    var mapped = this.value.split("").map(function(char, i) {
-                        switch (i) {
-                            case 0:
-                                return char == "1" || char == "0" ? char : "";
-                                break;
-                            case 1:
-                                return !isNaN(parseInt(char, 10)) ? (this[0] == "0" ? char : (+char < 3 ? char : "")) : "";
-                                break;
-                            case 2:
-                                return "/";
-                                break;
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                return !isNaN(parseInt(char, 10)) ? char : "";
-                                break;
-                            default:
-                                return "";
-                                break;
-                        }
-                    }, this.value);
-                    if (mapped.length === 2) mapped.push("/");
-                    this.value = mapped.join("");
-                });
-            });
-        </script>
-        <div class="col-6 pl-1">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="CVV" style="text-align:center;">
-            </div>
-        </div>
-    </div>
-    <!-- /row -->
-
-
-<!-- /row -->
-
-</div> -->

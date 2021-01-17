@@ -71,6 +71,24 @@
     <style>
         .jp-card {
             height: 90% !important;
+            margin-left: 115%;
+        }
+        .form-group1 {
+            width: 35%;
+        }
+        .btn_center{
+            margin-left:46%;
+        }
+        @media only screen and (max-width: 768px){
+            .jp-card{
+                margin-left: 25%;
+            }
+            .form-group1 {
+                width: 50%;
+            }
+            .btn_center{
+             margin-left:28.5%;
+            }
         }
         .shites {
             font-weight: bold !important;
@@ -81,6 +99,7 @@
         .shites:hover {
             color: white !important;
         }
+        
     </style>
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
@@ -98,6 +117,7 @@
     <link href="css/listing.css" rel="stylesheet">
     <link href="css/account.css" rel="stylesheet">
     <link href="css/checkout.css" rel="stylesheet">
+    <link href="css/error_track.css" rel="stylesheet">
 </head>
 
 <body>
@@ -164,7 +184,7 @@
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
                                                     if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
                                                         echo "<li>";
-                                                        echo "<a  id='showForm' class='shites' target='_parent'>Apliko për blerës</a>";
+                                                        echo "<a id='showForm' class='shites' target='_parent'>Apliko për blerës</a>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";
