@@ -3,7 +3,8 @@ header('Content-type: text/html; charset=utf-8');
 session_start();
 	
 	DEFINE('UNCONFIRMED',0);DEFINE('CONFIRMED',1); DEFINE('BUYER',2); DEFINE('SELLER',3);
-	DEFINE('DEVELOPMENT', 0);
+	DEFINE('DEVELOPMENT', 1);
+	DEFINE('KEY', "testtest");
 	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
@@ -78,4 +79,23 @@ session_start();
 		mysqli_stmt_close($query);
 	}
 
+	//encrypt_txt
+	function encrypt_txt($plaintext, $password = KEY) {
+		$method = "AES-128-CBC";
+		$key = hash('sha256', $password, true);
+		$iv = openssl_random_pseudo_bytes(16);
+		$ciphertext = openssl_encrypt($plaintext, $method, $key, OPENSSL_RAW_DATA, $iv);
+		$hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
+		return $iv . $hash . $ciphertext;
+	}
+	//
+	function decrypt_txt($ivHashCiphertext, $password = KEY) {
+		$method = "AES-128-CBC";
+		$iv = substr($ivHashCiphertext, 0, 16);
+		$hash = substr($ivHashCiphertext, 16, 32);
+		$ciphertext = substr($ivHashCiphertext, 48);
+		$key = hash('sha256', $password, true);
+		if (!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash)) return null;
+		return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
+	  }	
 ?>

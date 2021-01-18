@@ -1,6 +1,6 @@
 ﻿<?php
   require_once("db.php");
-  DEFINE('KEY', "testtest");
+
   ob_start();
 	
 	if(isset($_SESSION['user_buyer']) || isset($_SESSION['user_seller'])){ 
@@ -17,7 +17,7 @@
 		if (empty($user)) { $userError = true; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Kjo fushë nuk mund të jetë e zbrazët </small>"]; } elseif(strlen($user) < 5) { $userError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nofka është shumë e shkurtë (minimumi është 5 karaktere)</small>"]; } elseif(strlen($user) > 20) { $userError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nofka është shumë e gjatë (maksimumi është 20 karaktere)</small>"]; }elseif(mysqli_num_rows($select_user) > 0){ $userError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["userError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Ky përdorues ekziston!</small>"]; }
 		
 		//PASSWORD ERRORS
-		if ($password_1 !== 'a') { if (empty($password_1)) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazet</small>"]; } elseif(strlen($password_1) < 8) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"]; } elseif(strlen($password_1) > 50) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"]; } elseif(!preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $password_1)) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small style='color:red; font-weight:bold; text-align:left;'> Fjalëkalimi duhet të përmbaj së paku: <div style='text-align:left;'><ul> <li>Një shkronjë të madhe (A-Z)</li><li>Një shkronjë të vogel (a-z)</li><li>Një numer (1-9)</li><li>Një simbol (!-#$^?>)</li> </ul></div></small>"]; } elseif($password_1 !== $password_2) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Fjalëkalimet nuk përputhen </small>"]; } }
+		if ($password_1 !== 'a') { if (empty($password_1)) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazet</small>"]; } elseif(strlen($password_1) < 8) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"]; } elseif(strlen($password_1) > 50) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"]; } elseif(!preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $password_1)) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small style='color:red; font-weight:bold; text-align:left;'> Fjalëkalimi duhet të përmbaj së paku: <div style='text-align:left;'><ul> <li>Një shkronjë të madhe (A-Z)</li><li>Një shkronjë të vogel (a-z)</li><li>Një numer (1-9)</li><li>Një simbol (!-#$^?>)</li> </ul></div></small>"]; } elseif($password_1 !== $password_2) { $passwordError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Fjalëkalimet nuk përputhen </small>"]; } }
 
 		//FIRST NAME ERRORS
 		if (empty($fname)) { $fnameError = true; $_SESSION['save_user'] = $user; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(strlen($fname) < 2) { $fnameError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i shkurtë</small>"]; } elseif(strlen($fname) > 15) { $fnameError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i gjatë</small>"]; } elseif(!ctype_alpha($fname) && !((strpos($fname, 'ë')) || (strpos($fname, 'Ë')) || (strpos($fname, 'ç')) || (strpos($fname, 'Ç')))) { $fnameError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri duhet të jetë në rangun A-ZH</small>"]; }
@@ -56,18 +56,9 @@
 				$_SESSION['user_exist'] = "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Ky përdorues ekziston!</small>";
 				header("location:signin.php");
 			}
-
-			function encrypt_txt($plaintext, $password = KEY) {
-				$method = "AES-128-CBC";
-				$key = hash('sha256', $password, true);
-				$iv = openssl_random_pseudo_bytes(16);
-				$ciphertext = openssl_encrypt($plaintext, $method, $key, OPENSSL_RAW_DATA, $iv);
-				$hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
-				return $iv . $hash . $ciphertext;
-			  }
-				// $Token = openssl_random_pseudo_bytes('18', FALSE); 
-				$enc_email = encrypt_txt($email);
-				$encrypted_email = bin2hex($enc_email);	
+			// $Token = openssl_random_pseudo_bytes('18', FALSE); 
+			$enc_email = encrypt_txt($email);
+			$encrypted_email = bin2hex($enc_email);	
 
 			$stmt = prep_stmt("INSERT INTO users (username,password,first_name,last_name,email,tel_nr,birthday,city,postal_code,address,status) VALUES(?,?,?,?,?,?,?,?,?,?,?)", array($user,$password_hash,$fname,$lname,$email,$phone,$birthday,$city,$post,$address,$status),'ssssssssisi');
 			// PAPERCUT email confirmation
@@ -78,7 +69,7 @@
 				  
 				$to = 'butrintse@gmail.com';
 				$subject = "My subject";
-				$txt = "<head> <style type='text/css'> /* CLIENT-SPECIFIC STYLES */ body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; } img { -ms-interpolation-mode: bicubic; } /* RESET STYLES */ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; } table { border-collapse: collapse !important; } body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; } /* iOS BLUE LINKS */ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } /* MOBILE STYLES */ @media screen and (max-width:600px) { h1 { font-size: 32px !important; line-height: 32px !important; } } /* ANDROID CENTER FIX */ div[style*='margin: 16px 0;'] { margin: 0 !important; } </style> </head> <body> <!-- HIDDEN PREHEADER TEXT --> <div style='display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;'> This email was sent automatically. </div> <table border='0' cellpadding='0' cellspacing='0' width='100%'> <!-- LOGO --> <tr> <td bgcolor='#2C4EDA' align='center'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <tr> <td align='center' valign='top' style='padding: 40px 10px 40px 10px;'> <a href='#' target='_blank'> <img alt='Logo' src='https://i.ibb.co/KjK19sr/logo.png' width='200' style='display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 18px;' border='0'> </a> </td> </tr> </table> </td> </tr> <!-- HERO --> <tr> <td bgcolor='#2C4EDA' border='0' align='center' style='padding: 0px 10px 0px 10px;'> <table cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; margin-bottom: -3px;'> <tr> <td bgcolor='#ffffff' align='left' valign='top' style='padding: 40px 30px 20px 30px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;'> <h1 style='font-size: 30px; font-weight: 400; margin: 0; text-align:center;'>Konfirmo Emailin</h1> </td> </tr> </table> </td> </tr> <!-- COPY BLOCK --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- COPY --> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Tap the button below to reset your customer account password. If you didn't request a new password, you can safely delete this email.</p> </td> </tr> <!-- BULLETPROOF BUTTON --> <tr> <td bgcolor='#ffffff' align='left'> <table width='100%' border='0' cellspacing='0' cellpadding='0'> <tr> <td bgcolor='#ffffff' align='center' style='padding: 15px 30px 15px px;'> <table border='0' cellspacing='0' cellpadding='0'> <tr> <td align='center' style='border-radius: 3px;' bgcolor='#1a82e2'><a href='http://127.0.0.1/dealaim/signin.php". "?user_confirm=". $encrypted_email . "' target='' style='font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; display: inline-block;'>KONFIRMO</a></td> </tr> </table> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 20px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Nese butoni nuk funksionon atehere mereni linkun e meposhtem dhe vendoseni ne browser:<br> <a href='#'>http//127.0.0.1/dealaim/xxxxx-xxxx-xxxx</a> </p> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Ju faleminderit,<br> <strong>DEALAIM</strong> </p> </td> </tr> </table> </td> </tr> </table> </td> </tr> <!-- FOOTER --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- ADDRESS --> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>You received this email because we received a request for reseting the password for your account. If you didn't request that, you can safely delete this email.</p> </td> </tr> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>To stop receiving these emails, you can unsuscribe at anytime.<br> Colven - Ruta 11 Km 814 - (S3574XAB) Guadalupe Norte - Santa Fe, Argentina <br> Teléfono: (+54 3482) 498800 - colven@colven.com.ar </p> </td> </tr> </table> </td> </tr> </table> </body> </html>";
+				$txt = "<head> <style type='text/css'> /* CLIENT-SPECIFIC STYLES */ body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; } img { -ms-interpolation-mode: bicubic; } /* RESET STYLES */ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; } table { border-collapse: collapse !important; } body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; } /* iOS BLUE LINKS */ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } /* MOBILE STYLES */ @media screen and (max-width:600px) { h1 { font-size: 32px !important; line-height: 32px !important; } } /* ANDROID CENTER FIX */ div[style*='margin: 16px 0;'] { margin: 0 !important; } </style> </head> <body> <!-- HIDDEN PREHEADER TEXT --> <div style='display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;'> This email was sent automatically. </div> <table border='0' cellpadding='0' cellspacing='0' width='100%'> <!-- LOGO --> <tr> <td bgcolor='#2C4EDA' align='center'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <tr> <td align='center' valign='top' style='padding: 40px 10px 40px 10px;'> <a href='#' target='_blank'> <img alt='Logo' src='https://i.ibb.co/KjK19sr/logo.png' width='200' style='display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 18px;' border='0'> </a> </td> </tr> </table> </td> </tr> <!-- HERO --> <tr> <td bgcolor='#2C4EDA' border='0' align='center' style='padding: 0px 10px 0px 10px;'> <table cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; margin-bottom: -3px;'> <tr> <td bgcolor='#ffffff' align='left' valign='top' style='padding: 40px 30px 20px 30px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;'> <h1 style='font-size: 30px; font-weight: 400; margin: 0; text-align:center;'>Konfirmo Emailin</h1> </td> </tr> </table> </td> </tr> <!-- COPY BLOCK --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- COPY --> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Tap the button below to reset your customer account password. If you didn't request a new password, you can safely delete this email.</p> </td> </tr> <!-- BULLETPROOF BUTTON --> <tr> <td bgcolor='#ffffff' align='left'> <table width='100%' border='0' cellspacing='0' cellpadding='0'> <tr> <td bgcolor='#ffffff' align='center' style='padding: 15px 30px 15px px;'> <table border='0' cellspacing='0' cellpadding='0'> <tr> <td align='center' style='border-radius: 3px;' bgcolor='#1a82e2'><a href='http://127.0.0.1/dealaim/signin.php?user_confirm=". $encrypted_email . "' target='' style='font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; display: inline-block;'>KONFIRMO</a></td> </tr> </table> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 20px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Nese butoni nuk funksionon atehere mereni linkun e meposhtem dhe vendoseni ne browser:<br> <a href='#'>http//127.0.0.1/dealaim/xxxxx-xxxx-xxxx</a> </p> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Ju faleminderit,<br> <strong>DEALAIM</strong> </p> </td> </tr> </table> </td> </tr> </table> </td> </tr> <!-- FOOTER --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- ADDRESS --> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>You received this email because we received a request for reseting the password for your account. If you didn't request that, you can safely delete this email.</p> </td> </tr> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>To stop receiving these emails, you can unsuscribe at anytime.<br> Colven - Ruta 11 Km 814 - (S3574XAB) Guadalupe Norte - Santa Fe, Argentina <br> Teléfono: (+54 3482) 498800 - colven@colven.com.ar </p> </td> </tr> </table> </td> </tr> </table> </body> </html>";
 				$headers = "From: email_confirm@dealaim.com" . "\r\n" ;
 				$headers .= "MIME-Version: 1.0\r\n";
 				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -130,19 +121,117 @@
 				}
 				else {
 					$_SESSION['user_exist_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Përdoruesi ose fjalëkalimi janë të shkruara gabim!</small>";
-					header("kyçu.php");
+					header("signin.php");
 				}
 			}
 		}
 		else {
 			$_SESSION['user_exist_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Përdoruesi ose fjalëkalimi janë të shkruara gabim! </small>";
-			header("kyçu.php");
+			header("signin.php");
 		}
 	}
 	
+	if(isset($_POST['pass_reset'])){
+		$email_pass_reset = $_POST['email_forgot'];
+
+		$check_email = prep_stmt("SELECT * FROM users WHERE email = ?", $email_pass_reset,"s");
+		$row_email = mysqli_fetch_array($check_email);
+		
+		if(!filter_var($email_pass_reset, FILTER_VALIDATE_EMAIL)){
+			$_SESSION['email_reset_error'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Email nuk është në formatin e duhur!</small>";
+			header("location: signin.php?forgot_password"); die();
+		}elseif($row_email === NULL){
+			$_SESSION['email_reset_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Ky email nuk është i regjistruar si përdorues!</small>";
+			header("location: signin.php?forgot_password"); die();
+		}
+		else{
+			$select_user = prep_stmt("SELECT * FROM users WHERE email = ?", $email_pass_reset, "s");
+			$row_user = mysqli_fetch_array($select_user); 
+
+			$enc_user = encrypt_txt($row_user['username']);
+			$encrypted_user = bin2hex($enc_user);
+
+			  
+			$to = $email_pass_reset;
+			$subject = "My subject";
+			$txt = "<html lang='en-US'> <head> <meta content='text/html; charset=utf-8' http-equiv='Content-Type' /> <title>Reset Password Email Template</title> <meta name='description' content='Reset Password Email Template.'> <style type='text/css'> a:hover { text-decoration: underline !important; } </style> </head> <body marginheight='0' topmargin='0' marginwidth='0' style='margin: 0px; background-color: #f2f3f8;' leftmargin='0'> <!--100% body table--> <table cellspacing='0' border='0' cellpadding='0' width='100%' bgcolor='#f2f3f8' style='@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family='Open Sans, sans-serif;'> <tr> <td> <table style='background-color: #f2f3f8; max-width:670px;  margin:0 auto;' width='100%' border='0' align='center' cellpadding='0' cellspacing='0'> <tr> <td style='height:80px;'>&nbsp;</td> </tr> <tr> <td style='text-align:center;'> <a> <img width='60' src='https://i.ibb.co/hL4XZp2/android-chrome-192x192.png' title='logo' alt='logo'> </a> </td> </tr> <tr> <td style='height:20px;'>&nbsp;</td> </tr> <tr> <td> <table width='95%' border='0' align='center' cellpadding='0' cellspacing='0' style='max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);'> <tr> <td style='height:30px;'>&nbsp;</td> </tr> <tr> <td style='padding:0 47px;'> <h1 style='color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family: Rubik,sans-serif;'>Keni kerkuar ndryshimin e fjalekalimit?</h1> <span style='display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px; font-family: Rubik,sans-serif;'></span> <p style='color:#455056; font-size:15px;line-height:24px; margin:0;'> Ne nuk mund thjesht te i'u dergojm juve fjalekalimin e vjeter. Nje link i vecant per ndryshimin e fjalekalimit eshte gjeneruar per juve. Per te ndryshuar fjalekalimin klikoni ne butonin e me poshtem dhe ndjek hapat. </p> <a href='http://127.0.0.1/dealaim/signin.php?reset_password=". $encrypted_user ."' style='background:#2C4EDA;text-decoration:none !important; font-weight:500; margin-top:25px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px; font-family: Rubik,sans-serif;'>Ndrysho fjalekalimin</a>  </p> </td> </tr> <tr> <td style='height:40px;'>&nbsp;</td> </tr> </table> </td> <tr> <td style='height:20px;'>&nbsp;</td> </tr> <tr> <td style='text-align:center;'> <p style='font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0; font-family: Rubik,sans-serif'>&copy; <strong>http://127.0.0.1/dealaim</strong></p> </td> </tr> <tr> <td style='height:80px;'>&nbsp;</td> </tr> </table> </td> </tr> </table> <!--/100% body table--> </body> </html>";
+			$headers = "From: password_reset@dealaim.com" . "\r\n" ;
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+			mail($to,$subject,$txt,$headers);
+			
+			$_SESSION['email_reset_true'] = "<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju lutem shikoni emailin tuaj!</small>";
+			header("location: signin.php?forgot_password"); die();
+		}
+	}
+	if(isset($_POST['new_password'])){
+		$new_get_user = $_GET['reset_password']; 
+		$pass_1 = $_POST['password_1'];
+		$pass_2 = $_POST['password_2'];
+		
+
+		$passError = false;
+		$_SESSION['new_pass_errors'] = array();
+
+		if (empty($pass_1)) {
+			$passError = true;
+			$_SESSION['new_pass_errors'] += ["passError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazet</small>"];
+		}
+		elseif(strlen($pass_1) < 8) {
+			$passError = true;
+			$_SESSION['new_pass_errors'] += ["passError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"];
+		}
+		elseif(strlen($pass_1) > 50) {
+			$passError = true;
+			$_SESSION['new_pass_errors'] += ["passError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"];
+		}
+		elseif(!preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $pass_1)) {
+			$passError = true;
+			$_SESSION['new_pass_errors'] += ["passError" => "<div style='text-align:left; widht:50%; margin-left:30%;'><small style='color:red; font-weight:bold; text-align:left;'> Fjalëkalimi duhet të përmbaj së paku: <ul> <li>Një shkronjë të madhe (A-Z)</li><li>Një shkronjë të vogel (a-z)</li><li>Një numer (1-9)</li><li>Një simbol (!-#$^?>)</li> </ul></small></div>"];
+		}
+		elseif($pass_1 !== $pass_2) {
+			$passError = true;
+			$_SESSION['new_pass_errors'] += ["passError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Fjalëkalimet nuk përputhen </small>"];
+		}
+
+		if($passError ){
+			header("location:".$_SERVER['HTTP_REFERER']); die();
+		}
+		else{
+			$new_dec_user = hex2bin($new_get_user);
+			$new_decrypted_user = decrypt_txt($new_dec_user);
+			$new_pass_hash = password_hash($pass_1, PASSWORD_ARGON2I);
+
+			$new_pass = prep_stmt("UPDATE users SET password = ? WHERE username=?", array($new_pass_hash, $new_decrypted_user), "ss"); 
+			if($new_pass == 0){
+				echo "<script language='javascript'> alert('Fjalekalimi u ndryshua me suses.'); window.location='". $_SERVER['HTTP_REFERER'] ."';</script>";
+			}else{
+				echo "<script language='javascript'> alert('Fjalekalimi u ndryshua me suses.'); window.location='signin.php';</script>";
+			}
+		}
+
+	}
 ?>
 <?php require "header.php"; ?>
 <main class="bg_gray">
+	<?php if(isset($_GET['invalid_link'])){?> 
+		<div id="error_page">
+			<div class="container">
+				<div class="row justify-content-center text-center">
+					<div class="col-xl-7 col-lg-9">
+						<img src="img/404.svg" alt="" class="img-fluid" width="400" height="212">
+						<p>Linku që keni kërkuar nuk është valid!</p>
+						<form>
+							
+						</form>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+	<?php } ?>
 	<?php if(isset($_SESSION['unconfirmed'])){
 			if($_SESSION['unconfirmed']== UNCONFIRMED){ ?>
 			<div class="container">
@@ -169,16 +258,6 @@
 	//USER CONFIRM (from email)
 	elseif(isset($_GET['user_confirm'])){ 
 		$user = $_GET['user_confirm'];
-		function decrypt_txt($ivHashCiphertext, $password = KEY) {
-			$method = "AES-128-CBC";
-			$iv = substr($ivHashCiphertext, 0, 16);
-			$hash = substr($ivHashCiphertext, 16, 32);
-			$ciphertext = substr($ivHashCiphertext, 48);
-			$key = hash('sha256', $password, true);
-			if (!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash)) return null;
-			return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
-		  }	
-		  
 		  $dec_email = hex2bin($user);
 		  $decrypted_email = decrypt_txt($dec_email); //dekriptimi emailit
 
@@ -207,26 +286,50 @@
 		<?php 
 		//rrit statusin e userit nese konfirmohet emaili
 		$stmt_confirmed = prep_stmt("UPDATE users SET status=? WHERE email=?", array(CONFIRMED,		$decrypted_email), "is");
-		} else { ?>
-		<div id="error_page">
-			<div class="container">
-				<div class="row justify-content-center text-center">
-					<div class="col-xl-7 col-lg-9">
-						<img src="img/404.svg" alt="" class="img-fluid" width="400" height="212">
-						<p>Linku që keni kërkuar nuk është valid!</p>
-						<form>
-							<div class="search_bar">
-								<input type="text" class="form-control" placeholder="What are you looking for?">
-								<input type="submit" value="Search">
-							</div>
-						</form>
+		} else { //NOT A VALID LINK 
+			header("location:signin.php?invalid_link");
+		} }
+		//FORGOT PASSWORD (NEW PASSWORD)
+		elseif(isset($_GET['reset_password'])){ 
+			$reset_password = $_GET['reset_password'];
+
+			$dec_user = hex2bin($reset_password);
+			$decrypted_user = decrypt_txt($dec_user); //die(var_dump($decrypted_user));
+
+			if($decrypted_user !== NULL){
+		?>
+		<div class="row justify-content-center" style="margin: 1.5em 0 0 0">
+			<div class="col-xl-6 col-lg-6 col-md-8">
+				<div class="box_account">
+					<h3 class="client">Ndryshimi i fjalëkalimit</h3>
+					<div class="form_container">
+					<form action="" method="post">
+						<div class="divider"><span>Fjalëkalimi i ri</span></div>
+						<?php if(isset($_SESSION['new_pass_errors'])){
+								if(array_key_exists('passError', $_SESSION['new_pass_errors'])){
+									echo "<div class='text-center'>";
+									echo $_SESSION['new_pass_errors']['passError'];
+									echo "</div>";
+								}
+						} ?>
+						<div class="form-group">
+							<input type="password" class="form-control" name="password_1" id="email" placeholder="Fjalëkalimi i ri*" <?php if(isset($_SESSION['new_pass_errors'])){ if(array_key_exists('passError', $_SESSION['new_pass_errors'])){ echo "style='border-color:red'"; } } ?>>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control" name="password_2" id="password_in" value="" placeholder="Verifiko fjalëkalimin e ri*" <?php if(isset($_SESSION['new_pass_errors'])){ if(array_key_exists('passError', $_SESSION['new_pass_errors'])){ echo "style='border-color:red'"; } } unset($_SESSION['new_pass_errors']);?>>
+						</div>
+						
+						<div class="text-center"><input type="submit" value="Ndrysho" name="new_password" class="btn_1 full-width"></div>
+					</form>
 					</div>
+					<!-- /form_container -->
 				</div>
 				<!-- /row -->
 			</div>
-			<!-- /container -->
 		</div>
-		<?php } } else{ ?>	
+		<?php } else{ 
+			header("location:signin.php?invalid_link");
+		 } } else { ?>	
 		<div class="container margin_30">
 			<div class="page_header">
 				<div class="breadcrumbs">
@@ -243,8 +346,27 @@
 			<div class="col-xl-6 col-lg-6 col-md-8">
 				<div class="box_account">
 					<h3 class="client">Tashmë përdorues?</h3>
-					<div class="form_container">
+					<div class="form_container" <?php if(isset($_GET['forgot_password'])){ echo "style='height:150px;'"; }?>>
 						<form action="" method="post">
+							<!-- FORGOT PASSWORD -->
+						<?php if(isset($_GET['forgot_password'])){ ?>
+							<div id="forgot_pass">
+								<div class="form-group">
+									<?php if(isset($_SESSION['email_reset_error'])){
+											echo $_SESSION['email_reset_error'];
+										} 
+										if(isset($_SESSION['email_reset_false'])){
+											echo $_SESSION['email_reset_false']; 
+										}
+									?>
+									<input type="email" class="form-control" name="email_forgot" id="email_forgot" placeholder="Shkruaj e-mailin tuaj" <?php if(isset($_SESSION['email_reset_error']) || isset($_SESSION['email_reset_false'])){ echo "style='border-color:red'";}  ?>>
+								</div>
+								<div class="float-left" style="padding-left:5px;"><a id="forgot" href="signin.php">Kthehu prapa</a></div>
+								<div class="float-right"><input type="submit" name="pass_reset" value="Ndrysho Fjalëkalimin" class="btn_1"></div>
+							</div>
+							<?php unset($_SESSION['email_reset_false']); unset($_SESSION['email_reset_error']);?>
+							<?php } else { ?>
+							<!-- SIGIN -->
 							<div class="divider"><span>Kyçu këtu</span></div>
 							<div class="form-group">
 								<label> Përdoruesi ose Email * </label>
@@ -257,17 +379,11 @@
 							<div class="clearfix add_bottom_15">
 								
 								<div class="float-left"><a><?php if(isset($_SESSION['user_exist_false'])){echo $_SESSION['user_exist_false'];} ?></a></div>
-								<div class="float-right"><a id="forgot" href="javascript:void(0);">Keni harruar fjalëkalimin?</a></div>
+								<div class="float-right"><a id="forgot" href="signin.php?forgot_password">Keni harruar fjalëkalimin?</a></div>
 							</div>
 							<div class="text-center"><input type="submit" name="signin" value="Log In" class="btn_1 full-width"></div>
-							<div id="forgot_pw">
-								<div class="form-group">
-									<input type="email" class="form-control" name="email_forgot" id="email_forgot" placeholder="Shkruaj e-mailin tuaj">
-								</div>
-								<div class="float-left" style="padding-left:5px;"><a id="forgot" href="kyçu.php">Kthehu prapa</a></div>
-								<div class="float-right"><input type="submit" value="Ndrysho Fjalëkalimin" class="btn_1"></div>
-							</div>
-							<?php unset($_SESSION['user_exist_false']); ?>
+							
+							<?php } unset($_SESSION['user_exist_false']); ?>
 						</form> <!-- </form> -->
 					</div><!-- /form_container -->
 				</div><!-- /box_account -->

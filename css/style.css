@@ -2094,6 +2094,7 @@ header ul.top_tools {
     padding: 0;
     list-style: none;
     float: right;
+    margin-right: .5em;
 }
 
 @media (max-width: 767px) {
