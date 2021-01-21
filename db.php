@@ -8,7 +8,7 @@ session_start();
 	DEFINE('SELLER',3);
 	DEFINE('DEVELOPMENT', 1);
 	DEFINE('KEY', "testtest");
-	if (DEVELOPMENT == 1) {
+	if (DEVELOPMENT == 0) {
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
 	 } else {

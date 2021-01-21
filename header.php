@@ -99,12 +99,21 @@
         .shites:hover {
             color: white !important;
         }
+        .sukses {
+            width:100%;
+            padding: 10px 10px 1px 10px;
+            background-color:#D4EDDA;
+            text-align:center;
+            margin-bottom:6px;
+        }
+        
         
     </style>
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    
 
     <!-- DatePicker -->
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">

@@ -1,7 +1,7 @@
 ﻿<?php
   require_once("db.php");
-
-  ob_start();
+	
+	// die(var_dump($randomFloat));
   	$token_type = false;
 	if(isset($_SESSION['user_buyer']) || isset($_SESSION['user_seller'])){ 
 		header("location:index.php"); 
@@ -70,18 +70,69 @@
 			}
 			else{
 				
+				//CREATING BANK ACCOUNT for the register user
+				//generating an account number
+				$acc_number = array();
+				$acc_first_nr = rand(4,5);
+				$acc_number[0] .= $acc_first_nr;
+				for($i = 0; $i < 15; $i++){
+					if($acc_number[0] == 5){
+						$acc_number[1] = 1;
+						$acc_number[] .= rand(0,10);
+					}
+					else{
+						$acc_number[] .= rand(0,10);
+					}
+				}
+				$acc_number = implode("", $acc_number);
+				$acc_number1 = substr($acc_number,0,16); 
+
+				//getting the full name 
+				$acc_full_name = ucwords($fname . " " . $lname);
+
+				//generating a random expiry date betwwen today and today after 10 years 
+				$todays_date = strtotime(date("Y-m-d"));
+				$expires_at = strtotime(date("Y-m-d", strtotime("+10 years", $todays_date)));
+				$get_date = rand($todays_date, $expires_at);
+				$acc_expiry = date("m/Y",$get_date);
+
+				//generating a cvv code
+				$cvv = array();
+				for($j=0; $j<3; $j++){
+					$cvv[] = rand(0,9);
+				}
+				$cvv_implode = implode("", $cvv);
+				$acc_cvv = (int)$cvv_implode;
+
+				//generating account balance
+				$euro = rand(10,2000);
+				$centa = rand(0,99);
+				$random = str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
+				$acc_balance_str = $euro . "." . $random;
+				$acc_balance = floatval($acc_balance_str);
+
+				//inserting data
+				$bank_acc = prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance) VALUES(?,?,?,?,?)",array($acc_number1, $acc_full_name, $acc_expiry, $acc_cvv, $acc_balance), "sssis");
+
 				$conf_type = "account_confirm";
 				$insert_token = prep_stmt("INSERT INTO tokens(plain_txt,token,conf_type,type) VALUES(?,?,?,?)", array($email,$encrypted_email,$conf_type,$token_type), "sssi");
 
-				$to = $email;
-				$subject = "My subject";
-				$txt = "<head> <style type='text/css'> /* CLIENT-SPECIFIC STYLES */ body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; } img { -ms-interpolation-mode: bicubic; } /* RESET STYLES */ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; } table { border-collapse: collapse !important; } body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; } /* iOS BLUE LINKS */ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } /* MOBILE STYLES */ @media screen and (max-width:600px) { h1 { font-size: 32px !important; line-height: 32px !important; } } /* ANDROID CENTER FIX */ div[style*='margin: 16px 0;'] { margin: 0 !important; } </style> </head> <body> <!-- HIDDEN PREHEADER TEXT --> <div style='display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;'> This email was sent automatically. </div> <table border='0' cellpadding='0' cellspacing='0' width='100%'> <!-- LOGO --> <tr> <td bgcolor='#2C4EDA' align='center'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <tr> <td align='center' valign='top' style='padding: 40px 10px 40px 10px;'> <a href='#' target='_blank'> <img alt='Logo' src='https://i.ibb.co/KjK19sr/logo.png' width='200' style='display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 18px;' border='0'> </a> </td> </tr> </table> </td> </tr> <!-- HERO --> <tr> <td bgcolor='#2C4EDA' border='0' align='center' style='padding: 0px 10px 0px 10px;'> <table cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; margin-bottom: -3px;'> <tr> <td bgcolor='#ffffff' align='left' valign='top' style='padding: 40px 30px 20px 30px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;'> <h1 style='font-size: 30px; font-weight: 400; margin: 0; text-align:center;'>Konfirmo Emailin</h1> </td> </tr> </table> </td> </tr> <!-- COPY BLOCK --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- COPY --> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Tap the button below to reset your customer account password. If you didn't request a new password, you can safely delete this email.</p> </td> </tr> <!-- BULLETPROOF BUTTON --> <tr> <td bgcolor='#ffffff' align='left'> <table width='100%' border='0' cellspacing='0' cellpadding='0'> <tr> <td bgcolor='#ffffff' align='center' style='padding: 15px 30px 15px px;'> <table border='0' cellspacing='0' cellpadding='0'> <tr> <td align='center' style='border-radius: 3px;' bgcolor='#1a82e2'><a href='http://127.0.0.1/dealaim/signin.php?user_confirm=". $encrypted_email . "' target='' style='font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; display: inline-block;'>KONFIRMO</a></td> </tr> </table> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 20px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Nese butoni nuk funksionon atehere mereni linkun e meposhtem dhe vendoseni ne browser:<br> <a href='#'>http//127.0.0.1/dealaim/xxxxx-xxxx-xxxx</a> </p> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Ju faleminderit,<br> <strong>DEALAIM</strong> </p> </td> </tr> </table> </td> </tr> </table> </td> </tr> <!-- FOOTER --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- ADDRESS --> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>You received this email because we received a request for reseting the password for your account. If you didn't request that, you can safely delete this email.</p> </td> </tr> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>To stop receiving these emails, you can unsuscribe at anytime.<br> Colven - Ruta 11 Km 814 - (S3574XAB) Guadalupe Norte - Santa Fe, Argentina <br> Teléfono: (+54 3482) 498800 - colven@colven.com.ar </p> </td> </tr> </table> </td> </tr> </table> </body> </html>";
-				$headers = "From: email_confirm@dealaim.com" . "\r\n" ;
-				$headers .= "MIME-Version: 1.0\r\n";
-				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+				if($bank_acc == 0 || $insert_token == 0){
+					die("Error ne:". mysqli_prep_errno());
+				}else{
 
+					$to = $email;
+					$subject = "My subject";
+					$txt = "<head> <style type='text/css'> /* CLIENT-SPECIFIC STYLES */ body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; } img { -ms-interpolation-mode: bicubic; } /* RESET STYLES */ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; } table { border-collapse: collapse !important; } body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; } /* iOS BLUE LINKS */ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } /* MOBILE STYLES */ @media screen and (max-width:600px) { h1 { font-size: 32px !important; line-height: 32px !important; } } /* ANDROID CENTER FIX */ div[style*='margin: 16px 0;'] { margin: 0 !important; } </style> </head> <body> <!-- HIDDEN PREHEADER TEXT --> <div style='display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;'> This email was sent automatically. </div> <table border='0' cellpadding='0' cellspacing='0' width='100%'> <!-- LOGO --> <tr> <td bgcolor='#2C4EDA' align='center'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <tr> <td align='center' valign='top' style='padding: 40px 10px 40px 10px;'> <a href='#' target='_blank'> <img alt='Logo' src='https://i.ibb.co/KjK19sr/logo.png' width='200' style='display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 18px;' border='0'> </a> </td> </tr> </table> </td> </tr> <!-- HERO --> <tr> <td bgcolor='#2C4EDA' border='0' align='center' style='padding: 0px 10px 0px 10px;'> <table cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; margin-bottom: -3px;'> <tr> <td bgcolor='#ffffff' align='left' valign='top' style='padding: 40px 30px 20px 30px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; line-height: 48px;'> <h1 style='font-size: 30px; font-weight: 400; margin: 0; text-align:center;'>Konfirmo Emailin</h1> </td> </tr> </table> </td> </tr> <!-- COPY BLOCK --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- COPY --> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Shtyp butonin e me poshtem per te konfirmuar llogarine tuaj. Nese ju nuk keni hapur pernjemend llogari me kete email ne faqen tone, ju lutem fshijeni kete email. </p> </td> </tr> <!-- BULLETPROOF BUTTON --> <tr> <td bgcolor='#ffffff' align='left'> <table width='100%' border='0' cellspacing='0' cellpadding='0'> <tr> <td bgcolor='#ffffff' align='center' style='padding: 15px 30px 15px px;'> <table border='0' cellspacing='0' cellpadding='0'> <tr> <td align='center' style='border-radius: 3px;' bgcolor='#1a82e2'><a href='http://127.0.0.1/dealaim/signin.php?user_confirm=". $encrypted_email . "' target='' style='font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; display: inline-block;'>KONFIRMO</a></td> </tr> </table> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 20px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Nese butoni nuk funksionon atehere mereni linkun e meposhtem dhe vendoseni ne browser:<br> <a href='#' style='overflow-wrap:anywhere;'> http://127.0.0.1/dealaim/</a> </p> </td> </tr> <tr> <td bgcolor='#ffffff' align='left' style='padding: 0px 30px 20px 30px; color: #666666; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;'> <p style='margin: 0; text-align:left;'>Ju faleminderit,<br> <strong>DEALAIM</strong> </p> </td> </tr> </table> </td> </tr> </table> </td> </tr> <!-- FOOTER --> <tr> <td bgcolor='#f4f4f4' align='center' style='padding: 0px 10px 0px 10px;'> <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px;'> <!-- ADDRESS --> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>Ky email ju ka ardhur sepse keni hapur llogari ne 127.0.0.1/dealaim, nese ju personalisht nuk e keni kryer kete veprim, ju lutem fshijeni kete email</p> </td> </tr> <tr> <td bgcolor='#f4f4f4' align='left' style='padding: 0px 30px 30px 30px; color: #666666; font-family:  Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 18px;'> <p style='margin-top: 20px;text-align:center;'>Per te ndaluar keto lloje te emaileve, ju mund te beni 'unsubcribe' ne cdo kohe.<br> Gjilan - st. Madeleine Albright - (S3574XAB) Kosove - Shqiperi <br> Telefoni: (+383) 44333444 - mail_confirm@dealaim.com </p> </td> </tr> </table> </td> </tr> </table> </body> </html>";
+					$headers = "From: email_confirm@dealaim.com" . "\r\n" ;
+					$headers .= "MIME-Version: 1.0\r\n";
+					$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+					mail($to,$subject,$txt,$headers);
 
-				mail($to,$subject,$txt,$headers);
+					$_SESSION['new_user_correct'] = "<h4 style='color:#265725; font-weight:bold; text-align:center;'> SUKSES! </h4>
+					<p style='color:#265725;'> Llogaria juaj është krijuar me sukses, ju lutem konfirmojeni atë në linkun qe i'u kemi dërguar në email</p>"; 
+					header("location:signin.php");die();
+				}
 			}
 		}
 	}
@@ -172,8 +223,9 @@
 
 			mail($to,$subject,$txt,$headers);
 			
-			$_SESSION['email_reset_true'] = "<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju lutem shikoni emailin tuaj!</small>";
-			header("location: signin.php?forgot_password"); die();
+			$_SESSION['forgot_password_confirm'] = "<h4 style='color:#265725; font-weight:bold; text-align:center;'> SUKSES! </h4>
+			<p style='color:#265725;'> Kërkesa juaj është bërë, ju lutem shikojeni emailin tuaj </p>"; 
+			header("location:signin.php");die();
 		}
 	}
 	if(isset($_POST['new_password'])){
@@ -225,7 +277,9 @@
 			if($new_pass == 0){
 				echo "<script language='javascript'> alert('Dicka shkoi gabim, ju lutem provoni me vone perseri.'); window.location='". $_SERVER['HTTP_REFERER'] ."';</script>";
 			}else{
-				echo "<script language='javascript'> alert('Fjalekalimi u modifikua me sukses.'); window.location='signin.php';</script>";
+				$_SESSION['new_password_confirm'] = "<h4 style='color:#265725; font-weight:bold; text-align:center;'> SUKSES! </h4>
+				<p style='color:#265725;'> Ju keni ndryshuar fjalëkalimin me sukses, vazhdoni tek forma më poshtë për tu kyçur</p>"; 
+				header("location:signin.php");die();
 			}
 		}
 
@@ -333,7 +387,7 @@
 		else{
 			$stmt_token_pw = prep_stmt("SELECT type FROM tokens WHERE plain_txt = ? ORDER BY token_id desc", $date_user[0], "s");
 			$row_token_pw = mysqli_fetch_array($stmt_token_pw);
-			if($decrypted_user !== NULL && $row_token_pw['type'] == false)
+			if($date_user !== NULL && $row_token_pw['type'] == false)
 			{
 				?>
 				<div class="row justify-content-center" style="margin: 1.5em 0 0 0">
@@ -406,9 +460,20 @@
 									<div class="float-right"><input type="submit" name="pass_reset" value="Ndrysho Fjalëkalimin" class="btn_1"></div>
 								</div>
 								<?php unset($_SESSION['email_reset_false']); unset($_SESSION['email_reset_error']);?>
-								<?php } else { ?>
+							<?php } else { ?>
 								<!-- SIGIN -->
 								<div class="divider"><span>Kyçu këtu</span></div>
+								<?php if(isset($_SESSION['new_password_confirm'])){
+										echo "<div class='sukses'>";
+										echo $_SESSION['new_password_confirm'];
+										echo "</div>";
+									}
+									  elseif(isset($_SESSION['forgot_password_confirm'])){
+										echo "<div class='sukses'>";
+										echo $_SESSION['forgot_password_confirm'];
+										echo "</div>";
+									}
+								?>
 								<div class="form-group">
 									<label> Përdoruesi ose Email * </label>
 									<input type="text" class="form-control" name="username" placeholder="përdoruesi ose emaili..." <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
@@ -425,8 +490,11 @@
 								<div class="text-center"><input type="submit" name="signin" value="Log In" class="btn_1 full-width"></div>
 								
 								<?php } unset($_SESSION['user_exist_false']); ?>
+								<?php unset($_SESSION['forgot_password_confirm']);?>
+								<?php unset($_SESSION['new_password_confirm']);?>
 							</form> <!-- </form> -->
 						</div><!-- /form_container -->
+						
 					</div><!-- /box_account -->
 					<div class="row">
 						<div class="col-md-6 d-none d-lg-block">
@@ -450,8 +518,13 @@
 				<div class="col-xl-6 col-lg-6 col-md-8">
 					<div class="box_account">
 						<h3 class="new_client">Përdorues i ri</h3> <small class="float-right pt-2" style="color:black;"><b style='font-size:15px; color:red;'>* </b> -> Fushat që duhet mbushur detyrimisht</small>
-						<div class="form_container">
+						<div class="form_container" <?php if(isset($_SESSION['new_user_correct'])) { echo "style='border:2px solid #8EC343'";} ?>>
 							<form action="" method="post">
+								<?php if(isset($_SESSION['new_user_correct'])){
+										echo "<div class='sukses'>";
+										echo $_SESSION['new_user_correct'];
+										echo "</div>";
+								}?>
 								<div class="form-group">
 									<?php if(isset($_SESSION['signup_errors'])){
 											if(array_key_exists('userError', $_SESSION['signup_errors'])){
@@ -649,6 +722,7 @@
 							<!-- /form_container -->
 							</form>
 						</div>
+						<?php unset($_SESSION['new_user_correct']); ?>
 					<!-- /box_account -->
 				</div>
 			</div>
@@ -664,7 +738,6 @@
 </main>
 	<!--/main-->
 <?php unset($_SESSION['signup_errors']); 
-ob_end_flush();
 ?>
 
 <?php  require "footer.php"; ?>
