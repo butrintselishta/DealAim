@@ -43,7 +43,6 @@
                  -->
                  
                 <div class="form_container">
-					<form>
 						<div class="private box">
 							<div class="row no-gutters">
 								<div class="col-12 pr-1">
@@ -115,40 +114,47 @@
 							<div class="divider">
 								<span style="background-color:#fff">Të dhënat bankare</span>
 							</div>
-							<center><div class="row no-gutters form-container active" id="">
-								<div class="card-wrapper"></div>
-										<div class="col-12 pl-1">
-											<div class="form-group form-group1">
-												<label> Numri i xhirollogarisë </label>
-												<input type="text" name="number" id="number" class="form-control" placeholder="xxxx xxxx xxxx xxxx" style="text-align:center;">
-											</div>
+							<center>
+							<div class="row no-gutters form-container active" id="">
+								<form method="POST" action="profile.php" id="acc_form" style="width:100%;">
+									<div class="card-wrapper"></div>
+									<div class="col-12 pl-1">
+										<div class="form-group form-group1">
+											<label> Numri i xhirollogarisë </label>
+											<input type="text" name="number" id="number" class="form-control" placeholder="xxxx xxxx xxxx xxxx" style="text-align:center;">
 										</div>
-										<div class="col-12 pl-1">
-											<div class="form-group form-group1">
-												<label> Emri dhe Mbiemri </label>
-												<input type="text" name="name" class="form-control"  placeholder="Emri dhe Mbiemri" style="text-align:center;">
-											</div>
+									</div>
+									<div class="col-12 pl-1">
+										<div class="form-group form-group1">
+											<label> Emri dhe Mbiemri </label>
+											<input type="text" name="name" id="name" class="form-control"  placeholder="Emri dhe Mbiemri" style="text-align:center;">
 										</div>
-										<div class="col-12 pl-1">
-											<div class="form-group form-group1">
-												<label> Data skadencës </label>
-												<input type="tel" name="expiry" class="form-control" placeholder="MM/YY"  style="text-align:center;">
-											</div>
+									</div>
+									<div class="col-12 pl-1">
+										<div class="form-group form-group1">
+											<label> Data skadencës </label>
+											<input type="tel" name="expiry" id="expiry" class="form-control" placeholder="MM/YY"  style="text-align:center;">
 										</div>
-										<div class="col-12 pl-1">
-											<div class="form-group form-group1">
-												<label> CVV Kodi </label>
-												<input type="number" name="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
-											</div>
+									</div>
+									<div class="col-12 pl-1">
+										<div class="form-group form-group1">
+											<label> CVV Kodi </label>
+											<input type="number" name="cvc" id="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
 										</div>
-										<div class="text-center btn_center"><input type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 "></div>
-								</div>
-							</div>	</center>
-							
+									</div>
+									<div class="col-12 pl-1" id="cashInput" style="display:none;">
+										<div class="form-group form-group1">
+											<label> Shuma </label> <small> (Shuma që dëshironi të nxjerrni) </small>
+											<input type="number" name="shuma" id="shuma" class="form-control" placeholder="xxx"  style="text-align:center;">
+										</div>
+									</div>
+									<div class="text-center btn_center"><button type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
+								</form>
+							</div>	
+							</center>
 						</div>
 						<hr>
 						<!-- /form_container -->
-					</form>
                 </div>
 				<!-- /box_account -->
 	 <?php } 	} ?>
@@ -156,20 +162,137 @@
         </div>
     </div>
 	<script>
-        document.querySelector("#apply").addEventListener("click", function() {
-				
-			var acc_number = document.getElementById('number'); 
-            if(acc_number.value.charAt(0) == 4){ 
-				if(acc_number.value.length != 19){
-					swal("GABIM!", "Kjo xhirollogari nuk është valide, kërkohen 16 numra!", "error");
-					acc_number.style.borderColor = "red";
-					event.preventDefault();	
-				}else {
-					console.log("good");
-					event.preventDefault();	
+
+		var acc_nr_valid = false; var acc_name_valid = false; var acc_expiry_valid = false; var acc_cvc_valid = false;
+		//CHECKING ACC NUMBER
+		document.getElementById("number").onkeyup = function() 
+		{
+			var acc_number = document.getElementById('number');
+			//check if first number is 4
+			if(acc_number.value.substring(0,1) == 4 || acc_number.value.substring(0,1) == 5)
+			{ 
+				if(acc_number.value.length == 19){
+					if(acc_number.value.substring(0,1) == 4){
+						acc_nr_valid = true;
+						document.getElementById("name").focus();
+						acc_number.style.borderColor = "green";
+						acc_number.style.color = "green";
+					}
+					else if(acc_number.value.substring(0,1) == 5 && acc_number.value.substring(1,2) == 1 || acc_number.value.substring(1,2) == 2 || acc_number.value.substring(1,2) == 3 || acc_number.value.substring(1,2) == 4 || acc_number.value.substring(1,2) == 5){
+						acc_nr_valid = true;
+						document.getElementById("name").focus();
+						acc_number.style.borderColor = "green";
+						acc_number.style.color = "green";
+					}
+					else {
+						// swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
+						acc_number.style.borderColor = "red";
+						acc_number.style.color = "red";
+					}
 				}
-            }else{
-				console.log("ok");
+				else{
+					// swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
+					acc_number.style.borderColor = "red";
+					acc_number.style.color = "red";
+				}
+			}else {
+				acc_number.style.borderColor = "red";
+				acc_number.style.color = "red";
+			}
+		}
+		//CHECKING NAME
+		document.getElementById("name").onkeyup = function() 
+		{
+			var acc_name = document.getElementById('name');
+			var letters = /^[a-zA-Z][a-zA-Z\s]*$/;
+			//check if name is alphabetic
+			if(acc_name.value.match(letters)){
+				if(acc_name.value.length > 10){
+					acc_name_valid = true;
+					acc_name.style.borderColor = "green";
+					acc_name.style.color = "green";
+				}else{
+					acc_name.style.borderColor = "red";
+					acc_name.style.color = "red";
+				}
+			}else{
+				acc_name.style.borderColor = "red";
+				acc_name.style.color = "red";
+			}
+		}
+
+		//CHECKING NAME
+		document.getElementById("name").onkeyup = function() 
+		{
+			var acc_name = document.getElementById('name');
+			var letters = /^[a-zA-Z][a-zA-Z\s]*$/;
+			//check if name is alphabetic
+			if(acc_name.value.match(letters)){
+				if(acc_name.value.length > 10){
+					acc_name_valid = true;
+					acc_name.style.borderColor = "green";
+					acc_name.style.color = "green";
+				}else{
+					acc_name.style.borderColor = "red";
+					acc_name.style.color = "red";
+				}
+			}else{
+				acc_name.style.borderColor = "red";
+				acc_name.style.color = "red";
+			}
+		}
+
+		//CHECKING DATE
+		document.getElementById("expiry").onkeyup = function() 
+		{
+			var acc_expiry = document.getElementById('expiry');
+			//check 
+			if(acc_expiry.value.length == 9){
+				if(acc_expiry.value.substring(5,9) == 2021 && acc_expiry.value.substring(0,2) >= 3 &&acc_expiry.value.substring(0,2) <= 12){
+					acc_expiry_valid = true;
+					document.getElementById("cvc").focus();
+					acc_expiry.style.borderColor = "green";
+					acc_expiry.style.color = "green";
+				}
+				else if(acc_expiry.value.substring(0,2) >= 01 && acc_expiry.value.substring(0,2) <= 12 && acc_expiry.value.substring(5,9) >= 2022 && acc_expiry.value.substring(5,9) <= 2031){
+					acc_expiry_valid = true;
+					document.getElementById("cvc").focus();
+					acc_expiry.style.borderColor = "green";
+					acc_expiry.style.color = "green";
+				}
+				else{
+					acc_expiry.style.borderColor = "red";
+					acc_expiry.style.color = "red";
+				}
+			}else{
+				acc_expiry.style.borderColor = "red";
+				acc_expiry.style.color = "red";
+			}
+		}
+
+		//CHECKING CVC
+		document.getElementById("cvc").onkeyup = function() 
+		{
+			var acc_cvc = document.getElementById('cvc');
+			//check 
+			if(acc_cvc.value.length == 3){
+				acc_cvc_valid = true;
+				document.getElementById("apply").focus();
+				acc_cvc.style.borderColor = "green";
+				acc_cvc.style.color = "green";
+			}
+			else{
+				acc_cvc.style.borderColor = "red";
+				acc_cvc.style.color = "red";
+			}
+		}
+        document.querySelector("#apply").addEventListener("click", function(event) {
+			if(acc_nr_valid == true && acc_name_valid == true && acc_expiry_valid == true && acc_cvc_valid == true){
+				document.getElementById('cashInput').style.display = "block";
+				event.preventDefault();
+				// document.getElementById("acc_form").submit();
+			}else{
+				event.preventDefault();
 			}
         });  
     </script>

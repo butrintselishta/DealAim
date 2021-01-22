@@ -71,13 +71,9 @@
     <style>
         .jp-card {
             height: 90% !important;
-            margin-left: 115%;
         }
         .form-group1 {
             width: 35%;
-        }
-        .btn_center{
-            margin-left:46%;
         }
         @media only screen and (max-width: 768px){
             .jp-card{
@@ -85,9 +81,6 @@
             }
             .form-group1 {
                 width: 50%;
-            }
-            .btn_center{
-             margin-left:28.5%;
             }
         }
         .shites {

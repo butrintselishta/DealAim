@@ -489,7 +489,7 @@
 									<div class="float-left"><a><?php if(isset($_SESSION['user_exist_false'])){echo $_SESSION['user_exist_false'];} ?></a></div>
 									<div class="float-right"><a id="forgot" href="signin.php?forgot_password">Keni harruar fjalëkalimin?</a></div>
 								</div>
-								<div class="text-center"><input type="submit" name="signin" value="Log In" class="btn_1 full-width"></div>
+								<div class="text-center"><input type="submit" name="signin" value="Kyçu" class="btn_1 full-width"></div>
 								
 								<?php } unset($_SESSION['user_exist_false']); ?>
 								<?php unset($_SESSION['forgot_password_confirm']);?>
