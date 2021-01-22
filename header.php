@@ -92,12 +92,20 @@
         }
         .shites {
             font-weight: bold !important;
-            color: #172134 !important;
+            background: transparent;
             font-size: 15px !important;
+            border: 0;
         }
 
         .shites:hover {
             color: white !important;
+            border:0;
+        }
+        .shites:focus{
+            outline:0;
+            color: white !important;
+            background: transparent;
+            border:0;
         }
         .sukses {
             width:100%;
@@ -106,7 +114,13 @@
             text-align:center;
             margin-bottom:6px;
         }
-        
+        .gabim {
+            width:100%;
+            padding: 10px 10px 1px 10px;
+            background-color:#EFB3AB;
+            text-align:center;
+            margin-bottom:6px;
+        }
         
     </style>
     <!-- BASE CSS -->
@@ -193,7 +207,7 @@
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
                                                     if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
                                                         echo "<li>";
-                                                        echo "<a id='showForm' class='shites' target='_parent'>Apliko për blerës</a>";
+                                                        echo "<a href='profile.php#formL'  class='shites'>Apliko për blerës</button>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";

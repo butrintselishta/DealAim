@@ -123,6 +123,7 @@
 		<!--form -->
 	</div>
 <!-- COMMON SCRIPTS -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/common_scripts.min.js"></script>
 <script src="js/main.js"></script>
 
@@ -142,41 +143,16 @@
 
 		$('#image').click(function(){
             $('#myfile').click();
-        })
+        });
 
-        $('#showForm').click(function() {
-            
-            let currentURL = $(location).attr("href");
-            let redirectURL = "http://127.0.0.1/dealaim/profile.php"
-            if (currentURL !== redirectURL) {
-                $(location).attr("href", redirectURL);
-                var formL = $('.formL').show();
-                document.documentElement.scrollTop = formL[0].offsetTop;
-            } else {
-                var formL = $('.formL').show(); 
-                document.documentElement.scrollTop = formL[0].offsetTop;
-            }
+        
 
+        function showDiv() {
+            document.getElementById('showForm').style.display = "block";
+        }
+        
+    </script>
 
-            // var formL = $('.formL').show(); // show the form wrapper in order to get its height
-            // // formLHeight = formL.height(),
-            // // formLForm = formL.find('form').hide(); // hide the form itself instead
-      
-            // // formL.height(formLHeight);
-            // // formLForm.toggle("slow", function() {
-            // //     // optionally, reset the height
-            // //     formL.height('auto');
-            // // }); 
-            
-            // // this line is only needed so that the code snippet will not scroll the
-            // // outer browser window, but only the iframe content. If you're not in an iframe,
-            // // you can just use the original scrollIntoView() approach instead
-            // document.documentElement.scrollTop = formL[0].offsetTop;
-            // //   formL.get(0).scrollIntoView();
-          
-            
-});
-	</script>
 </body>
 
 </html>

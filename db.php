@@ -6,9 +6,9 @@ session_start();
 	DEFINE('CONFIRMED',1); 
 	DEFINE('BUYER',2); 
 	DEFINE('SELLER',3);
-	DEFINE('DEVELOPMENT', 1);
+	DEFINE('DEVELOPMENT', 0);
 	DEFINE('KEY', "testtest");
-	if (DEVELOPMENT == 0) {
+	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
 	 } else {
