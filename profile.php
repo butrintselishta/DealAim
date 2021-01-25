@@ -6,14 +6,31 @@
 
 	$stmt = "";
 	if($_SESSION['logged'] == true){
-		$stmt = prep_stmt("SELECT * FROM users WHERE username = ?", $_SESSION['user']['username'], "s");
+		$stmt = prep_stmt("SELECT * FROM users WHERE username = ? or email = ?", array($_SESSION['user']['username'],$_SESSION['user']['email']), "s");
 	}
 
 	if(isset($_POST['bank_acc'])){
-		$acc_number = trim($_POST['number']);die(var_dump($acc_number));
+		$acc_number = trim($_POST['number']);
 		$acc_full_name = $_POST['name'];
 		$acc_expiry = $_POST['expiry'];
 		$acc_cvc = $_POST['cvc'];
+		$user_id = $_POST['user_id'];
+
+		// //CREATING BANK ACCOUNT for the register user // 	//generating an account number // 	// $acc_number = array(); // 	// $acc_first_nr = rand(4,5); // 	// $acc_number[] .= $acc_first_nr; // 	// for($i = 0; $i < 15; $i++){ // 	// 	if($acc_number[0] == 5){ // 	// 		$acc_number[1] = 1; // 	// 		$acc_number[] .= rand(0,10); // 	// 	} // 	// 	else{ // 	// 		$acc_number[] .= rand(0,10); // 	// 	} // 	// } // 	// $acc_number = implode("", $acc_number); // 	// $acc_number1 = substr($acc_number,0,16); // 	// //getting the full name // 	// $acc_full_name = ucwords($fname . " " . $lname); // 	// //generating a random expiry date betwwen today and today after 10 years // 	// $todays_date = strtotime(date("Y-m-d")); // 	// $expires_at = strtotime(date("Y-m-d", strtotime("+10 years", $todays_date))); // 	// $get_date = rand($todays_date, $expires_at); // 	// $acc_expiry = date("m/Y",$get_date); // 	// //generating a cvv code // 	// $cvv = array(); // 	// for($j=0; $j<3; $j++){ // 	// 	$cvv[] = rand(0,9); // 	// } // 	// $cvv_implode = implode("", $cvv); // 	// $acc_cvv = (int)$cvv_implode; // 	
+		//generating account balance // 	
+		$euro = rand(10,2000); 
+		$centa = rand(0,99); 
+		$random = str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
+		$acc_balance_str = $euro . "." . $random; 
+		$acc_balance = floatval($acc_balance_str); 
+			 
+		//inserting data (bank account)
+		if(!prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance, user_id) VALUES(?,?,?,?,?,?)",array($acc_number, $acc_full_name, $acc_expiry, $acc_cvc, $acc_balance, $user_id), "sssisi")){ $_SESSION['insert_data_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë për tu regjistruar</p>"; header("location:signin.php"); die();}
+
+		if(!prep_stmt("UPDATE users SET status=? WHERE user_id = ?", array(BUYER,$user_id), "ii")){
+			die("NO UPDATE!");
+		}
+
 	}
 ?>
 <?php require "header.php"; ?>
@@ -142,12 +159,18 @@
 											<input type="number" name="cvc" id="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
 										</div>
 									</div>
-									<div class="col-12 pl-1" id="cashInput" style="display:none;">
+									<div class="col-12 pl-1">
+										<div class="form-group form-group1">
+											<label> CVV Kodi </label>
+											<input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>" class="form-control" style="text-align:center;">
+										</div>
+									</div>
+									<!-- <div class="col-12 pl-1" id="cashInput" style="display:none;">
 										<div class="form-group form-group1">
 											<label> Shuma </label> <small> (Shuma që dëshironi të nxjerrni) </small>
 											<input type="number" name="shuma" id="shuma" class="form-control" placeholder="xxx"  style="text-align:center;">
 										</div>
-									</div>
+									</div> -->
 									<div class="text-center btn_center"><button type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
 								</form>
 							</div>	
@@ -288,9 +311,9 @@
 		}
         document.querySelector("#apply").addEventListener("click", function(event) {
 			if(acc_nr_valid == true && acc_name_valid == true && acc_expiry_valid == true && acc_cvc_valid == true){
-				document.getElementById('cashInput').style.display = "block";
-				event.preventDefault();
-				// document.getElementById("acc_form").submit();
+				// document.getElementById('cashInput').style.display = "block";
+				// event.preventDefault();
+				document.getElementById("acc_form").submit();
 			}else{
 				event.preventDefault();
 			}
