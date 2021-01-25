@@ -3,8 +3,8 @@
 	
 	// die(var_dump($randomFloat));
   	$token_type = false;
-	if(isset($_SESSION['user_buyer']) || isset($_SESSION['user_seller'])){ 
-		header("location:index.php"); 
+	if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+		header("location:profile.php"); 
 	}
 	if(isset($_POST['signup'])){
 		$user = trim($_POST['username']); $password_1 = $_POST['password_1']; $password_2 = $_POST['password_2']; $fname = trim(ucfirst($_POST['first_name'])); $lname = trim(ucfirst($_POST['last_name'])); $email = $_POST['email']; $phone = trim($_POST['phone']); $bday = $_POST['bday']; $city = trim($_POST['city']); $post = trim($_POST['postcode']); $address = $_POST['address'];
@@ -90,7 +90,7 @@
 		$user_signin = $_POST['username'];
 		$password_signin = $_POST['password'];
 		
-		$sel_user = prep_stmt("SELECT * FROM users WHERE username = ? OR email=?", array($user_signin,$user_signin), 'ss');
+		$sel_user = prep_stmt("SELECT * FROM users WHERE username = ? ", $user_signin, 's');
 		$_SESSION['logged'] = false;
 		$_SESSION['user'] = array();
 
@@ -119,7 +119,7 @@
 						header("location:index.php"); die();
 					}elseif($row['status'] === ADMIN){
 						$_SESSION['logged'] = true;
-						$_SESSION['user'] += ["username"=>ADMIN];
+						$_SESSION['user'] += ["username"=>"{$user_signin}"];
 						$_SESSION['user'] += ["status"=>ADMIN];
 						header("location:admin.php");die();
 					}
@@ -132,7 +132,7 @@
 			}
 		}
 		else {
-			$_SESSION['user_exist_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Përdoruesi ose fjalëkalimi janë të shkruara gabim! </small>";
+			$_SESSION['user_exist_false'] = "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'> Ky përdorues nuk ekziston! </small>";
 			header("signin.php");
 		}
 	}
@@ -434,8 +434,8 @@
 									}
 								?>
 								<div class="form-group">
-									<label> Përdoruesi ose Email * </label>
-									<input type="text" class="form-control" name="username" placeholder="përdoruesi ose emaili..." <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
+									<label> Përdoruesi * </label>
+									<input type="text" class="form-control" name="username" placeholder="përdoruesi..." <?php if(isset($_SESSION['user_exist_false'])){ echo "style='border-color:red;'";} ?>>
 								</div>
 								<div class="form-group">
 								<label> Fjalëkalimi * </label>

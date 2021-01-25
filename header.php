@@ -1,10 +1,11 @@
 <?php 
     require_once "db.php";
 
-    // if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
-    //     $sts = array_search(BUYER, $_SESSION['user']);
-	// 	die(var_dump($sts));
-    // }
+//   if(isset($_SESSION['logged'])){
+//       $user = $_SESSION['user']['username'];
+//       $stmt = prep_stmt("SELECT status FROM users WHERE username = ?", $user, 's');
+//       $s = mysqli_fetch_array($stmt); die(var_dump($s));
+//   }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -280,25 +281,29 @@
                             <div class="col-xl-2 col-lg-2 col-md-3">
                                 <ul class="top_tools">
                                     <li> </li>
+                                    
                                         <!-- /dropdown-cart-->
                                     <li>
                                         <div class="dropdown dropdown-access">
                                             <a href="<?php if(isset($_SESSION['logged'])){ echo "profile.php ";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
                                             <div class="dropdown-menu">
                                                 <?php if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){   ?>
-                                                <a style="font-size: 15px;font-weight:italic;">Përshëndetje
+                                                <a style="font-size: 15px;font-weight:italic;">Statusi:
                                                     <?php
                                                         if(isset($_SESSION['user'])){
                                                             if($_SESSION['user']['status'] == CONFIRMED){
-                                                                echo ucfirst($_SESSION['user']['username']);
+                                                                echo "<b style='color:#CF2928'> I REGJISTRUAR </b>";
                                                             }elseif($_SESSION['user']['status'] == BUYER){
-                                                                echo ucfirst($_SESSION['user']['username']);
+                                                                echo "<b style='color:#E8532B'>BLERËS</b>";
                                                             }else{
-                                                                echo ucfirst($_SESSION['user']['username']);
+                                                                echo "<b style='color:#5ABC35'>SHITËS</b>";
                                                             }
                                                         }
                                                     ?> 
                                                 </a>
+                                                <!-- <a style="font-size: 15px;font-weight:italic;">Bilanci:
+                                                    <b style='color:green'> $222 </b>
+                                                </a> -->
                                                 <ul>
                                                     <li>
                                                         <a href="profile.php"><i class="ti-user"></i>Profili im</a>
@@ -333,6 +338,13 @@
                                     </li>
                                 </ul>
                             </div>
+                            <!-- <div class="col-xl-1 col-lg-2 col-md-3">
+                                <ul class="top_tools">
+                                    <li>
+                                    <a style=""> Bilanci: 222$ </a>
+                                                </li>
+                                </ul>
+                            </div> -->
                         </div>
                         <!-- /row -->
                     </div>

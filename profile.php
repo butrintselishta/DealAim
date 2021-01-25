@@ -1,16 +1,17 @@
 <?php 
-    require "db.php";
-    if(!isset($_SESSION['logged'])){
-        header("location:index.php");
+	require "db.php";
+    if($_SESSION['logged'] == false){
+        header("location:signin.php");
 	}
 
-	$stmt = "";
-	if($_SESSION['logged'] == true){
-		$stmt = prep_stmt("SELECT * FROM users WHERE username = ? or email = ?", array($_SESSION['user']['username'],$_SESSION['user']['email']), "s");
-	}
+	$username = $_SESSION['user']['username']; //USERNAME I PERDORUESITTE KYCUR
+	$stmt = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
+
+	// $stmt_fetch = mysqli_fetch_array($stmt);
+	// $stmt_id = $stmt_fetch['user_id'];
 
 	if(isset($_POST['bank_acc'])){
-		$acc_number = trim($_POST['number']);
+		$acc_number = str_replace(" ", "", $_POST['number']);
 		$acc_full_name = $_POST['name'];
 		$acc_expiry = $_POST['expiry'];
 		$acc_cvc = $_POST['cvc'];
@@ -25,10 +26,12 @@
 		$acc_balance = floatval($acc_balance_str); 
 			 
 		//inserting data (bank account)
-		if(!prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance, user_id) VALUES(?,?,?,?,?,?)",array($acc_number, $acc_full_name, $acc_expiry, $acc_cvc, $acc_balance, $user_id), "sssisi")){ $_SESSION['insert_data_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë për tu regjistruar</p>"; header("location:signin.php"); die();}
+		if(!prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance, user_id) VALUES(?,?,?,?,?,?)",array($acc_number, $acc_full_name, $acc_expiry, $acc_cvc, $acc_balance, $user_id), "sssisi")){ $_SESSION['insert_bank_acc_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë dhe provoni përsëri!</p>"; header("location:profile.php"); die();}
 
 		if(!prep_stmt("UPDATE users SET status=? WHERE user_id = ?", array(BUYER,$user_id), "ii")){
 			die("NO UPDATE!");
+		}else { 
+			$_SESSION['user']['status'] = BUYER;
 		}
 
 	}
@@ -58,7 +61,6 @@
                 <h3 class="new_client">Profili im</h3> 
                 <!-- <small class="float-right pt-2" style="color:black;"><b style='font-size:15px; color:red;'>* </b> -> Fushat që duhet mbushur detyrimisht</small>
                  -->
-                 
                 <div class="form_container">
 						<div class="private box">
 							<div class="row no-gutters">
@@ -86,6 +88,13 @@
 							</div>
 							<!-- /row -->
 							<div class="divider"><span style="background-color:#fff">Të dhënat personale</span></div>
+							<?php
+								if(isset($_SESSION['insert_bank_acc_error'])){
+									echo "<div class='gabim'>";
+									echo $_SESSION['insert_bank_acc_error'];
+									echo "</div>";
+								}unset($_SESSION['insert_bank_acc_error']);
+							?>
 							<div class="row no-gutters">
 								<div class="col-6 pr-1" id="formL">
 									<div class="form-group">
@@ -123,9 +132,79 @@
 									</div>
 								</div>
 							</div>
-							<div class="text-center"><a href="#formL" onclick="showDiv()" class="btn_1 ">Apliko për blerës</a></div>
-						</div>
+							<?php if($_SESSION['user']['status'] == BUYER){
+								$stmt_check_id = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
+								$stmt_fetch = mysqli_fetch_array($stmt_check_id);
+								$stmt_id = $stmt_fetch['user_id']; 
+								$select_user_bank = prep_stmt("SELECT * FROM bank_acc WHERE user_id=?", $stmt_id, "i");  
+								$row_bank = mysqli_fetch_array($select_user_bank); 
 
+								if(mysqli_num_rows($select_user_bank) > 0){
+									while($row_bank = mysqli_fetch_array($select_user_bank)){
+										$number = $row_bank['acc_number'];
+										$name = $row_bank['acc_full_name'];
+										$expiry = str_replace(" ", "", $row_bank['acc_expiry']);
+										$cvc = $row_bank['acc_cvc'];
+										
+									
+										$acc_nr = substr($number, 0, 1);$acc_nr2 = substr($number, -1);
+										$acc_bank_number = $acc_nr . "*** **** **** ***" . $acc_nr2;
+
+										$name_substr1 = substr($name, 0, 1);
+										$name_substr2 = substr($name, -1);
+										$name_str = str_repeat("*", strlen($name)-2);
+										$acc_bank_name = $name_substr1 . $name_str . $name_substr2;
+
+										$expiry_substr1 = substr($expiry, 0, 1);
+										$expiry_substr2 = substr($expiry, -1);
+										$expiry_str = str_repeat("*", strlen($expiry)-2);
+										$acc_bank_expiry = $expiry_substr1 . $expiry_str . $expiry_substr2;
+
+										$cvc_substr = substr_replace($cvc, "***", 0, strlen($cvc));
+									}
+								}
+									
+							?>
+								<div class="divider"><span style="background-color:#fff">Të dhënat bankare</span></div>
+								<div class="private box" id="">
+									<center>
+									<div class="row no-gutters form-container active" id="">
+										<form style="width:100%;">
+											<div class="col-12 pl-1">
+												<div class="form-group form-group1">
+													<label> Numri i xhirollogarisë </label>
+													<input type="text" name="number" placeholder="<?php echo $acc_bank_number; ?>" class="form-control" style="text-align:center;" disabled="disabled">
+												</div>
+											</div>
+											<div class="col-12 pl-1">
+												<div class="form-group form-group1">
+													<label> Emri dhe Mbiemri </label>
+													<input type="text" name="name" placeholder="<?php echo $acc_bank_name ?>" class="form-control"   style="text-align:center;" disabled="disabled">
+												</div>
+											</div>
+											<div class="col-12 pl-1">
+												<div class="form-group form-group1">
+													<label> Data skadencës </label>
+													<input type="tel" name="expiry" class="form-control"   style="text-align:center;" placeholder="<?php echo $acc_bank_expiry ?>" disabled="disabled">
+												</div>
+											</div>
+											<div class="col-12 pl-1">
+												<div class="form-group form-group1">
+													<label> CVV Kodi </label>
+													<input type="number" name="cvc" class="form-control"   style="text-align:center;" placeholder="<?php echo $cvc_substr ?>" disabled="disabled">
+												</div>
+											</div>
+										</form>
+									</div>	
+									</center>
+								</div>
+							<?php }  ?>
+							<?php if($_SESSION['user']['status'] == CONFIRMED){ ?>
+							<div class="text-center"><a href="#formL" onclick="showDiv()" class="btn_1 ">Apliko për blerës</a></div> 
+							<?php } elseif($_SESSION['user']['status'] == BUYER){ ?>
+							<div class="text-center"><a href="#formL" onclick="showDiv()" class="btn_1 ">Apliko për shitës</a></div> 
+							<?php } ?>
+						</div>
 
 						<div class="private box" id="showForm" style="display:none">
 							<div class="divider">
@@ -161,8 +240,7 @@
 									</div>
 									<div class="col-12 pl-1">
 										<div class="form-group form-group1">
-											<label> CVV Kodi </label>
-											<input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>" class="form-control" style="text-align:center;">
+											<input type="hidden" name="user_id" class="form-control" value="<?php echo $row['user_id'] ?>" style="text-align:center;">
 										</div>
 									</div>
 									<!-- <div class="col-12 pl-1" id="cashInput" style="display:none;">
