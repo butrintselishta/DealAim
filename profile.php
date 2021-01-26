@@ -27,13 +27,14 @@
 			 
 		//inserting data (bank account)
 		if(!prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance, user_id) VALUES(?,?,?,?,?,?)",array($acc_number, $acc_full_name, $acc_expiry, $acc_cvc, $acc_balance, $user_id), "sssisi")){ $_SESSION['insert_bank_acc_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë dhe provoni përsëri!</p>"; header("location:profile.php"); die();}
-
-		if(!prep_stmt("UPDATE users SET status=? WHERE user_id = ?", array(BUYER,$user_id), "ii")){
-			die("NO UPDATE!");
-		}else { 
-			$_SESSION['user']['status'] = BUYER;
+		else{
+			if(!prep_stmt("UPDATE users SET status=?,user_balance=? WHERE user_id = ?", array(BUYER,0,$user_id), "iii")){
+				die("Ndodhi një gabim");
+			}else { 
+				$_SESSION['user']['status'] = BUYER;
+				$_SESSION['insert_bank_acc_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi juaj është ndryshuar në <b style='color:#F0AC1A'> BLERËS </b>, bilanci juaj për momentin është <b style='color:#CF2928'>€0.00</b>. Për ta ndryshuar gjendjen e bilancit shikoni <a href='#'>udhëzimet</a> ose ndryshoni menjëher <b><a href='#'>këtu</a></b></p>"; header("location:profile.php"); die();
+			}
 		}
-
 	}
 ?>
 <?php require "header.php"; ?>
@@ -93,7 +94,11 @@
 									echo "<div class='gabim'>";
 									echo $_SESSION['insert_bank_acc_error'];
 									echo "</div>";
-								}unset($_SESSION['insert_bank_acc_error']);
+								}elseif(isset($_SESSION['insert_bank_acc_correct'])){
+									echo "<div class='sukses'>";
+									echo $_SESSION['insert_bank_acc_correct'];
+									echo "</div>";
+								}unset($_SESSION['insert_bank_acc_error']);unset($_SESSION['insert_bank_acc_correct']);
 							?>
 							<div class="row no-gutters">
 								<div class="col-6 pr-1" id="formL">
@@ -137,14 +142,13 @@
 								$stmt_fetch = mysqli_fetch_array($stmt_check_id);
 								$stmt_id = $stmt_fetch['user_id']; 
 								$select_user_bank = prep_stmt("SELECT * FROM bank_acc WHERE user_id=?", $stmt_id, "i");  
-								$row_bank = mysqli_fetch_array($select_user_bank); 
 
 								if(mysqli_num_rows($select_user_bank) > 0){
 									while($row_bank = mysqli_fetch_array($select_user_bank)){
 										$number = $row_bank['acc_number'];
 										$name = $row_bank['acc_full_name'];
 										$expiry = str_replace(" ", "", $row_bank['acc_expiry']);
-										$cvc = $row_bank['acc_cvc'];
+										$cvc = $row_bank['acc_cvc']; 
 										
 									
 										$acc_nr = substr($number, 0, 1);$acc_nr2 = substr($number, -1);
@@ -446,9 +450,6 @@
             debug: false
 
         });
-    </script>
-     <script>
-         //credit card max length
     </script>
 </main>
 <?php require "footer.php"; ?>

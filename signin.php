@@ -7,7 +7,17 @@
 		header("location:profile.php"); 
 	}
 	if(isset($_POST['signup'])){
-		$user = trim($_POST['username']); $password_1 = $_POST['password_1']; $password_2 = $_POST['password_2']; $fname = trim(ucfirst($_POST['first_name'])); $lname = trim(ucfirst($_POST['last_name'])); $email = $_POST['email']; $phone = trim($_POST['phone']); $bday = $_POST['bday']; $city = trim($_POST['city']); $post = trim($_POST['postcode']); $address = $_POST['address'];
+		$user = trim($_POST['username']);
+		$password_1 = $_POST['password_1'];
+		$password_2 = $_POST['password_2'];
+		$fname = trim(ucfirst($_POST['first_name']));
+		$lname = trim(ucfirst($_POST['last_name']));
+		$email = $_POST['email'];
+		$phone = trim($_POST['phone']);
+		$bday = $_POST['bday'];
+		$city = trim($_POST['city']);
+		$post = trim($_POST['postcode']);
+		$address = $_POST['address'];
 
 		$userError = false; $passwordError = false; $fnameError = false; $lnameError = false; $emailError = false; $phoneError = false; $cityError=false; $postnrError = false; $addressError = false; $bdayError = false;
 		$_SESSION['signup_errors'] = array();
@@ -30,7 +40,7 @@
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { $emailError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Email nuk është shkruar në formatin e duhur</small>"]; }elseif(mysqli_num_rows($select_email) > 0){ $emailError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Përdoruesi me këtë email ekziston!</small>"]; }
 
 		//TEL NUMBER ERROR
-		if (!is_numeric($phone) && !((strpos($phone, '+')) || (strpos($phone, '-')))) { $phoneError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_email'] = $email; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["phoneError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë lejon vetëm +, - dhe numra 0 deri 9</small>"]; } elseif((strlen($phone) < 8) || (strlen($phone) > 16)) { $phoneError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_email'] = $email; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["phoneError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 8 deri 16 numra</small>"]; }
+		// if (!is_numeric($phone) && !((strpos($phone, '+')) || (strpos($phone, '-')))) { $phoneError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_email'] = $email; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["phoneError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë lejon vetëm +, - dhe numra 0 deri 9</small>"]; } elseif((strlen($phone) < 8) || (strlen($phone) > 16)) { $phoneError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_email'] = $email; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["phoneError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 8 deri 16 numra</small>"]; }
 
 		//CITY ERRORS
 		if (empty($city)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!ctype_alpha($city)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Qyteti duhet të jetë në rangun A-ZH</small>"]; } elseif((strlen($city) < 4) || (strlen($city) > 15)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 4 deri në 15 shkronja</small>"]; }
@@ -563,14 +573,17 @@
 										<div class="col-6 pl-1">
 											<div class="form-group">
 												<?php
-													if(isset($_SESSION['signup_errors'])){
-														if(array_key_exists('phoneError', $_SESSION['signup_errors'])){
-															echo $_SESSION['signup_errors']['phoneError'];
-														}
-													}
+													// if(isset($_SESSION['signup_errors'])){
+													// 	if(array_key_exists('phoneError', $_SESSION['signup_errors'])){
+													// 		echo $_SESSION['signup_errors']['phoneError'];
+													// 	}
+													// }
 												?>
-												<label style='padding-left:.3em; <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('phoneError', $_SESSION['signup_errors'])){ echo "display:none"; } } ?>'>Nr. Telefonit</label>
-												<input type="text" class="form-control" name="phone" placeholder="+383 xx xxx xxx " value="<?php if(isset($_SESSION['save_phone'])){ echo $_SESSION['save_phone'];} unset($_SESSION['save_phone']); ?>" <?php if(isset($_SESSION['signup_errors'])){ if(array_key_exists('phoneError', $_SESSION['signup_errors'])){ echo "style='border-color:red'"; } } ?>>
+												<label style='padding-left:.3em;' id="label" >Nr. Telefonit *</label>
+												<label><span id="valid-msg" class="hide" style="text-align:center">(✓ Valid)</span></label>
+												<label><span id="error-msg" class="hide" style="text-align:center"></span></label>
+												<input id="phone" type="tel" name="phone" class="form-control" value="<?php if(isset($_SESSION['save_phone'])){
+												echo $_SESSION['save_phone']; unset($_SESSION['save_phone']);	}?>">
 											</div>
 										</div>
 										
@@ -684,7 +697,7 @@
 								</div> -->
 								<!-- /company -->
 								<hr>
-								<div class="text-center"><input type="submit" name="signup" value="Regjistrohu" class="btn_1 full-width"></div>
+								<div class="text-center"><input type="submit" name="signup" value="Regjistrohu" id="register" class="btn_1 full-width"></div>
 							<!-- /form_container -->
 							</form>
 						</div>
@@ -695,7 +708,78 @@
 			</div>
 		<!-- /row -->
 	</div>
+	<script src="js/intlTelInput.js"></script>
+    <script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            // autoPlaceholder: "off",
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            // geoIpLookup: function(callback) {
+            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+            //     var countryCode = (resp && resp.country) ? resp.country : "";
+            //     callback(countryCode);
+            //   });
+            // },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            // nationalMode : false,
+            // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+            // placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            // separateDialCode: true,
+            utilsScript: "js/utils.js",
+        });
+    </script>
+    <script>
+        var input = document.querySelector("#phone"),
+            errorMsg = document.querySelector("#error-msg"),
+            validMsg = document.querySelector("#valid-msg");
 
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["(Numri i pavlefshëm)", "(Invalid country code)", "(Shumë i shkurtër)", "(Shumë i gjatë)", "(Numri i pavlefshëm)"];
+
+        // initialise plugin
+        var iti = window.intlTelInput(input, {
+            utilsScript: "js/utils.js?1603274336113"
+        });
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+					validMsg.classList.remove("hide");
+					document.getElementById("valid-msg").style.color = "#60CA0D";
+					document.getElementById("phone").style.borderColor = "#60CA0D";
+					document.getElementById("register").disabled = false;
+                } else {
+                    input.classList.add("error");
+					var errorCode = iti.getValidationError();
+                    document.getElementById("error-msg").style.color = "#E62E2D";
+                    document.getElementById("phone").style.borderColor = "#E62E2D";
+                    errorMsg.innerHTML = errorMap[errorCode];
+					errorMsg.classList.remove("hide");
+					document.getElementById("register").disabled = true;
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
+    </script>											
 	    <!-- Js Plugins per DATEPICKER -->
 		<script src="js/datepicker/jquery-3.3.1.min.js"></script>
 		<script src="js/datepicker/jquery-ui.min.js"></script>

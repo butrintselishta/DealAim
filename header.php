@@ -1,11 +1,5 @@
 <?php 
     require_once "db.php";
-
-//   if(isset($_SESSION['logged'])){
-//       $user = $_SESSION['user']['username'];
-//       $stmt = prep_stmt("SELECT status FROM users WHERE username = ?", $user, 's');
-//       $s = mysqli_fetch_array($stmt); die(var_dump($s));
-//   }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,7 +109,9 @@
             text-align:center;
             margin-bottom:6px;
         }
-        
+        .hide {
+            display: none;
+        }
     </style>
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
@@ -135,6 +131,8 @@
     <link href="css/account.css" rel="stylesheet">
     <link href="css/checkout.css" rel="stylesheet">
     <link href="css/error_track.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/intlTelInput.css">
+    <!-- <link rel="stylesheet" href="css/demo.css"> -->
 </head>
 
 <body>
@@ -294,20 +292,35 @@
                                                             if($_SESSION['user']['status'] == CONFIRMED){
                                                                 echo "<b style='color:#CF2928'> I REGJISTRUAR </b>";
                                                             }elseif($_SESSION['user']['status'] == BUYER){
-                                                                echo "<b style='color:#E8532B'>BLERËS</b>";
+                                                                echo "<b style='color:#F0AC1A'>BLERËS</b>";
                                                             }else{
                                                                 echo "<b style='color:#5ABC35'>SHITËS</b>";
                                                             }
                                                         }
                                                     ?> 
                                                 </a>
-                                                <!-- <a style="font-size: 15px;font-weight:italic;">Bilanci:
-                                                    <b style='color:green'> $222 </b>
-                                                </a> -->
+                                                
+                                                <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
+                                                {   
+                                                    $st = prep_stmt("SELECT CAST(user_balance as decimal(6,2)) FROM users WHERE username=?", $_SESSION['user']['username'], 's');
+                                                    $sql = mysqli_fetch_array($st);
+                                                    echo "<hr style='margin:0.4em 0 0.4em 0'>";
+                                                    echo "<a style='font-size:15px;font-weight:italic;'>Bilanci:
+                                                        <b style='color:green'> €". $sql[0]." </b>
+                                                    </a>";
+                                                }
+                                                ?>
+                                                <!-- -->
                                                 <ul>
                                                     <li>
                                                         <a href="profile.php"><i class="ti-user"></i>Profili im</a>
                                                     </li>
+                                                    <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
+                                                    {  ?>
+                                                    <li>
+                                                        <a href="balance.php"><i class="ti-money"></i>Ndrysho Bilancin</a>
+                                                    </li>
+                                                    <?php }?>
                                                     <li>
                                                         <a href="logout.php"><i class="ti-shift-left-alt"></i>Ç'kyçu</a>
                                                     </li>
@@ -318,7 +331,8 @@
                                             </div>
                                         </div>
                                         <!-- /dropdown-access-->
-                                    </li>
+                                    </li>  
+                                  
                                     <!-- <li>
                                         <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
                                     </li> -->

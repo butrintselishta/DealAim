@@ -1,5 +1,5 @@
 <?php 
-   
+   require_once 'db.php';
 ?>
 <footer class="revealed">
     <div class="container">

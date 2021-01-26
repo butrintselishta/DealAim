@@ -1,76 +1,53 @@
+<!DOCTYPE html>
+<html>
+
 <head>
-    <style type='text/css'>
-        /* CLIENT-SPECIFIC STYLES */
-        
-        body,
-        table,
-        td,
-        a {
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-        }
-        
-        table,
-        td {
-            mso-table-lspace: 0pt;
-            mso-table-rspace: 0pt;
-        }
-        
-        img {
-            -ms-interpolation-mode: bicubic;
-        }
-        /* RESET STYLES */
-        
-        img {
-            border: 0;
-            height: auto;
-            line-height: 100%;
-            outline: none;
-            text-decoration: none;
-        }
-        
-        table {
-            border-collapse: collapse !important;
-        }
-        
-        body {
-            height: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-        }
-        /* iOS BLUE LINKS */
-        
-        a[x-apple-data-detectors] {
-            color: inherit !important;
-            text-decoration: none !important;
-            font-size: inherit !important;
-            font-family: inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-        }
-        /* MOBILE STYLES */
-        
-        @media screen and (max-width:600px) {
-            h1 {
-                font-size: 32px !important;
-                line-height: 32px !important;
-            }
-        }
-        /* ANDROID CENTER FIX */
-        
-        div[style*='margin: 16px 0;'] {
-            margin: 0 !important;
+    <meta charset="utf-8">
+    <title>International Telephone Input</title>
+    <link rel="stylesheet" href="css/intlTelInput.css">
+    <link rel="stylesheet" href="css/demo.css">
+    <style>
+        .hide {
+            display: none;
         }
     </style>
 </head>
 
 <body>
+    <h1>International Telephone Input</h1>
     <!-- HIDDEN PREHEADER TEXT -->
     <input id="phone" type="tel">
     <span id="valid-msg" class="hide">✓ Valid</span>
     <span id="error-msg" class="hide"></span>
 
+
+    <script src="js/intlTelInput.js"></script>
+    <script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            // autoPlaceholder: "off",
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            // geoIpLookup: function(callback) {
+            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+            //     var countryCode = (resp && resp.country) ? resp.country : "";
+            //     callback(countryCode);
+            //   });
+            // },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            // nationalMode : false,
+            // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+            // placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            // separateDialCode: true,
+            utilsScript: "js/utils.js",
+        });
+    </script>
     <script>
         var input = document.querySelector("#phone"),
             errorMsg = document.querySelector("#error-msg"),
@@ -81,7 +58,7 @@
 
         // initialise plugin
         var iti = window.intlTelInput(input, {
-            utilsScript: "../../build/js/utils.js?1603274336113"
+            utilsScript: "js/utils.js?1603274336113"
         });
 
         var reset = function() {
@@ -97,9 +74,12 @@
             if (input.value.trim()) {
                 if (iti.isValidNumber()) {
                     validMsg.classList.remove("hide");
+                    document.getElementById("valid-msg").style.color = "#60CA0D";
                 } else {
                     input.classList.add("error");
                     var errorCode = iti.getValidationError();
+                    document.getElementById("error-msg").style.color = "#E62E2D";
+                    document.getElementById("phone").style.borderColor = "#E62E2D";
                     errorMsg.innerHTML = errorMap[errorCode];
                     errorMsg.classList.remove("hide");
                 }
