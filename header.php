@@ -70,6 +70,9 @@
         .form-group1 {
             width: 35%;
         }
+        .input-group-bal {
+                width:30% !important;
+            }
         @media only screen and (max-width: 768px){
             .jp-card{
                 margin-left: 25%;
@@ -77,7 +80,23 @@
             .form-group1 {
                 width: 50%;
             }
+            .input-group-bal {
+                width:60% !important;
+            }
+            .btn__1{
+                display:flow-root !important;
+            }
+            
         }
+        @media only screen and (max-width: 1199px){
+            .checkmark {
+                margin-left:0% !important;
+            }
+            .btn__1{
+                display:flow-root !important;
+            }
+        }
+
         .shites {
             font-weight: bold !important;
             background: transparent;
@@ -203,7 +222,7 @@
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";
-                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Apliko për shitës</a>";
+                                                        echo "<a href='profile.php#formBuyer' class='shites'>Apliko për shitës</a>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == SELLER){
                                                         echo "<li>";
@@ -246,22 +265,20 @@
                                             </span>
                                             <div id="menu">
                                                 <ul>
-                                                    <li><span><a href="#0">Makina</a></span>
-                                                        <ul>
-                                                            <li><a href="produktet.php">Vetura</a></li>
-                                                            <li><a href="produktet.php">Motoçikleta (mbi 50cc)</a></li>
-                                                            <li><a href="produktet.php">Moped (nën 50cc)</a></li>
-                                                        </ul>
-                                                    </li>
                                                     <li><span><a href="#">Elektronik</a></span>
                                                         <ul>
-                                                            <li><a href="produktet.php">Kompjuter</a></li>
-                                                            <li><a href="produktet.php">Telefon</a></li>
+                                                            <li><a href="products.php">Kompjuter</a></li>
+                                                            <li><a href="products.php">Telefon</a></li>
                                                         </ul>
                                                     </li>
-                                                    <li><span><a href="#">Afarizëm</a></span>
+                                                    <li><span><a href="#0">Makina</a></span>
                                                         <ul>
-                                                            <li><a href="produktet.php">Hapësirë afariste</a></li>
+                                                            <li><a href="products.php">Vetura</a></li> 
+                                                        </ul>
+                                                    </li>
+                                                    <li><span><a href="#">WEB</a></span>
+                                                        <ul>
+                                                            <li><a href="products.php">Template</a></li>
                                                         </ul>
                                                     </li>
                                                 </ul>
@@ -318,7 +335,7 @@
                                                     <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
                                                     {  ?>
                                                     <li>
-                                                        <a href="balance.php"><i class="ti-money"></i>Ndrysho Bilancin</a>
+                                                        <a href="balance.php"><i class="ti-money"></i>Bilanci</a>
                                                     </li>
                                                     <?php }?>
                                                     <li>

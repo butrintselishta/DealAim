@@ -14,8 +14,8 @@
 
     
     //TERHIQ
-    if(isset($_POST['terheq_btn'])){
-        $ter = $_POST['ter_shuma']; 
+    if(isset($_POST['depozite_btn'])){
+        $ter = $_POST['dep_shuma']; 
         $ter_shuma = number_format($ter, 2,'.', '');//die(var_dump($ter_shuma));
 
         $balance = prep_stmt("SELECT acc_balance FROM bank_acc WHERE user_id=?", $user_id['user_id'],'i');
@@ -55,8 +55,8 @@
     }
 
     //DEPOZITO
-    if(isset($_POST['depozite_btn'])){
-        $dep = $_POST['dep_shuma'];
+    if(isset($_POST['terheq_btn'])){
+        $dep = $_POST['ter_shuma'];
         $dep_shuma = number_format($dep, 2,'.', '');//die(var_dump($dep_shuma));
         $sel_current_balance = prep_stmt("SELECT user_balance FROM users WHERE user_id=?", $user_id['user_id'],"i");
         if(mysqli_num_rows($sel_current_balance) > 0){
@@ -86,7 +86,7 @@
                 $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:balance.php"); die();
                }
                else{
-                $_SESSION['user_balance_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> <b style='color:#F0AC1A;font-size:17px;'>". $dep_shuma ."€ </b> janë depozituar në llogarinë tuaj bankare. Bilanci juaj aktual është: <b style='color:#F0AC1A;font-size:17px;'>". $tot_balance_user ."€ </b></p>"; header("location:balance.php"); die();
+                $_SESSION['user_balance_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> <b style='color:#F0AC1A;font-size:17px;'>". $dep_shuma ."€ </b> janë tërhequr nga llogaria juaj. Bilanci juaj aktual është: <b style='color:#F0AC1A;font-size:17px;'>". number_format($tot_balance_user,2,'.','') ."€ </b></p>"; header("location:balance.php"); die();
                }
             }
         }
@@ -121,7 +121,7 @@
                         <center>
                             <div class="row no-gutters">
                                 <?php
-                                     if(isset($_SESSION['prep_stmt_error'])){
+                                    if(isset($_SESSION['prep_stmt_error'])){
                                         echo "<div class='gabim'>";
                                         echo $_SESSION['prep_stmt_error'];
                                         echo "</div>";
@@ -141,8 +141,8 @@
                                          <label> Zgjedhni shërbmin </label>
                                         <select class="wide add_bottom_10" name="country" id="sherbimi"  onchange="showSherbimin()" >
                                             <option value="0" selected="">Zgjedhni...</option>
-                                            <option value="1">Tërheqje</option>
-                                            <option value="2">Depozitë</option>
+                                            <option value="1">Depozitë</option>
+                                            <option value="2">Tërheqje</option>
                                         </select>
                                     </div>
                                 </form>
@@ -151,37 +151,6 @@
                     </div>
                 </div>
                 <!-- TERHEQ div -->
-                <div class="form_container" id="terheqje_div" style="box-shadow:none; display:none;" >
-                <div class="divider" style="margin-bottom:2em;"><span style="background-color:#fff">Shërbimi zgjedhur: <b style="color:#5ABC35;font-size:17px; font-weight:900; "> TËRHEQJE </b></span></div>
-                    <div class="private box" style="background:#F8F8F8;">
-                        <center>
-                            <div class="row no-gutters">
-                                <form style="width:100%; float:right;" method="POST" action="" id="ter_form">
-                                    <div style="width:100%">
-                                        <ul style="list-style: '\00BB'; color:#5ABC35; text-align:left; ">
-                                            <li style="font-weight: 500; padding: 10px 0px 5px 0px; ">
-                                                <i style="font-size:14px;"><b>TËRHEQJE PARASH</b> => Paratë që dëshironi t'i fusni në llogarinë tuaj këtu (në DEAL AIM) <b>nga llogaria juaj bankare</b></i>
-                                            </li>
-                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-                                                <i style="font-size:14px;">Shuma minimale për tërheqje është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
-                                            </li>
-                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-                                                <i style="font-size:14px;">Shuma duhet të jetë fikse (p.sh: <b style="color: #2C4EDA; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro 1000 euro... </b>) </i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="form-group form-group1" style="width:30%;">
-                                        <label> Shëno shumën </label>
-                                        <input type="text" name="ter_shuma" id="ter_shuma" class="form-control" style="text-align:center;">
-                                    </div>
-                                    <div class="text-center btn_center" style="margin-bottom:20px;"><button type="submit" id="balance_btn_ter" name="terheq_btn" value="Vazhdo" class="btn_1 ">TËRHIQ</button></div>
-                                </form>
-                            </div>
-                        </center>
-                    </div>
-                </div>
-                
-                <!-- DEPOZITE div -->
                 <div class="form_container" id="depozite_div" style="box-shadow:none; display:none;" >
                 <div class="divider" style="margin-bottom:2em;"><span style="background-color:#fff">Shërbimi zgjedhur: <b style="color:#2C4EDA;font-size:17px; font-weight:900;"> DEPOZITË </b></span></div>
                     <div class="private box" style="background:#F8F8F8;">
@@ -191,7 +160,7 @@
                                     <div style="width:100%">
                                         <ul style="list-style: '\00BB'; color:#2C4EDA; text-align:left; ">
                                             <li style="font-weight: 500; padding: 10px 0px 5px 0px; ">
-                                                <i style="font-size:14px;"><b>DEPOZITË PARASH</b> => Paratë që dëshironi t'i ktheni(depozitoni) në llogarinë tuaj bankare <b>nga llogaria juaj këtu (në DEAL AIM)</b></i>
+                                                <i style="font-size:14px;"><b>DEPOZITË PARASH</b> => Paratë që dëshironi t'i fusni në llogarinë tuaj këtu (në DEAL AIM) <b>nga llogaria juaj bankare</b></i>
                                             </li>
                                             <li style="font-weight: 500; padding: 5px 0px 10px 0px;">
                                                 <i style="font-size:14px;">Shuma minimale për depozitë është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
@@ -201,9 +170,12 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="form-group form-group1" style="width:30%;">
-                                        <label> Shëno shumën </label>
-                                        <input type="text" name="dep_shuma" id="dep_shuma" class="form-control" style="text-align:center;">
+                                    <label> Shëno shumën </label>
+                                    <div class="input-group input-group-bal mb-3">
+                                        <input type="text" name="dep_shuma" id="dep_shuma" class="form-control" aria-label="Amount (to the nearest euro)">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">€</span>
+                                        </div>
                                     </div>
                                     <div class="text-center btn_center" style="margin-bottom:20px;"><button type="submit" id="balance_btn_dep" name="depozite_btn" value="Vazhdo" class="btn_1 ">DEPOZITO</button></div>
                                 </form>
@@ -211,6 +183,43 @@
                         </center>
                     </div>
                 </div>
+
+                <div class="form_container" id="terheqje_div" style="box-shadow:none; display:none;" >
+                <div class="divider" style="margin-bottom:2em;"><span style="background-color:#fff">Shërbimi zgjedhur: <b style="color:#5ABC35;font-size:17px; font-weight:900; "> TËRHEQJE </b></span></div>
+                    <div class="private box" style="background:#F8F8F8;">
+                        <center>
+                            <div class="row no-gutters">
+                                <form style="width:100%; float:right;" method="POST" action="" id="ter_form">
+                                    <div style="width:100%">
+                                        <ul style="list-style: '\00BB'; color:#5ABC35; text-align:left; ">
+                                            <li style="font-weight: 500; padding: 10px 0px 5px 0px; ">
+                                                <i style="font-size:14px;"><b>TËRHEQJE PARASH</b> => Paratë që dëshironi t'i ktheni në llogarinë tuaj bankare <b>nga llogaria juaj këtu (në DEAL AIM)</b></i>
+                                            </li>
+                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                <i style="font-size:14px;">Shuma minimale për tërheqje është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
+                                            </li>
+                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                <i style="font-size:14px;">Shuma duhet të jetë fikse (p.sh: <b style="color: #2C4EDA; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro 1000 euro... </b>) </i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <label> Shëno shumën </label>
+                                    <div class="input-group input-group-bal mb-3" >
+                                        
+                                        <input type="text" name="ter_shuma" id="ter_shuma" class="form-control" aria-label="Amount (to the nearest euro)">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">€</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center btn_center" style="margin-bottom:20px;"><button type="submit" id="balance_btn_ter" name="terheq_btn" value="Vazhdo" class="btn_1 ">TËRHIQ</button></div>
+                                </form>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+                
+                <!-- DEPOZITE div -->
+                
             </div>
         </div>
     </div>
@@ -220,11 +229,11 @@
             var sherbimi = document.getElementById("sherbimi");
             console.log(sherbimi.value);
             if(sherbimi.value == 1){
+                document.getElementById("terheqje_div").style.display = "none";
+                document.getElementById("depozite_div").style.display = "block"; 
+            }else if(sherbimi.value == 2){
                 document.getElementById("terheqje_div").style.display = "block";
                 document.getElementById("depozite_div").style.display = "none";
-            }else if(sherbimi.value == 2){
-                document.getElementById("terheqje_div").style.display = "none";
-                document.getElementById("depozite_div").style.display = "block";
             }else{
                 document.getElementById("terheqje_div").style.display = "none";
                 document.getElementById("depozite_div").style.display = "none";

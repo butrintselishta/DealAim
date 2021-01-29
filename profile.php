@@ -29,11 +29,24 @@
 		if(!prep_stmt("INSERT INTO bank_acc(acc_number,acc_full_name,acc_expiry, acc_cvc, acc_balance, user_id) VALUES(?,?,?,?,?,?)",array($acc_number, $acc_full_name, $acc_expiry, $acc_cvc, $acc_balance, $user_id), "sssisi")){ $_SESSION['insert_bank_acc_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë dhe provoni përsëri!</p>"; header("location:profile.php"); die();}
 		else{
 			if(!prep_stmt("UPDATE users SET status=?,user_balance=? WHERE user_id = ?", array(BUYER,0,$user_id), "iii")){
-				die("Ndodhi një gabim");
+				$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:balance.php"); die();
 			}else { 
 				$_SESSION['user']['status'] = BUYER;
 				$_SESSION['insert_bank_acc_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi juaj është ndryshuar në <b style='color:#F0AC1A'> BLERËS </b>, bilanci juaj për momentin është <b style='color:#CF2928'>€0.00</b>. Për ta ndryshuar gjendjen e bilancit shikoni <a href='#'>udhëzimet</a> ose ndryshoni menjëher <b><a href='balance.php'>këtu</a></b></p>"; header("location:profile.php"); die();
 			}
+		}
+	}
+
+	//apply for seller
+	if(isset($_POST['seller_apply'])){
+		$id_number = $_POST['id_number'];
+		$term_cond = intval($_POST['check_confirm']);//die(var_dump($check));
+
+		if(!prep_stmt("UPDATE users SET pid_number = ?, terms_and_conditions =  ?, status=? WHERE username = ?", array($id_number,$term_cond,SELLER, $username), "iiis")){
+			$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:balance.php"); die();
+		}else{
+			$_SESSION['user']['status'] = SELLER;
+			$_SESSION['seller_status_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi juaj është ndryshuar në <b style='color:#5ABC35; font-weight:900;'> SHITËS </b>, tani pos që mund të fitoni ankande si blerës, ju mund edhe të futni produkte tuaja në ankand për shitje. </p>"; header("location:profile.php"); die();
 		}
 	}
 ?>
@@ -59,12 +72,37 @@
 				while($row = mysqli_fetch_array($stmt))
 				{
 				?>
-                <h3 class="new_client">Profili im</h3> 
+				<h3 class="new_client">Profili im</h3> 
+				<h3 class="float-right pt-2" style="font-size:15px; padding-right:.5em;">Statusi: <?php if($_SESSION['user']['status'] == CONFIRMED){ echo "<b style='color:#CF2928; font-size:15px'>I REGJISTRUAR</b></h3>"; } elseif ($_SESSION['user']['status'] == BUYER){echo "<b style='color:#F0AC1A; font-size:18px'>BLERËS</b></h3>";}else {echo "<b style='color:#5ABC35'>SHITËS</b></h3>"; } ?>
                 <!-- <small class="float-right pt-2" style="color:black;"><b style='font-size:15px; color:red;'>* </b> -> Fushat që duhet mbushur detyrimisht</small>
                  -->
                 <div class="form_container">
 						<div class="private box">
 							<div class="row no-gutters">
+							<?php
+								if(isset($_SESSION['prep_stmt_error'])){
+									echo "<div class='gabim'>";
+									echo $_SESSION['prep_stmt_error'];
+									echo "</div>";
+								}
+								elseif(isset($_SESSION['insert_bank_acc_error'])){
+									echo "<div class='gabim'>";
+									echo $_SESSION['insert_bank_acc_error'];
+									echo "</div>";
+								}elseif(isset($_SESSION['insert_bank_acc_correct'])){
+									echo "<div class='sukses'>";
+									echo $_SESSION['insert_bank_acc_correct'];
+									echo "</div>";
+								}elseif(isset($_SESSION['seller_status_correct'])){
+									echo "<div class='sukses'>";
+									echo $_SESSION['seller_status_correct'];
+									echo "</div>";
+								};
+								unset($_SESSION['prep_stmt_error']);
+								unset($_SESSION['insert_bank_acc_error']);
+								unset($_SESSION['insert_bank_acc_correct']);
+								unset($_SESSION['seller_status_correct']);
+							?>
 								<div class="col-12 pr-1">
 										<img src="img/blog-1.jpg" id="image" style="max-width:180px; border-radius: 50% !important; display: block; height:180px; margin:2% 0% 2% 42.5%;:center;">
 										<input type="file" id="myfile" style="display: none;"/>
@@ -89,17 +127,7 @@
 							</div>
 							<!-- /row -->
 							<div class="divider"><span style="background-color:#fff">Të dhënat personale</span></div>
-							<?php
-								if(isset($_SESSION['insert_bank_acc_error'])){
-									echo "<div class='gabim'>";
-									echo $_SESSION['insert_bank_acc_error'];
-									echo "</div>";
-								}elseif(isset($_SESSION['insert_bank_acc_correct'])){
-									echo "<div class='sukses'>";
-									echo $_SESSION['insert_bank_acc_correct'];
-									echo "</div>";
-								}unset($_SESSION['insert_bank_acc_error']);unset($_SESSION['insert_bank_acc_correct']);
-							?>
+							
 							<div class="row no-gutters">
 								<div class="col-6 pr-1" id="formL">
 									<div class="form-group">
@@ -137,7 +165,7 @@
 									</div>
 								</div>
 							</div>
-							<?php if($_SESSION['user']['status'] == BUYER){
+							<?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){
 								$stmt_check_id = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
 								$stmt_fetch = mysqli_fetch_array($stmt_check_id);
 								$stmt_id = $stmt_fetch['user_id']; 
@@ -186,7 +214,7 @@
 													<input type="text" name="name" placeholder="<?php echo $acc_bank_name ?>" class="form-control"   style="text-align:center;" disabled="disabled">
 												</div>
 											</div>
-											<div class="col-12 pl-1">
+											<div class="col-12 pl-1" id="formBuyer">
 												<div class="form-group form-group1">
 													<label> Data skadencës </label>
 													<input type="tel" name="expiry" class="form-control"   style="text-align:center;" placeholder="<?php echo $acc_bank_expiry ?>" disabled="disabled">
@@ -204,9 +232,9 @@
 								</div>
 							<?php }  ?>
 							<?php if($_SESSION['user']['status'] == CONFIRMED){ ?>
-							<div class="text-center"><a href="#formL" onclick="showDiv()" class="btn_1 ">Apliko për blerës</a></div> 
+							<div class="text-center" style="margin-bottom:15px;"><a href="#formL" onclick="showFormBuyer()" class="btn_1 ">Apliko për blerës</a></div> 
 							<?php } elseif($_SESSION['user']['status'] == BUYER){ ?>
-							<div class="text-center"><a href="#formL" onclick="showDiv()" class="btn_1 ">Apliko për shitës</a></div> 
+							<div class="text-center" style="margin-bottom:15px;"><a href="#formBuyer" onclick="showFormSeller()" id="showSellerForm" class="btn_1 ">Apliko për shitës</a></div> 
 							<?php } ?>
 						</div>
 
@@ -224,7 +252,7 @@
 											<input type="text" name="number" id="number" class="form-control" placeholder="xxxx xxxx xxxx xxxx" style="text-align:center;">
 										</div>
 									</div>
-									<div class="col-12 pl-1">
+									<div class="col-12 pl-1" >
 										<div class="form-group form-group1">
 											<label> Emri dhe Mbiemri </label>
 											<input type="text" name="name" id="name" class="form-control"  placeholder="Emri dhe Mbiemri" style="text-align:center;">
@@ -242,8 +270,8 @@
 											<input type="number" name="cvc" id="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
 										</div>
 									</div>
-									<div class="col-12 pl-1">
-										<div class="form-group form-group1">
+									<div class="col-12 pl-1" >
+										<div class="form-group form-group1" >
 											<input type="hidden" name="user_id" class="form-control" value="<?php echo $row['user_id'] ?>" style="text-align:center;">
 										</div>
 									</div>
@@ -253,19 +281,128 @@
 											<input type="number" name="shuma" id="shuma" class="form-control" placeholder="xxx"  style="text-align:center;">
 										</div>
 									</div> -->
-									<div class="text-center btn_center"><button type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
+									<div class="text-center btn_center" style="margin-bottom:15px;"><button type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
 								</form>
 							</div>	
 							</center>
 						</div>
-						<hr>
+						
+						<!-- SELLER data -->
+						<?php if($_SESSION['user']['status'] == SELLER){ ?>
+							<div class="private box" margin-top:3em;>
+							<div class="divider">
+								<span style="background-color:#fff">Të dhënat shtesë</span>
+							</div>
+							<center>
+							<div class="row no-gutters form-container active" id="">
+								<form style="width:100%;">
+									<div class="clearfix add_bottom_15 ">
+										<?php 
+										$stmt = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
+										if(mysqli_num_rows($stmt) > 0){
+											while($seller_sel = mysqli_fetch_array($stmt))
+											{
+										?>
+										<div class="checkboxes float-center">
+											<div class="form-group form-group1">
+												<label style="font-weight:500;color:black;"> ID Identifikuese </label>
+												<input type="text" class="form-control"  placeholder="<?php echo $seller_sel['pid_number']; ?>" style="text-align:center;" readonly>
+											</div>
+										</div>
+										<?php } } ?>
+									</div>
+								</form>
+							</div>	
+							</center>
+						</div>
+						<?php } ?>
+
+						<!-- SELLER application -->
+						<div class="private box" id="showForm_seller" style="display; margin-top:3em;display:none;">
+							<div class="divider">
+								<span style="background-color:#fff">Aplikimi për shitës</span>
+							</div>
+							<center>
+							<div class="row no-gutters form-container active" id="">
+								<form method="POST" action="profile.php" id="form_seller" style="width:100%;">
+									<div class="clearfix add_bottom_15" style="width:42.5%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
+										<div class="checkboxes float-center">
+											<small style="color:red; font-weight:700;"><i class="ti-hand-point-right" style="color:black;"></i> Shënoni ID-në identifikuese tek fusha e parë, është e domosdoshme.</small><br/>
+											<small style="color:red; font-weight:700;"><i class="ti-hand-point-right" style="color:black;"></i> Ju lutem lexoni me kujdes <a href="#" style="font-weight:900;"> Termet dhe Kushtet</a>, pas pranimit të tyre përgjegjësia është mbi ju. </small>
+										</div>
+									</div>
+									<div class="clearfix add_bottom_15 ">
+										<div class="checkboxes float-center">
+											<div class="form-group form-group1">
+												<input type="text" name="id_number" id="id_number" class="form-control"  placeholder="Numri pasaportes (ID identifikuese)" style="text-align:center;">
+											</div>
+										</div>
+									</div>
+									<div class="clearfix add_bottom_15">
+										<div class="checkboxes float-center">
+											<label class="container_check" style="color:black;">Duke klikuar këtu, unë i pranoj <a href="#" style="font-weight:900;"> Termet dhe Kushtet. <b style="color:red">*</b></a>
+												<input type="checkbox" value="" name="check_confirm" id="check_confirm" onclick="calc()">
+												<span class="checkmark" name="checkmark" id="checkmark" style="margin-left:34%;"></span>
+											</label>
+										</div>
+									</div> 
+									<div class="text-center btn_center" style="margin-bottom:15px;"><button type="submit" id="seller_apply" name="seller_apply" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
+								</form>
+							</div>	
+							</center>
+						</div>
 						<!-- /form_container -->
                 </div>
 				<!-- /box_account -->
 	 <?php } 	} ?>
 			</div>			
         </div>
-    </div>
+	</div>
+	<script>
+		function showFormSeller() {
+			var e = document.getElementById("showForm_seller");
+    	   	e.style.display = (e.style.display == 'block') ? 'none' : 'block';
+        }
+		var id_num = false; var is_check = false;
+		function calc(){
+			var isChecked = document.getElementById("check_confirm");
+			if(isChecked.checked){
+				isChecked.value = 1;
+				is_check = true;
+			}else{
+				isChecked.value=0;
+				is_check = false;
+			}
+		}
+		
+		document.getElementById("id_number").onkeyup = function() 
+		{
+			var id_number = document.getElementById('id_number');
+			if(id_number.value.match('^\\d+$')){
+				if(id_number.value.length >= 8 && id_number.value.length <= 15){
+					id_number.style.borderColor = "green";
+					id_number.style.color = "green";
+					id_num = true;
+				}else{
+					id_number.style.borderColor = "red";
+					id_number.style.color = "red";
+					id_num = false;
+				}
+			}else{
+				id_number.style.borderColor = "red";
+				id_number.style.color = "red";
+				id_num = false;
+			}
+		}
+
+		document.querySelector("#seller_apply").addEventListener("click", function(event) {
+			if(id_num == true && is_check == true){
+				document.getElementById("form_seller").submit();
+			}else{
+				event.preventDefault();
+			}
+        });  
+	</script>
 	<script>
 
 		var acc_nr_valid = false; var acc_name_valid = false; var acc_expiry_valid = false; var acc_cvc_valid = false;

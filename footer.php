@@ -147,8 +147,9 @@
 
         
 
-        function showDiv() {
-            document.getElementById('showForm').style.display = "block";
+        function showFormBuyer() {
+            var e = document.getElementById("showForm");
+    	   	e.style.display = (e.style.display == 'block') ? 'none' : 'block';
         }
 
         

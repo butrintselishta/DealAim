@@ -184,12 +184,12 @@
 					<div class="grid_item">
 						<figure>
 							<span class="ribbon off">-30%</span>
-							<a href="produktet.php">
+							<a href="details.php">
 								<img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/1.jpg" alt="">
 							</a>
 							<div data-countdown="2020/03/15" class="countdown"></div>
 						</figure>
-						<a href="produktet.php">
+						<a href="details.php">
 							<h3>Armor Air x Fear</h3>
 						</a>
 						<div class="price_box">

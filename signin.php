@@ -261,7 +261,7 @@
 	else
 	{
 		if(isset($_SESSION['unconfirmed'])){
-			if($_SESSION['unconfirmed']== UNCONFIRMED){ ?>
+			if($_SESSION['unconfirmed'] == UNCONFIRMED){ ?>
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-md-5">
@@ -296,16 +296,6 @@
 			$row_sts = mysqli_fetch_array($stmt_sts);
 
 			if($date_email[0] !== NULL && $row_sts['status'] == UNCONFIRMED && $row_token['type'] == false){ 
-				//rrit statusin e userit nese konfirmohet emaili
-				$stmt_confirmed = prep_stmt("UPDATE users SET status=? WHERE email=?", array(CONFIRMED,		$date_email[0]), "is");
-				//token type ktheje ne true (used);
-				$token_type = true;
-				$stmt_token_confirmed = prep_stmt("UPDATE tokens SET type=? WHERE plain_txt=?", array($token_type,$date_email[0]), "is");
-
-				if($stmt_confirmed == 0 || $stmt_token_confirmed == 0){
-					die("Gabim ne:". mysqli_stmt_error);
-				}
-
 				?>
 				<div class="container">
 					<div class="row justify-content-center">
@@ -320,14 +310,23 @@
 									</svg>
 								</div>
 							<h2>JENI KONFIRMUAR</h2>
-							<p>Emaili juaj është konfirmuar, klikoni <a href="signin.php"> këtu </a> për kyçje në sistem</p>
+							<p>Llogaria juaj është konfirmuar, klikoni <a href="signin.php"> këtu </a> për kyçje në sistem</p>
 							</div>
 						</div>
 					</div>
 					<!-- /row -->
 				</div>
 		<?php 
-		} else { //NOT A VALID LINK 
+		//rrit statusin e userit nese konfirmohet emaili
+		$stmt_confirmed = prep_stmt("UPDATE users SET status=? WHERE email=?", array(CONFIRMED,		$date_email[0]), "is");
+		//token type ktheje ne true (used);
+		$token_type = true;
+		$stmt_token_confirmed = prep_stmt("UPDATE tokens SET type=? WHERE plain_txt=?", array($token_type,$date_email[0]), "is");die(var_dump($stmt_token_confirmed));
+
+		if($stmt_confirmed == 0 || $stmt_token_confirmed == 0){
+			die("Gabim");
+		} } 
+		else { //NOT A VALID LINK 
 			echo "<script language='javascript'> window.location='signin.php?invalid_link';</script>";
 		} }
 		//FORGOT PASSWORD (NEW PASSWORD)
