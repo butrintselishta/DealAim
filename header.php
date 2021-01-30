@@ -1,5 +1,44 @@
 <?php 
     require_once "db.php";
+     //PRODUKTET dhe BRENDET dynamic multilevel menu
+    $result = prep_stmt("SELECT cat_id,cat_title,parent_id,cat_link FROM categories",null,null);
+    //create a multidimensional array to hold a list of menu and parent menu
+	$menu = array(
+		'menus' => array(),
+		'parent_menus' => array()
+	);
+ 
+	//build the array lists with data from the menu table
+	while ($row = mysqli_fetch_assoc($result)) {
+		//creates entry into menus array with current menu id ie. $menus['menus'][1]
+		$menu['menus'][$row['cat_id']] = $row;
+		//creates entry into parent_menus array. parent_menus array contains a list of all menus with children
+		$menu['parent_menus'][$row['parent_id']][] = $row['cat_id'];
+	}
+	
+	// Create the main function to build milti-level menu. It is a recursive function.	
+	function buildMenu($parent, $menu) {
+        $html = "";
+        if (isset($menu['parent_menus'][$parent])) {
+            $html .= "<ul>";
+            foreach ($menu['parent_menus'][$parent] as $menu_id) {
+                if (!isset($menu['parent_menus'][$menu_id])) { //rreshtin posht te brand_prod kam mbet
+                    $html .= "
+                                 <li>
+                                    <a href='" . $menu['menus'][$menu_id]['cat_link'] . "?sub_cat=$menu_id". "'>" . $menu['menus'][$menu_id]['cat_title'] . "</a>
+                                 </li>
+                                ";
+                }
+                if (isset($menu['parent_menus'][$menu_id])) {
+                    $html .= "<li><span><a href='" . $menu['menus'][$menu_id]['cat_link'] . "'>" . $menu['menus'][$menu_id]['cat_title'] . "</a></span>";
+                    $html .= buildMenu($menu_id, $menu);
+                    $html .= "</li>";
+                }
+            }
+            $html .= "</ul>";
+        }
+        return $html;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -264,24 +303,8 @@
                                                 </a>
                                             </span>
                                             <div id="menu">
-                                                <ul>
-                                                    <li><span><a href="#">Elektronik</a></span>
-                                                        <ul>
-                                                            <li><a href="products.php">Kompjuter</a></li>
-                                                            <li><a href="products.php">Telefon</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><span><a href="#0">Makina</a></span>
-                                                        <ul>
-                                                            <li><a href="products.php">Vetura</a></li> 
-                                                        </ul>
-                                                    </li>
-                                                    <li><span><a href="#">WEB</a></span>
-                                                        <ul>
-                                                            <li><a href="products.php">Template</a></li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
+                                                <!--- CATEGORIES -->
+                                                <?php echo buildMenu(0,$menu);?>
                                             </div>
                                         </li>
                                     </ul>
