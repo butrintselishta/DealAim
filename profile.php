@@ -245,7 +245,7 @@
 							<center>
 							<div class="row no-gutters form-container active" id="">
 								<form method="POST" action="profile.php" id="acc_form" style="width:100%;">
-									<div class="card-wrapper"></div>
+							  		<div class="card-wrapper"></div>
 									<div class="col-12 pl-1">
 										<div class="form-group form-group1">
 											<label> Numri i xhirollogarisë </label>
