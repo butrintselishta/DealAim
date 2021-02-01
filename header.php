@@ -257,15 +257,15 @@
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
                                                     if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
                                                         echo "<li>";
-                                                        echo "<a href='profile.php#formL'  class='shites'>Apliko për blerës</button>";
+                                                        echo "<a href='user_panel/index.php?form_buyer'  class='shites'>Apliko për blerës</button>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";
-                                                        echo "<a href='profile.php#formBuyer' class='shites'>Apliko për shitës</a>";
+                                                        echo "<a href='user_panel/index.php?form_seller' class='shites'>Apliko për shitës</a>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == SELLER){
                                                         echo "<li>";
-                                                        echo "<a href='../item/allaia-ecommerce-html-template/25781982.html' class='shites' target='_parent'>Shto një produkt</a>";
+                                                        echo "";
                                                         echo "</li>";
                                                     }
                                                 }
@@ -353,14 +353,8 @@
                                                 <!-- -->
                                                 <ul>
                                                     <li>
-                                                        <a href="profile.php"><i class="ti-user"></i>Profili im</a>
+                                                        <a href="user_panel/index.php"><i class="ti-user"></i>Paneli</a>
                                                     </li>
-                                                    <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
-                                                    {  ?>
-                                                    <li>
-                                                        <a href="balance.php"><i class="ti-money"></i>Bilanci</a>
-                                                    </li>
-                                                    <?php }?>
                                                     <li>
                                                         <a href="logout.php"><i class="ti-shift-left-alt"></i>Ç'kyçu</a>
                                                     </li>
