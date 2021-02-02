@@ -61,8 +61,8 @@
 					<li><a href="#">Category</a></li>
 					<li>Page active</li>
 				</ul>
-		</div>
-    </div>
+			</div>
+  	  </div>
     <div class="row justify-content-center">
         <div class="col-xl-12 col-lg-6 col-md-8">
 			<div class="box_account">

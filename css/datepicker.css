@@ -40,7 +40,8 @@
     -ms-border-radius: 3px;
     border-radius: 3px;
     border: 1px solid #ddd;
-    height: calc(1.75em + .75rem + 2px)
+    height: calc(1.75em + .75rem + 2px);
+	width:100%
 }
 
 .datepicker-3:focus {

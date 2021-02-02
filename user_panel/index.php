@@ -47,7 +47,8 @@
 	if(mysqli_num_rows($stmt) > 0){
 		$stmt_fetch = mysqli_fetch_array($stmt);
 
-		$username = $stmt_fetch['username'];
+        $username = $stmt_fetch['username'];
+        $profile_pic = $stmt_fetch['profile_pic'];
 		$fname = $stmt_fetch['first_name'];//die(var_dump($fname));
 		$lname = $stmt_fetch['last_name'];
 		$email = $stmt_fetch['email'];
@@ -68,18 +69,94 @@
 		$user_fname = $_POST['fname'];
 		$user_lname = $_POST['lname'];
 		$user_email = $_POST['email'];
-		$user_tel = $_POST['tel'];
+		$user_tel = $_POST['phone'];
 		$user_bday =  $_POST['bday'];
 		$user_city = $_POST['city'];
 		$user_postal = $_POST['post_code'];
 		$user_address = $_POST['address'];
-		$user_pid = $_POST['pid'];
+        $user_pid = $_POST['pid'];
 
-		if($user_usname == $username && empty($user_pass) && $user_fname == $fname && $user_lname==$lname &&	$user_email==$email && $user_tel == $tel && $user_bday == $bday && $user_city == $city && $user_postal == $post_code && $user_address == $address && $user_pid == $pid){
-			die ("ska ndryshim");
+        if(is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
+            $pic = $_FILES['profile_pic'];
+            $picname = "profile_pic_" . $username; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename   = $picname . "." . $imageFileType; 
+            $target_dir = "../img/profile_pictures/{$basename}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $_SESSION['profile_pic_error'] = "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Pranohen vetem fotografitë, jo file tjera!</small>"; header("location:index.php"); die();
+            }
+            if ($pic['size'] > 3000000) {
+                $_SESSION['profile_pic_error'] = "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Foto është shumë e madhe!</small>"; header("location:index.php"); die();
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $_SESSION['profile_pic_error'] = "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Pranohen vetem fotografitë në formatin JPG, JPEG dhe PNG!</small>"; header("location:index.php"); die();
+            }
+            $source = $pic["tmp_name"];
+        }
+
+
+		if($user_usname == $username && empty($user_pass) && $user_fname == $fname && $user_lname==$lname &&	$user_email==$email && $user_tel == $tel && $user_bday == $bday && $user_city == $city && $user_postal == $post_code && $user_address == $address && $user_pid == $pid && !is_uploaded_file($_FILES['profile_pic']['tmp_name'])){
+            $_SESSION['no_changes_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> NUK KA NDRYSHIM! </h4><p style='color:#E62E2D;'> Ju nuk keni ndryshuar as një nga të dhënat </p>"; header("location:index.php"); die();
 		}else{
-			die ("ka ndryshim");
-		}
+            $passwordError = false; $fnameError = false; $lnameError = false; $emailError = false; $phoneError = false; $cityError=false; $postnrError = false; $addressError = false; $bdayError = false;
+            $_SESSION['user_data_errors'] = array();
+
+            if (!empty($user_pass) && strlen($user_pass) < 8) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"]; } elseif(!empty($user_pass) && strlen($user_pass) > 50) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"]; } elseif(!empty($user_pass) && !preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $user_pass)) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi nuk është i shkruar në formatin e duhur!</small>"]; } if (empty($user_fname)) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(strlen($user_fname) < 2) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i shkurtë</small>"]; } elseif(strlen($user_fname) > 15) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i gjatë</small>"]; } elseif(!ctype_alpha($user_fname) && !((strpos($user_fname, 'ë')) || (strpos($user_fname, 'Ë')) || (strpos($user_fname, 'ç')) || (strpos($user_fname, 'Ç')))) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri duhet të jetë në rangun A-ZH</small>"]; } if (empty($user_lname)) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(strlen($user_lname) < 2) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i shkurtë</small>"]; } elseif(strlen($user_lname) > 15) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i gjatë</small>"]; } elseif(!ctype_alpha($user_lname) && !((strpos($user_lname, 'ë')) || (strpos($user_lname, 'Ë')) || (strpos($user_lname, 'ç')) || (strpos($user_lname, 'Ç')))) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri duhet të jetë në rangun A-ZH</small>"]; } if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) { $emailError = true; $_SESSION['user_data_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Email nuk është shkruar në formatin e duhur</small>"]; } elseif(mysqli_num_rows($select_email) > 0) { $emailError = true; $_SESSION['user_data_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Përdoruesi me këtë email ekziston!</small>"]; } if (empty($user_city)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!ctype_alpha($user_city)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Qyteti duhet të jetë në rangun A-ZH</small>"]; } elseif((strlen($user_city) < 4) || (strlen($user_city) > 15)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 4 deri në 15 shkronja</small>"]; } if (empty($user_postal)) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!is_numeric($user_postal)) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"]; } elseif(strlen($user_postal) !== 5) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm 5 numra</small>"]; } if (empty($user_address)) { $addressError = true; $_SESSION['user_data_errors'] += ["addressError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } if (empty($user_pid)) { $pidError = true; $_SESSION['user_data_errors'] += ["pidError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; }elseif(!is_numeric($user_pid)){ $pidError = true; $_SESSION['user_data_errors'] += ["pidError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"]; }elseif(strlen($user_pid) < 8){ $pidError = true; $_SESSION['user_data_errors'] += ["pidError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>ID Identifikuese nuk është në formatin e duhur</small>"]; }elseif(strlen($user_pid) > 16){ $pidError = true; $_SESSION['user_data_errors'] += ["pidError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>ID Identifikuese nuk është në formatin e duhur</small>"]; }
+
+            if($passwordError || $fnameError || $lnameError || $emailError || $cityError || $postnrError || $addressError || $pidError){
+			header("location:index.php"); die();
+            }
+          else{
+                $user_birthday = date("Y-m-d", strtotime($user_bday)); //die($user_birthday);
+                $password_hash = password_hash($user_pass, PASSWORD_ARGON2I); //die($password_hash);
+                if (is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
+                    if (file_exists($target_dir)) {
+                    unlink($target_dir); //nese foto ekziston me ate emer, fshije
+                    move_uploaded_file($source, $target_dir); //ngarko foton e re
+                    } else {
+                    move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    }
+                }
+
+                if(empty($user_pass) && empty($basename)){
+                    if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=".$stmt_fetch['user_id'], array($user_fname,$user_lname,$user_email,$user_tel,$user_birthday,$user_city,$user_postal,$user_address,$user_pid), "ssssssisi")){
+                         $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+                    }else{
+                        $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die(); 
+                    }
+                }
+                elseif(empty($user_pass) && !empty($basename)){
+                    if(!prep_stmt("UPDATE users SET profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=".$stmt_fetch['user_id'], array($basename, $user_fname,$user_lname,$user_email,$user_tel,$user_birthday,$user_city,$user_postal,$user_address,$user_pid), "sssssssisi")){
+                        if($basename == $stmt_fetch['profile_pic']){
+                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die();  
+                        }else{
+                         $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+                        }
+                    }else{
+                        $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die(); 
+                    }
+                }elseif(!empty($user_pass) && empty($basename)){
+                    if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=".$stmt_fetch['user_id'], array($password_hash, $user_fname,$user_lname,$user_email,$user_tel,$user_birthday,$user_city,$user_postal,$user_address,$user_pid), "sssssssisi")){
+                         $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+                    }else{
+                        $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die(); 
+                    }
+                }
+                else{
+                    if(!prep_stmt("UPDATE users SET password=?,profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=".$stmt_fetch['user_id'], array($password_hash,$basename, $user_fname,$user_lname,$user_email,$user_tel,$user_birthday,$user_city,$user_postal,$user_address,$user_pid), "ssssssssisi")){
+                        if($basename == $stmt_fetch['profile_pic']){
+                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die();  
+                        }else{
+                         $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+                        }
+                    }else{
+                        $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die(); 
+                    }
+                }
+            }
+        }
 	}
 
 	// $stmt_id = $stmt_fetch['user_id'];
@@ -272,6 +349,9 @@
         .input-group-bal {
 			width:30% !important;
 		}
+        .img_upl{
+            width:20% !important;
+        }
         @media only screen and (max-width: 768px){
             .jp-card{
                 margin-left: 25%;
@@ -285,7 +365,9 @@
             .btn__1{
                 display:flow-root !important;
             }
-            
+            .img_upl{
+                width:80%  !important;
+        }
         }
         @media only screen and (max-width: 1199px){
             .checkmark {
@@ -359,7 +441,8 @@
     <link href="../css/error_track.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+    <link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+    <link rel="stylesheet" href="assets/css/_page-profile.scss">
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
@@ -580,124 +663,152 @@
         </header>
         <!-- /header -->
 <main class="bg_gray">
-     <div class="container margin_30">
-		<div class="page_header">
-			<div class="breadcrumbs">
-				<ul>
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Category</a></li>
-					<li>Page active</li>
-				</ul>
-		</div>
-    </div>
-    <div class="row justify-content-center" style="background:#fff; box-shadow:0px 0px 10px 0px rgb(0 0 0 / 10%);">
-        <div class="col-xl-12 col-lg-6 col-md-8">
-			<div class="box_account">
-              <center>
-                <h3 class="new_client">Përshëndetje, <i style="font-weight:bold;"><?php echo " " . $stmt_fetch['first_name'] . " " . $stmt_fetch['last_name']; ?></i></h3> 
-				<ul class="nav nav-tabs" role="tablist">
-					<?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ echo "<li class='active'><a href='#buyer' role='tab' data-toggle='tab'>Aplikimi për blerës</a></li>";} ?>
-					<?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ echo "<li class='active'><a href='#seller' role='tab' data-toggle='tab'>Aplikimi për shitës</a></li>";} ?>
-					<li class="<?php if(isset($_GET['form_buyer']) || isset($_GET['form_seller'])){ echo "";}else { echo "active";} ?>"><a href="#myprofile" role="tab" data-toggle="tab">Profili im</a></li>
-					<?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){ echo "<li><a href='#bank_acc' role='tab' data-toggle='tab'>Llogaria Bankare dhe Bilanci</a></li>"; } ?>
-					<?php if($_SESSION['user']['status'] == SELLER) {
+    <div class="container margin_30">
+        <div class="page_header">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Category</a></li>
+                    <li>Page active</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center" style="background:#fff; box-shadow:0px 0px 10px 0px rgb(0 0 0 / 10%);">
+            <div class="col-xl-12 col-lg-6 col-md-8">
+                <div class="box_account">
+                    <center>
+                        <h3 class="new_client">Përshëndetje, <i
+                                style="font-weight:bold;"><?php echo " " . $stmt_fetch['first_name'] . " " . $stmt_fetch['last_name']; ?></i>
+                        </h3>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ echo "<li class='active'><a href='#buyer' role='tab' data-toggle='tab'>Aplikimi për blerës</a></li>";} ?>
+                            <?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ echo "<li class='active'><a href='#seller' role='tab' data-toggle='tab'>Aplikimi për shitës</a></li>";} ?>
+                            <li
+                                class="<?php if(isset($_GET['form_buyer']) || isset($_GET['form_seller'])){ echo "";}else { echo "active";} ?>">
+                                <a href="#myprofile" role="tab" data-toggle="tab">Profili im</a></li>
+                            <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){ echo "<li ><a href='#bank_acc' role='tab' data-toggle='tab'>Llogaria Bankare dhe Bilanci</a></li>"; } ?>
+                            <?php if($_SESSION['user']['status'] == SELLER) {
 					echo "<li><a href='#prod_add' role='tab' data-toggle='tab'>Shto një produkt </a></li>";
 					echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
 					echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
 					} ?>
-				</ul>
-					<div class="tab-content content-profile">
-						<?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ ?>
-						<div class="tab-pane fade in active" id="buyer" style="">
-                            <!-- BANK ACCOUNT APPLICATION -->
-                             <div class="private box" id="showForm" style="display">
-                                <div class="divider">
-                                    <span style="background-color:#fff">Të dhënat bankare</span>
+                        </ul>
+                        <div class="tab-content content-profile">
+                            <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ ?>
+                            <div class="tab-pane fade in active" id="buyer" style="">
+                                <!-- BANK ACCOUNT APPLICATION -->
+                                <div class="private box" id="showForm" style="display">
+                                    <div class="divider">
+                                        <span style="background-color:#fff">Të dhënat bankare</span>
+                                    </div>
+                                    <center>
+                                        <div class="row no-gutters form-container active" id="">
+                                            <form method="POST" action="index.php" id="acc_form" style="width:100%;">
+                                                <div class="col-12 pl-1">
+                                                    <div class="card-wrapper"></div>
+                                                </div>
+                                                <div class="col-12 pl-1">
+                                                    <div class="form-group form-group1">
+                                                        <label> Numri i xhirollogarisë </label>
+                                                        <input type="text" name="number" id="number"
+                                                            class="form-control" placeholder="xxxx xxxx xxxx xxxx"
+                                                            style="text-align:center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 pl-1">
+                                                    <div class="form-group form-group1">
+                                                        <label> Emri dhe Mbiemri </label>
+                                                        <input type="text" name="name" id="name" class="form-control"
+                                                            placeholder="Emri dhe Mbiemri" style="text-align:center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 pl-1">
+                                                    <div class="form-group form-group1">
+                                                        <label> Data skadencës </label>
+                                                        <input type="tel" name="expiry" id="expiry" class="form-control"
+                                                            placeholder="MM/YY" style="text-align:center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 pl-1">
+                                                    <div class="form-group form-group1">
+                                                        <label> CVV Kodi </label>
+                                                        <input type="number" name="cvc" id="cvc" class="form-control"
+                                                            placeholder="xxx" style="text-align:center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 pl-1">
+                                                    <div class="form-group form-group1">
+                                                        <input type="hidden" name="user_id" class="form-control"
+                                                            value="<?php echo $stmt_fetch['user_id'] ?>"
+                                                            style="text-align:center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 pl-1" id="">
+                                                    <div class="text-center btn_center" style="margin-bottom:15px;">
+                                                        <button type="submit" id="apply" name="bank_acc" value="Vazhdo"
+                                                            class="btn_1 ">APLIKO</button></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </center>
                                 </div>
-                                <center>
+                            </div>
+                            <?php } ?>
+
+                            <?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ ?>
+                            <div class="tab-pane fade in active" id="seller" style="">
                                 <div class="row no-gutters form-container active" id="">
-                                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="acc_form" style="width:100%;">
-                                        <div class="col-12 pl-1"> 
-                                            <div class="card-wrapper"></div>
-                                        </div>
-                                        <div class="col-12 pl-1">
-                                            <div class="form-group form-group1">
-                                                <label> Numri i xhirollogarisë </label>
-                                                <input type="text" name="number" id="number" class="form-control" placeholder="xxxx xxxx xxxx xxxx" style="text-align:center;">
+                                    <form method="POST" action="" id="form_seller" style="width:100%;">
+                                        <small
+                                            style="color:#000; font-weight:700; font-size:15px;text-align:center !important; text-decoration:underline;">
+                                            Aplikimi për tu bërë shitës është i thjeshtë, ju vetëm duhet të shkruani <b
+                                                style="text-transform:uppercase; color:red;">numrin tuaj identifikues
+                                                (ID)</b> dhe të pranoni <a href="#"> TERMET DHE KUSHTET </a></small>
+                                        <div class="clearfix add_bottom_15"
+                                            style="width:42.5%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
+                                            <div class="checkboxes float-center">
+                                                <br />
+                                                <small style="color:red; font-weight:700;"><i
+                                                        class="ti-hand-point-right" style="color:black;"></i> Ju lutem
+                                                    lexoni me kujdes <a href="#" style="font-weight:900;"> Termet dhe
+                                                        Kushtet</a>, pas pranimit të tyre përgjegjësia është mbi ju.
+                                                </small>
                                             </div>
                                         </div>
-                                        <div class="col-12 pl-1" >
-                                            <div class="form-group form-group1">
-                                                <label> Emri dhe Mbiemri </label>
-                                                <input type="text" name="name" id="name" class="form-control"  placeholder="Emri dhe Mbiemri" style="text-align:center;">
+                                        <div class="clearfix add_bottom_15 " style="margin:0;">
+                                            <div class="checkboxes float-center">
+                                                <div class="form-group form-group1">
+                                                    <input type="text" name="id_number" id="id_number"
+                                                        class="form-control"
+                                                        placeholder="Numri pasaportes (ID identifikuese)"
+                                                        style="text-align:center;">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 pl-1">
-                                            <div class="form-group form-group1">
-                                                <label> Data skadencës </label>
-                                                <input type="tel" name="expiry" id="expiry" class="form-control" placeholder="MM/YY"  style="text-align:center;">
+                                        <div class="clearfix add_bottom_15">
+                                            <div class="checkboxes float-center">
+                                                <label class="container_check" style="color:black;">Duke klikuar këtu,
+                                                    unë i pranoj <a href="#" style="font-weight:900;"> Termet dhe
+                                                        Kushtet. <b style="color:red">*</b></a>
+                                                    <input type="checkbox" value="" name="check_confirm"
+                                                        id="check_confirm" onclick="calc()">
+                                                    <span class="checkmark" name="checkmark" id="checkmark"
+                                                        style="margin-left:34%;"></span>
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class="col-12 pl-1">
-                                            <div class="form-group form-group1">
-                                                <label> CVV Kodi </label>
-                                                <input type="number" name="cvc" id="cvc" class="form-control" placeholder="xxx"  style="text-align:center;">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 pl-1" >
-                                            <div class="form-group form-group1" >
-                                                <input type="hidden" name="user_id" class="form-control" value="<?php echo $stmt_fetch['user_id'] ?>" style="text-align:center;">
-                                            </div>
-										</div>
-										<div class="col-12 pl-1" id="" >
-											<div class="text-center btn_center" style="margin-bottom:15px;"><button type="submit" id="apply" name="bank_acc" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
-										</div>
+                                        <div class="text-center btn_center" style="margin-bottom:15px;"><button
+                                                type="submit" id="seller_apply" name="seller_apply" value="Vazhdo"
+                                                class="btn_1 ">APLIKO</button></div>
                                     </form>
-                                </div>	
-                                </center>
-							</div>
-						</div>
-						<?php } ?>
-						
-						<?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ ?>
-						<div class="tab-pane fade in active" id="seller" style="">	
-							<div class="row no-gutters form-container active" id="">
-								<form method="POST" action="" id="form_seller" style="width:100%;">
-									<small style="color:#000; font-weight:700; font-size:15px;text-align:center !important; text-decoration:underline;"> Aplikimi për tu bërë shitës është i thjeshtë, ju vetëm duhet të shkruani <b style="text-transform:uppercase; color:red;">numrin tuaj identifikues (ID)</b> dhe të pranoni <a href="#"> TERMET DHE KUSHTET </a></small>
-									<div class="clearfix add_bottom_15" style="width:42.5%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
-										<div class="checkboxes float-center">
-											<br/>
-											<small style="color:red; font-weight:700;"><i class="ti-hand-point-right" style="color:black;"></i> Ju lutem lexoni me kujdes <a href="#" style="font-weight:900;"> Termet dhe Kushtet</a>, pas pranimit të tyre përgjegjësia është mbi ju. </small>
-										</div>
-									</div>
-									<div class="clearfix add_bottom_15 " style="margin:0;">
-										<div class="checkboxes float-center">
-											<div class="form-group form-group1">
-												<input type="text" name="id_number" id="id_number" class="form-control"  placeholder="Numri pasaportes (ID identifikuese)" style="text-align:center;">
-											</div>
-										</div>
-									</div>
-									<div class="clearfix add_bottom_15">
-										<div class="checkboxes float-center">
-											<label class="container_check" style="color:black;">Duke klikuar këtu, unë i pranoj <a href="#" style="font-weight:900;"> Termet dhe Kushtet. <b style="color:red">*</b></a>
-												<input type="checkbox" value="" name="check_confirm" id="check_confirm" onclick="calc()">
-												<span class="checkmark" name="checkmark" id="checkmark" style="margin-left:34%;"></span>
-											</label>
-										</div>
-									</div> 
-									<div class="text-center btn_center" style="margin-bottom:15px;"><button type="submit" id="seller_apply" name="seller_apply" value="Vazhdo" class="btn_1 ">APLIKO</button></div>
-								</form>
-							</div>	
-						</div>
-						<?php } ?>
-						<!-- MY PROFILE -->
-						<?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED || isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ ?>
-                        <div class="tab-pane fade" id="myprofile">
-						<?php } else { ?>
-						<form method="post" action="index.php">
-						<div class="tab-pane fade in active" id="myprofile">
-							<?php } ?>
-							<?php
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <!-- MY PROFILE -->
+                            
+                               
+                            <div class="tab-pane fade  <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED || isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){  echo " "; } else { echo ' in active';}?>" id="myprofile">
+                                        <?php
 								if(isset($_SESSION['prep_stmt_error'])){
 									echo "<div class='gabim'>";
 									echo $_SESSION['prep_stmt_error'];
@@ -723,97 +834,136 @@
 									echo "<div class='sukses'>";
 									echo $_SESSION['seller_status_correct'];
 									echo "</div>";
-								}
+                                }
+                                if(isset($_SESSION['no_changes_error'])){
+									echo "<div class='gabim'>";
+									echo $_SESSION['no_changes_error'];
+									echo "</div>";
+                                }
+                                if(isset($_SESSION['user_data_changed'])){
+									echo "<div class='sukses'>";
+									echo $_SESSION['user_data_changed'];
+									echo "</div>";
+                                }
 								unset($_SESSION['prep_stmt_error']);
 								unset($_SESSION['insert_bank_acc_error']);
 								unset($_SESSION['insert_bank_acc_correct']);
 								unset($_SESSION['user_balance_correct']);
 								unset($_SESSION['user_balance_low']);
-								unset($_SESSION['seller_status_correct']);
-
-							?>
-						
-							<div class="profile-section">
-								<h2 class="profile-heading">Profile Photo</h2>
-								<div class="media">
-									<div class="media-body">
-										<img src="../img/facebook_icon.png" class="user-photo media-object" alt="User"style="border:0;">
+                                unset($_SESSION['seller_status_correct']);
+                                unset($_SESSION['no_changes_error']);
+                                unset($_SESSION['user_data_changed']);
+                              ?>
+                                <form method="post" action="index.php"  enctype="multipart/form-data" >
+                                    <div class="profile-section">
+                                        <h2 class="profile-heading">Profile Photo</h2>
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <img src="../img/profile_pictures/<?php echo $profile_pic; ?>" class="user-photo media-object"
+                                                    alt="User" style="border:0;width:150px; height:150px; border-radius:50%;">
+                                            </div>
+                                        </div>
+                                        <div class="media-body" style="padding-top:10px;">
+                                                <label class="form-label" for="customFile">Ndrysho foton e profilit</label>
+                                                <?php if(isset($_SESSION['profile_pic_error'])){
+                                                    echo $_SESSION['profile_pic_error'];
+                                                } ?>
+                                                <input type="file" name="profile_pic" class="form-control img_upl" id="customFile" style="<?php if(isset($_SESSION['profile_pic_error'])){ echo "border:1px solid red;";} unset($_SESSION['profile_pic_error']); ?>"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="media-body">
-                                    <p>Shto fotografinë tuaj
-                                        <br> <em>Foto duhet të jetë të pakten 140x140px</em></p>
-                                    <button type="button" class="btn btn-default-dark" id="btn-upload-photo">Upload Photo</button>
-                                    <input type="file" id="filePhoto" class="sr-only">
-								</div>
-							</div>
-							<div class="profile-section">
-								<div class="divider"><span style="background-color:#fff">Të dhënat personale</span></div>
-								<div class="clearfix" >
-									<!-- LEFT SECTION -->
-									<div class="left" style="width:48%;">
-										<div class="form-group">
-											<label>First Name</label>
-											<input type="text" value="<?php echo $username; ?>" class="form-control"  name="username" style="text-align:center; font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Emri</label>
-											<input type="text" value="<?php echo $fname; ?>" class="form-control"  name="fname" style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Email</label>
-											<input type="text" value="<?php echo $email; ?>" class="form-control"  name="email" style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Datëlindja</label>
-											<input type="text" class="form-control  datepicker-3"  id="datelindja" name="bday" value="<?php echo $bday; ?>"  style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Qyteti</label>
-											<input type="text" name="city" value="<?php echo $city; ?>" class="form-control"  style="text-align:center;font-weight:500">
-										</div>
-									</div>
-									<!-- END LEFT SECTION -->
-									<!-- RIGHT SECTION -->
-									<div class="right" style="width:48%;">
-										<div class="form-group">
-											<label>Fjalëkalimi</label>
-											<input type="password"  value="" name="password"  class="form-control"  style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Mbiemri</label>
-											<input type="text" value="<?php echo $lname; ?>" name="lname" class="form-control"  style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Numri telefonit</label>
-											<input type="text" value="<?php echo $tel; ?>" name="tel" class="form-control"  style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Adresa</label>
-											<input type="text" value="<?php echo $address; ?>"class="form-control" name="address" style="text-align:center;font-weight:500">
-										</div>
-										<div class="form-group">
-											<label>Kodi postar</label>
-											<input type="text" value="<?php echo $post_code; ?>"class="form-control" name="post_code" style="text-align:center;font-weight:500">
-										</div>
-									</div>
-									<!-- END RIGHT SECTION -->
-								</div>
-								<?php if($_SESSION['user']['status'] == SELLER){ ?>
-										<div class="form-group">
-											<label>ID Identifikuese</label>
-											<input type="text" value="<?php echo $pid; ?>"class="form-control" name="pid" style="text-align:center;font-weight:500">
-										</div>
-									<?php } ?>
-								<p class="margin-top-30">
-									<input type="submit" class="btn_1" name="update_user_data" value="Ndrysho">
-								</p>
-							</div>
-						</div>
-						</form>
-						<!-- END MY PROFILE -->
-						<!-- BANK ACCOUNT -->
-						<?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER) { 
+                                    <div class="profile-section">
+                                        <div class="divider"><span style="background-color:#fff">Të dhënat
+                                                personale</span></div>
+                                        <div class="clearfix">
+                                            <!-- LEFT SECTION -->
+                                            <div class="left" style="width:48%;">
+                                                <div class="form-group">
+                                                    <label>Përdoruesi</label>
+                                                    <input type="text" value="<?php echo $username; ?>"
+                                                        class="form-control" name="username"
+                                                        style="text-align:center; font-weight:500" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("fnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['fnameError']; } else{ echo "Emri"; } ?></label>
+                                                    <input type="text" value="<?php echo $fname; ?>"
+                                                        class="form-control" name="fname"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('fnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("emailError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['emailError']; } else{ echo "Email"; } ?></label>
+                                                    <input type="text" value="<?php echo $email; ?>"
+                                                        class="form-control" name="email"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('emailError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Datëlindja</label>
+                                                    <input type="text" class="form-control datepicker-3"
+                                                        id="datelindja" name="bday" value="<?php echo $bday; ?>"
+                                                        style="text-align:center;font-weight:500;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("cityError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['cityError']; } else{ echo "Qyteti"; } ?></label>
+                                                    <input type="text" name="city" value="<?php echo $city; ?>"
+                                                        class="form-control"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('cityError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                            </div>
+                                            <!-- END LEFT SECTION -->
+                                            <!-- RIGHT SECTION -->
+                                            <div class="right" style="width:48%;">
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("passwordError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['passwordError']; } else{ echo "Fjalëkalimi"; } ?></label>
+                                                    <input type="password" value="" name="password"
+                                                        class="form-control"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('passwordError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("lnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['lnameError']; } else{ echo "Mbiemri"; } ?></label>
+                                                    <input type="text" value="<?php echo $lname; ?>" name="lname"
+                                                        class="form-control"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('lnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Numri telefonit <span id="valid-msg" class="hide" style="text-align:center">(✓ Valid)</span><span id="error-msg" class="hide" style="text-align:center"></span></label>
+
+                                                    <input id="phone" type="tel" name="phone" class="form-control" value="<?php echo $tel; ?>" style="text-align:center;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("addressError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['addressError']; } else{ echo "Adresa"; } ?></label>
+                                                    <input type="text" value="<?php echo $address; ?>"
+                                                        class="form-control" name="address"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('addressError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("postnrError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['postnrError']; } else{ echo "Kodi Postar"; } ?></label>
+                                                    <input type="text" value="<?php echo $post_code; ?>"
+                                                        class="form-control" name="post_code"
+                                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('postnrError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                            </div>
+                                            <!-- END RIGHT SECTION -->
+                                        </div>
+                                        <?php if($_SESSION['user']['status'] == SELLER){ ?>
+                                        <div class="form-group">
+                                            <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("pidError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['pidError']; } else{ echo "Kodi Postar"; } ?></label>
+                                            <input type="text" value="<?php echo $pid; ?>" class="form-control"
+                                                name="pid" style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('pidError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                        </div>
+                                        <?php } ?>
+                                        <p class="margin-top-30">
+                                            <input type="submit" class="btn_1" id="update_user_data" name="update_user_data"
+                                                value="Ndrysho">
+                                        </p>
+                                    </div>
+                                    <?php unset($_SESSION['user_data_errors']); ?>
+                                </form>
+                            </div>
+                        
+                                <!-- END MY PROFILE -->
+                                <!-- BANK ACCOUNT -->
+                            <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER) 
+                            { 
 							$stmt_check_id = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
 							$stmt_fetch = mysqli_fetch_array($stmt_check_id);
 							$stmt_id = $stmt_fetch['user_id']; 
@@ -843,419 +993,539 @@
 									$cvc_substr = substr_replace($cvc, "***", 0, strlen($cvc));
 								}
 							}
-								
-						?>	
-						<div class="tab-pane fade" id="bank_acc">
-							<div class="profile-section">
-								<div class="clearfix">
-									<!-- LEFT SECTION -->
-									<div class="left" style="width:48%;">
-										<div class="divider" style="margin-bottom:50px;">
-											<span style="background-color:#fff; text-decoration:underline;">Të dhënat bankare</span>
-										</div>
-										<div class="form-group">
-											<label>Numri i xhirollogarisë</label>
-											<input type="text" class="form-control" value="<?php echo $acc_bank_number; ?>" style="text-align:center; font-weight:500;">
-										</div>
-										<div class="form-group">
-											<label> Emri dhe Mbiemri</label>
-											<input type="email" class="form-control" value="<?php echo $acc_bank_name; ?>" style="text-align:center; font-weight:500;">
-										</div>
-										<div class="form-group">
-											<label> Data skadencës</label>
-											<input type="email" class="form-control" value="<?php echo $acc_bank_expiry ?>" style="text-align:center; font-weight:500;">
-										</div>
-										<div class="form-group">
-											<label>CVV Kodi </label>
-											<input type="text" value="<?php echo $cvc_substr ?>" class="form-control" style="text-align:center; font-weight:500;">
-										</div>
-										<p class="margin-top-30">
-											<button type="button" class="btn_1">Update</button>
-										</p>
-									</div>
-									<!-- END LEFT SECTION -->
-									<!-- RIGHT SECTION -->
-									<div class="right" style="width:48%;">
-									<?php 
-										$balan_perdoruesit = prep_stmt("SELECT user_balance FROM users WHERE user_id=?", $stmt_fetch['user_id'],"i");
-										$balanci_aktual = mysqli_fetch_array($balan_perdoruesit);
-									?>
-									<div class="divider" style="margin-bottom:50px;">
-                                   	 	<span style="background-color:#fff; text-decoration:underline;">Bilanci juaj për momentin është: <b style='color:#5ABC35; font-size:18px; font-weight: 800; font-size:16px;'> <?php echo number_format($balanci_aktual['user_balance'], 2,'.', '') . "€"; ?> </b></span>
-									</div>
-									<div class="clearfix add_bottom_15" style="width:90%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
-										<div class="checkboxes float-center">
-											<small style="color:#000; font-weight:700; font-size:15px;"><i class="ti-hand-point-right" style="color:black;"></i> &nbsp Më poshtë mund ta ndryshoni gjendjen e bilancit tuaj duke depozituar ose tërhequr para!</small>
-										</div>
-									</div>
-									<!-- <h3 style='color:#000; margin-bottom:25px; text-decoration:underline;'> </h3> -->
-										<div class="form-group">
-											<div class="custom-select-form" style="width:50%">
-												<label> Zgjedhni shërbmin </label>
-												<select class="wide add_bottom_10" name="country" id="sherbimi"  onchange="showSherbimin()" >
-													<option value="0" selected="">Zgjedhni...</option>
-													<option value="1">Depozitë</option>
-													<option value="2">Tërheqje</option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group" id="depozite_div" style="display:none;">
-											<form style="width:100%;background-color:#f8f8f8; float:right;" method="POST" action="" id="dep_form">
-												<div style="width:100%;" >
-													<ul style="list-style: '\00BB'; color:#000; text-align:left; ">
-														<li style="font-weight: 500; padding: 10px 0px 5px 0px; ">
-															<i style="font-size:14px;"><b>DEPOZITË PARASH</b> => Paratë që dëshironi t'i fusni në llogarinë tuaj këtu (në DEAL AIM) <b>nga llogaria juaj bankare</b></i>
-														</li>
-														<li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-															<i style="font-size:14px;">Shuma minimale për depozitë është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
-														</li>
-														<li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-															<i style="font-size:14px;">Shuma duhet të jetë fikse (p.sh: <b style="color: #5ABC35; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro, 1000 euro... </b>) </i>
-														</li>
-													</ul>
-												</div>
-												<label> Shëno shumën </label>
-												<div class="input-group input-group-bal mb-3" >
-													<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="dep_shuma" id="dep_shuma"  style="height:2.4rem; text-align:center;">
-													<div class="input-group-append" style="margin:0;">
-														<span class="input-group-text">€</span>
-													</div>
-												</div>
-												<div class="text-center btn_center" style="margin-bottom:20px;" >
-													<button type="submit" id="balance_btn_dep" name="depozite_btn" value="Vazhdo" class="btn_1 ">DEPOZITO</button>
-												</div>
-											</form>
-										</div>
-										<div class="form-group" id="terheqje_div" style="display:none;">
-										<form style="width:100%;background-color:#f8f8f8; float:right;" method="POST" action="" id="ter_form">
-											<div style="width:100%">
-												<ul style="list-style: '\00BB'; color:#000; text-align:left; ">
-													<li style="font-weight: 500; padding: 10px 0px 5px 0px; ">
-														<i style="font-size:14px;"><b>TËRHEQJE PARASH</b> => Paratë që dëshironi t'i ktheni në llogarinë tuaj bankare <b>nga llogaria juaj këtu (në DEAL AIM)</b></i>
-													</li>
-													<li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-														<i style="font-size:14px;">Shuma minimale për tërheqje është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
-													</li>
-													<li style="font-weight: 500; padding: 5px 0px 10px 0px;">
-														<i style="font-size:14px;">Shuma duhet të jetë fikse (p.sh: <b style="color: #2C4EDA; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro 1000 euro... </b>) </i>
-													</li>
-												</ul>
-											</div>
-											<label> Shëno shumën </label>
-											<div class="input-group input-group-bal mb-3" >
-												<input type="text" name="ter_shuma" id="ter_shuma" class="form-control" aria-label="Amount (to the nearest euro)"  style="height:2.4rem;text-align:center;">
-												<div class="input-group-prepend" style="margin:0;">
-													<span class="input-group-text">€</span>
-												</div>
-											</div>
-											<div class="text-center btn_center" style="margin-bottom:20px;"><button type="submit" id="balance_btn_ter" name="terheq_btn" value="Vazhdo" class="btn_1 ">TËRHIQ</button></div>
-										</form>
-										</div>
-									</div>
-									<!-- END RIGHT SECTION -->
-								</div>
-							</div>
-						</div>
-						<?php } ?>
-						<!-- END ACCOUNT -->
-						
-						<!-- END BILLINGS -->
-						<!-- PREFERENCES -->
-						
-						<!-- END PREFERENCES -->
-                    </div>
-              </center>
-			</div>
-		</div>
-		<!-- END MAIN CONTENT -->
-	</div>
-	
-	<!-- SHOW SHERBIMIN -->
-	<script type="text/javascript">
-      function showSherbimin(){
-            //nese zgjidhet terhejqe, SHOW DIV per terheqje
-            var sherbimi = document.getElementById("sherbimi");
-            console.log(sherbimi.value);
-            if(sherbimi.value == 1){
-                document.getElementById("terheqje_div").style.display = "none";
-                document.getElementById("depozite_div").style.display = "block"; 
-            }else if(sherbimi.value == 2){
-                document.getElementById("terheqje_div").style.display = "block";
-                document.getElementById("depozite_div").style.display = "none";
-            }else{
-                document.getElementById("terheqje_div").style.display = "none";
-                document.getElementById("depozite_div").style.display = "none";
-            }
-        } 
-	</script>
-	<!--- DEPOZIT and TERHEQ --->
-	<script type="text/javascript">
-        var sh_terheq = false; 
-        var sh_depozite = false;
-        document.getElementById("ter_shuma").onkeyup = function() 
-		{ 
-            var terheq_shuma = document.getElementById("ter_shuma");
-            if(terheq_shuma.value.match(/^\d+$/))
-            {
-                if(terheq_shuma.value < 5 || terheq_shuma.value > 2000){
-                    sh_terheq = false;
-                    terheq_shuma.style.border = "2px solid red";
-                }else{
-                    terheq_shuma.style.border = "2px solid green";
-                    sh_terheq = true; 
-                }
-            }else{
-                terheq_shuma.style.border = "2px solid red";
-                sh_terheq = false;
-            }
-        }
-
-        document.getElementById("dep_shuma").onkeyup = function() 
-		{ 
-            var depozite_shuma = document.getElementById("dep_shuma");
-            if(depozite_shuma.value.match(/^\d+$/))
-            {
-                if(depozite_shuma.value < 5 || depozite_shuma.value > 2000){
-                    sh_depozite = false;
-                    depozite_shuma.style.border = "2px solid red";
-                }else{
-                    depozite_shuma.style.border = "2px solid green";
-                    sh_depozite = true;
-                }
-            }else{
-                depozite_shuma.style.border = "2px solid red";
-                sh_depozite = false;
-            }
-        }
-
-        //TERHEQ
-        document.querySelector("#balance_btn_ter").addEventListener("click", function(event) {
-            if(sh_terheq == true){
-                console.log("123");
-                document.getElementById("ter_form").submit();
-            }else{
-                event.preventDefault();
-                document.getElementById("ter_shuma").style.border = "2px solid red";
-            }
+							?>
+                            <div class="tab-pane fade" id="bank_acc">
+                                <div class="profile-section">
+                                    <div class="clearfix">
+                                        <!-- LEFT SECTION -->
+                                        <div class="left" style="width:48%;">
+                                            <div class="divider" style="margin-bottom:50px;">
+                                                <span style="background-color:#fff; text-decoration:underline;">Të
+                                                    dhënat bankare</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Numri i xhirollogarisë</label>
+                                                <input type="text" class="form-control"
+                                                    value="<?php echo $acc_bank_number; ?>"
+                                                    style="text-align:center; font-weight:500;">
+                                            </div>
+                                            <div class="form-group">
+                                                <label> Emri dhe Mbiemri</label>
+                                                <input type="email" class="form-control"
+                                                    value="<?php echo $acc_bank_name; ?>"
+                                                    style="text-align:center; font-weight:500;">
+                                            </div>
+                                            <div class="form-group">
+                                                <label> Data skadencës</label>
+                                                <input type="email" class="form-control"
+                                                    value="<?php echo $acc_bank_expiry ?>"
+                                                    style="text-align:center; font-weight:500;">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>CVV Kodi </label>
+                                                <input type="text" value="<?php echo $cvc_substr ?>"
+                                                    class="form-control"
+                                                    style="text-align:center; font-weight:500;">
+                                            </div>
+                                            <p class="margin-top-30">
+                                                <button type="button" class="btn_1">Update</button>
+                                            </p>
+                                        </div>
+                                        <!-- END LEFT SECTION -->
+                                        <!-- RIGHT SECTION -->
+                                        <div class="right" style="width:48%;">
+                                            <?php 
+                                    $balan_perdoruesit = prep_stmt("SELECT user_balance FROM users WHERE user_id=?", $stmt_fetch['user_id'],"i");
+                                    $balanci_aktual = mysqli_fetch_array($balan_perdoruesit);
+                                ?>
+                                            <div class="divider" style="margin-bottom:50px;">
+                                                <span
+                                                    style="background-color:#fff; text-decoration:underline;">Bilanci
+                                                    juaj për momentin është: <b
+                                                        style='color:#5ABC35; font-size:18px; font-weight: 800; font-size:16px;'>
+                                                        <?php echo number_format($balanci_aktual['user_balance'], 2,'.', '') . "€"; ?>
+                                                    </b></span>
+                                            </div>
+                                            <div class="clearfix add_bottom_15"
+                                                style="width:90%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
+                                                <div class="checkboxes float-center">
+                                                    <small style="color:#000; font-weight:700; font-size:15px;"><i
+                                                            class="ti-hand-point-right" style="color:black;"></i>
+                                                        &nbsp Më poshtë mund ta ndryshoni gjendjen e bilancit tuaj
+                                                        duke depozituar ose tërhequr para!</small>
+                                                </div>
+                                            </div>
+                                            <!-- <h3 style='color:#000; margin-bottom:25px; text-decoration:underline;'> </h3> -->
+                                            <div class="form-group">
+                                                <div class="custom-select-form" style="width:50%">
+                                                    <label> Zgjedhni shërbmin </label>
+                                                    <select class="wide add_bottom_10" name="country" id="sherbimi"
+                                                        onchange="showSherbimin()">
+                                                        <option value="0" selected="">Zgjedhni...</option>
+                                                        <option value="1">Depozitë</option>
+                                                        <option value="2">Tërheqje</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="depozite_div" style="display:none;">
+                                                <form style="width:100%;background-color:#f8f8f8; float:right;"
+                                                    method="POST" action="" id="dep_form">
+                                                    <div style="width:100%;">
+                                                        <ul
+                                                            style="list-style: '\00BB'; color:#000; text-align:left; ">
+                                                            <li
+                                                                style="font-weight: 500; padding: 10px 0px 5px 0px; ">
+                                                                <i style="font-size:14px;"><b>DEPOZITË PARASH</b> =>
+                                                                    Paratë që dëshironi t'i fusni në llogarinë tuaj
+                                                                    këtu (në DEAL AIM) <b>nga llogaria juaj
+                                                                        bankare</b></i>
+                                                            </li>
+                                                            <li
+                                                                style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                                <i style="font-size:14px;">Shuma minimale për
+                                                                    depozitë është <b
+                                                                        style="color: #CF2928; font-size:16px;">5
+                                                                        euro</b>, ndërsa ajo maksimale është <b
+                                                                        style="color: #CF2928; font-size:16px;">
+                                                                        2000 euro </b> </i>
+                                                            </li>
+                                                            <li
+                                                                style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                                <i style="font-size:14px;">Shuma duhet të jetë fikse
+                                                                    (p.sh: <b
+                                                                        style="color: #5ABC35; font-size:16px;">5
+                                                                        euro, 7 euro, 10 euro, 100 euro, 1000
+                                                                        euro... </b>) </i>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <label> Shëno shumën </label>
+                                                    <div class="input-group input-group-bal mb-3">
+                                                        <input type="text" class="form-control"
+                                                            aria-label="Amount (to the nearest dollar)"
+                                                            name="dep_shuma" id="dep_shuma"
+                                                            style="height:2.4rem; text-align:center;">
+                                                        <div class="input-group-append" style="margin:0;">
+                                                            <span class="input-group-text">€</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center btn_center" style="margin-bottom:20px;">
+                                                        <button type="submit" id="balance_btn_dep"
+                                                            name="depozite_btn" value="Vazhdo"
+                                                            class="btn_1 ">DEPOZITO</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="form-group" id="terheqje_div" style="display:none;">
+                                                <form style="width:100%;background-color:#f8f8f8; float:right;"
+                                                    method="POST" action="" id="ter_form">
+                                                    <div style="width:100%">
+                                                        <ul
+                                                            style="list-style: '\00BB'; color:#000; text-align:left; ">
+                                                            <li
+                                                                style="font-weight: 500; padding: 10px 0px 5px 0px; ">
+                                                                <i style="font-size:14px;"><b>TËRHEQJE PARASH</b> =>
+                                                                    Paratë që dëshironi t'i ktheni në llogarinë tuaj
+                                                                    bankare <b>nga llogaria juaj këtu (në DEAL
+                                                                        AIM)</b></i>
+                                                            </li>
+                                                            <li
+                                                                style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                                <i style="font-size:14px;">Shuma minimale për
+                                                                    tërheqje është <b
+                                                                        style="color: #CF2928; font-size:16px;">5
+                                                                        euro</b>, ndërsa ajo maksimale është <b
+                                                                        style="color: #CF2928; font-size:16px;">
+                                                                        2000 euro </b> </i>
+                                                            </li>
+                                                            <li
+                                                                style="font-weight: 500; padding: 5px 0px 10px 0px;">
+                                                                <i style="font-size:14px;">Shuma duhet të jetë fikse
+                                                                    (p.sh: <b
+                                                                        style="color: #2C4EDA; font-size:16px;">5
+                                                                        euro, 7 euro, 10 euro, 100 euro 1000 euro...
+                                                                    </b>) </i>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <label> Shëno shumën </label>
+                                                    <div class="input-group input-group-bal mb-3">
+                                                        <input type="text" name="ter_shuma" id="ter_shuma"
+                                                            class="form-control"
+                                                            aria-label="Amount (to the nearest euro)"
+                                                            style="height:2.4rem;text-align:center;">
+                                                        <div class="input-group-prepend" style="margin:0;">
+                                                            <span class="input-group-text">€</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center btn_center" style="margin-bottom:20px;">
+                                                        <button type="submit" id="balance_btn_ter" name="terheq_btn"
+                                                            value="Vazhdo" class="btn_1 ">TËRHIQ</button></div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- END RIGHT SECTION -->
+                                    </div>
+                                </div>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </center>
+                </div>
+            </div>
+            </div>  <!-- END MAIN CONTENT -->
+        </div>
+        <script src="../js/intlTelInput.js"></script>
+    <script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            // autoPlaceholder: "off",
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            // geoIpLookup: function(callback) {
+            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+            //     var countryCode = (resp && resp.country) ? resp.country : "";
+            //     callback(countryCode);
+            //   });
+            // },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            // nationalMode : false,
+            // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+            // placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            // separateDialCode: true,
+            utilsScript: "../js/utils.js",
         });
-
-        //DEPOZITO 
-        document.querySelector("#balance_btn_dep").addEventListener("click", function(event) {
-            if(sh_depozite == true){
-                document.getElementById("dep_form").submit();
-            }else{ 
-                event.preventDefault();
-                document.getElementById("dep_shuma").style.border = "2px solid red";
-            }
-        });
-	</script>
-	<!-- SELLER APPLICATION -->
-   	<script>
-		var id_num = false; var is_check = false;
-		function calc(){
-			var isChecked = document.getElementById("check_confirm");
-			if(isChecked.checked){
-				isChecked.value = 1;
-				is_check = true;
-			}else{
-				isChecked.value=0;
-				is_check = false;
-			}
-		}
-		
-		document.getElementById("id_number").onkeyup = function() 
-		{
-			var id_number = document.getElementById('id_number');
-			if(id_number.value.match('^\\d+$')){
-				if(id_number.value.length >= 8 && id_number.value.length <= 15){
-					id_number.style.borderColor = "green";
-					id_number.style.color = "green";
-					id_num = true;
-				}else{
-					id_number.style.borderColor = "red";
-					id_number.style.color = "red";
-					id_num = false;
-				}
-			}else{
-				id_number.style.borderColor = "red";
-				id_number.style.color = "red";
-				id_num = false;
-			}
-		}
-
-		document.querySelector("#seller_apply").addEventListener("click", function(event) {
-			if(id_num == true && is_check == true){
-				document.getElementById("form_seller").submit();
-			}else{
-				event.preventDefault();
-			}
-        });  
-	</script>
-	<script>
-
-		var acc_nr_valid = false; var acc_name_valid = false; var acc_expiry_valid = false; var acc_cvc_valid = false;
-		//CHECKING ACC NUMBER
-		document.getElementById("number").onkeyup = function() 
-		{
-			var acc_number = document.getElementById('number');
-			//check if first number is 4
-			if(acc_number.value.substring(0,1) == 4 || acc_number.value.substring(0,1) == 5)
-			{ 
-				if(acc_number.value.length == 19){
-					if(acc_number.value.substring(0,1) == 4){
-						acc_nr_valid = true;
-						document.getElementById("name").focus();
-						acc_number.style.borderColor = "green";
-						acc_number.style.color = "green";
-					}
-					else if(acc_number.value.substring(0,1) == 5 && acc_number.value.substring(1,2) == 1 || acc_number.value.substring(1,2) == 2 || acc_number.value.substring(1,2) == 3 || acc_number.value.substring(1,2) == 4 || acc_number.value.substring(1,2) == 5){
-						acc_nr_valid = true;
-						document.getElementById("name").focus();
-						acc_number.style.borderColor = "green";
-						acc_number.style.color = "green";
-					}
-					else {
-						// swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
-						acc_number.style.borderColor = "red";
-						acc_number.style.color = "red";
-					}
-				}
-				else{
-					// swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
-					acc_number.style.borderColor = "red";
-					acc_number.style.color = "red";
-				}
-			}else {
-				acc_number.style.borderColor = "red";
-				acc_number.style.color = "red";
-			}
-		}
-		//CHECKING NAME
-		document.getElementById("name").onkeyup = function() 
-		{
-			var acc_name = document.getElementById('name');
-			var letters = /^[a-zA-Z][a-zA-Z\s]*$/;
-			//check if name is alphabetic
-			if(acc_name.value.match(letters)){
-				if(acc_name.value.length > 10){
-					acc_name_valid = true;
-					acc_name.style.borderColor = "green";
-					acc_name.style.color = "green";
-				}else{
-					acc_name.style.borderColor = "red";
-					acc_name.style.color = "red";
-				}
-			}else{
-				acc_name.style.borderColor = "red";
-				acc_name.style.color = "red";
-			}
-		}
-
-		//CHECKING DATE
-		document.getElementById("expiry").onkeyup = function() 
-		{
-			var acc_expiry = document.getElementById('expiry');
-			//check 
-			if(acc_expiry.value.length == 9){
-				if(acc_expiry.value.substring(5,9) == 2021 && acc_expiry.value.substring(0,2) >= 3 &&acc_expiry.value.substring(0,2) <= 12){
-					acc_expiry_valid = true;
-					document.getElementById("cvc").focus();
-					acc_expiry.style.borderColor = "green";
-					acc_expiry.style.color = "green";
-				}
-				else if(acc_expiry.value.substring(0,2) >= 01 && acc_expiry.value.substring(0,2) <= 12 && acc_expiry.value.substring(5,9) >= 2022 && acc_expiry.value.substring(5,9) <= 2031){
-					acc_expiry_valid = true;
-					document.getElementById("cvc").focus();
-					acc_expiry.style.borderColor = "green";
-					acc_expiry.style.color = "green";
-				}
-				else{
-					acc_expiry.style.borderColor = "red";
-					acc_expiry.style.color = "red";
-				}
-			}else{
-				acc_expiry.style.borderColor = "red";
-				acc_expiry.style.color = "red";
-			}
-		}
-
-		//CHECKING CVC
-		document.getElementById("cvc").onkeyup = function() 
-		{
-			var acc_cvc = document.getElementById('cvc');
-			//check 
-			if(acc_cvc.value.length == 3){
-				acc_cvc_valid = true;
-				document.getElementById("apply").focus();
-				acc_cvc.style.borderColor = "green";
-				acc_cvc.style.color = "green";
-			}
-			else{
-				acc_cvc.style.borderColor = "red";
-				acc_cvc.style.color = "red";
-			}
-		}
-        document.querySelector("#apply").addEventListener("click", function(event) {
-			if(acc_nr_valid == true && acc_name_valid == true && acc_expiry_valid == true && acc_cvc_valid == true){
-				// document.getElementById('cashInput').style.display = "block";
-				// event.preventDefault();
-				document.getElementById("acc_form").submit();
-			}else{
-				console.log("KEQ");
-				event.preventDefault();
-			}
-        });  
     </script>
     <script>
-        $('form').card({
-            ontainer: '.card-wrapper'
+        var input = document.querySelector("#phone"),
+            errorMsg = document.querySelector("#error-msg"),
+            validMsg = document.querySelector("#valid-msg");
+
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["(Numri i pavlefshëm)", "(Kodi i shtetit është invalid)", "(Shumë i shkurtër)", "(Shumë i gjatë)", "(Numri i pavlefshëm)"];
+
+        // initialise plugin
+        var iti = window.intlTelInput(input, {
+            utilsScript: "js/utils.js?1603274336113"
         });
-        // Vanilla JavaScript
-        new Card({
-            form: document.querySelector('form'),
-            container: '.card-wrapper'
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (iti.isValidNumber()) {
+					validMsg.classList.remove("hide");
+					document.getElementById("valid-msg").style.color = "#60CA0D";
+					document.getElementById("phone").style.borderColor = "#60CA0D";
+					document.getElementById("update_user_data").disabled = false;
+                } else {
+                    input.classList.add("error");
+					var errorCode = iti.getValidationError();
+                    document.getElementById("error-msg").style.color = "#E62E2D";
+                    document.getElementById("phone").style.borderColor = "#E62E2D";
+                    errorMsg.innerHTML = errorMap[errorCode];
+					errorMsg.classList.remove("hide");
+					document.getElementById("update_user_data").disabled = true;
+                }
+            }
         });
 
-        $('form').card({
-            formatting: true,
-            formSelectors: {
-                numberInput: 'input[name="number"]',
-                expiryInput: 'input[name="expiry"]',
-                cvcInput: 'input[name="cvc"]',
-                nameInput: 'input[name="name"]'
-            },
-            cardSelectors: {
-                cardContainer: '.jp-card-container',
-                card: '.jp-card',
-                numberDisplay: '.jp-card-number',
-                expiryDisplay: '.jp-card-expiry',
-                cvcDisplay: '.jp-card-cvc',
-                nameDisplay: '.jp-card-name'
-            },
-            // custom message
-            messages: {
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
+    </script>	
+        <!-- SHOW SHERBIMIN -->
+        <script type="text/javascript">
+            function showSherbimin() {
+                //nese zgjidhet terhejqe, SHOW DIV per terheqje
+                var sherbimi = document.getElementById("sherbimi");
+                console.log(sherbimi.value);
+                if (sherbimi.value == 1) {
+                    document.getElementById("terheqje_div").style.display = "none";
+                    document.getElementById("depozite_div").style.display = "block";
+                } else if (sherbimi.value == 2) {
+                    document.getElementById("terheqje_div").style.display = "block";
+                    document.getElementById("depozite_div").style.display = "none";
+                } else {
+                    document.getElementById("terheqje_div").style.display = "none";
+                    document.getElementById("depozite_div").style.display = "none";
+                }
+            }
+        </script>
+        <!--- DEPOZIT and TERHEQ --->
+        <script type="text/javascript">
+            var sh_terheq = false;
+            var sh_depozite = false;
+            document.getElementById("ter_shuma").onkeyup = function () {
+                var terheq_shuma = document.getElementById("ter_shuma");
+                if (terheq_shuma.value.match(/^\d+$/)) {
+                    if (terheq_shuma.value < 5 || terheq_shuma.value > 2000) {
+                        sh_terheq = false;
+                        terheq_shuma.style.border = "2px solid red";
+                    } else {
+                        terheq_shuma.style.border = "2px solid green";
+                        sh_terheq = true;
+                    }
+                } else {
+                    terheq_shuma.style.border = "2px solid red";
+                    sh_terheq = false;
+                }
+            }
 
-                validDate: 'valid\nthru',
-                monthYear: 'month/year'
-            },
+            document.getElementById("dep_shuma").onkeyup = function () {
+                var depozite_shuma = document.getElementById("dep_shuma");
+                if (depozite_shuma.value.match(/^\d+$/)) {
+                    if (depozite_shuma.value < 5 || depozite_shuma.value > 2000) {
+                        sh_depozite = false;
+                        depozite_shuma.style.border = "2px solid red";
+                    } else {
+                        depozite_shuma.style.border = "2px solid green";
+                        sh_depozite = true;
+                    }
+                } else {
+                    depozite_shuma.style.border = "2px solid red";
+                    sh_depozite = false;
+                }
+            }
 
-            placeholders: {
-                number: '&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;',
-                cvc: '&bull;&bull;&bull;',
-                expiry: '&bull;&bull;/&bull;&bull;',
-                name: 'Full Name'
-            },
-            masks: {
-                cardNumber: false
-            },
-            classes: {
-                valid: 'jp-card-valid',
-                invalid: 'jp-card-invalid'
-            },
-            debug: false
+            //TERHEQ
+            document.querySelector("#balance_btn_ter").addEventListener("click", function (event) {
+                if (sh_terheq == true) {
+                    console.log("123");
+                    document.getElementById("ter_form").submit();
+                } else {
+                    event.preventDefault();
+                    document.getElementById("ter_shuma").style.border = "2px solid red";
+                }
+            });
 
-        });
-    </script>
+            //DEPOZITO 
+            document.querySelector("#balance_btn_dep").addEventListener("click", function (event) {
+                if (sh_depozite == true) {
+                    document.getElementById("dep_form").submit();
+                } else {
+                    event.preventDefault();
+                    document.getElementById("dep_shuma").style.border = "2px solid red";
+                }
+            });
+        </script>
+        <!-- SELLER APPLICATION -->
+        <script>
+            var id_num = false;
+            var is_check = false;
+
+            function calc() {
+                var isChecked = document.getElementById("check_confirm");
+                if (isChecked.checked) {
+                    isChecked.value = 1;
+                    is_check = true;
+                } else {
+                    isChecked.value = 0;
+                    is_check = false;
+                }
+            }
+
+            document.getElementById("id_number").onkeyup = function () {
+                var id_number = document.getElementById('id_number');
+                if (id_number.value.match('^\\d+$')) {
+                    if (id_number.value.length >= 8 && id_number.value.length <= 15) {
+                        id_number.style.borderColor = "green";
+                        id_number.style.color = "green";
+                        id_num = true;
+                    } else {
+                        id_number.style.borderColor = "red";
+                        id_number.style.color = "red";
+                        id_num = false;
+                    }
+                } else {
+                    id_number.style.borderColor = "red";
+                    id_number.style.color = "red";
+                    id_num = false;
+                }
+            }
+
+            document.querySelector("#seller_apply").addEventListener("click", function (event) {
+                if (id_num == true && is_check == true) {
+                    document.getElementById("form_seller").submit();
+                } else {
+                    event.preventDefault();
+                }
+            });
+        </script>
+        <script>
+            var acc_nr_valid = false;
+            var acc_name_valid = false;
+            var acc_expiry_valid = false;
+            var acc_cvc_valid = false;
+            //CHECKING ACC NUMBER
+            document.getElementById("number").onkeyup = function () {
+                var acc_number = document.getElementById('number');
+                //check if first number is 4
+                if (acc_number.value.substring(0, 1) == 4 || acc_number.value.substring(0, 1) == 5) {
+                    if (acc_number.value.length == 19) {
+                        if (acc_number.value.substring(0, 1) == 4) {
+                            acc_nr_valid = true;
+                            document.getElementById("name").focus();
+                            acc_number.style.borderColor = "green";
+                            acc_number.style.color = "green";
+                        } else if (acc_number.value.substring(0, 1) == 5 && acc_number.value.substring(1, 2) == 1 ||
+                            acc_number.value.substring(1, 2) == 2 || acc_number.value.substring(1, 2) == 3 ||
+                            acc_number.value.substring(1, 2) == 4 || acc_number.value.substring(1, 2) == 5) {
+                            acc_nr_valid = true;
+                            document.getElementById("name").focus();
+                            acc_number.style.borderColor = "green";
+                            acc_number.style.color = "green";
+                        } else {
+                            // swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
+                            acc_number.style.borderColor = "red";
+                            acc_number.style.color = "red";
+                        }
+                    } else {
+                        // swal("GABIM!", "Kjo xhirollogari nuk është valide!", "error");
+                        acc_number.style.borderColor = "red";
+                        acc_number.style.color = "red";
+                    }
+                } else {
+                    acc_number.style.borderColor = "red";
+                    acc_number.style.color = "red";
+                }
+            }
+            //CHECKING NAME
+            document.getElementById("name").onkeyup = function () {
+                var acc_name = document.getElementById('name');
+                var letters = /^[a-zA-Z][a-zA-Z\s]*$/;
+                //check if name is alphabetic
+                if (acc_name.value.match(letters)) {
+                    if (acc_name.value.length > 10) {
+                        acc_name_valid = true;
+                        acc_name.style.borderColor = "green";
+                        acc_name.style.color = "green";
+                    } else {
+                        acc_name.style.borderColor = "red";
+                        acc_name.style.color = "red";
+                    }
+                } else {
+                    acc_name.style.borderColor = "red";
+                    acc_name.style.color = "red";
+                }
+            }
+
+            //CHECKING DATE
+            document.getElementById("expiry").onkeyup = function () {
+                var acc_expiry = document.getElementById('expiry');
+                //check 
+                if (acc_expiry.value.length == 9) {
+                    if (acc_expiry.value.substring(5, 9) == 2021 && acc_expiry.value.substring(0, 2) >= 3 &&
+                        acc_expiry.value.substring(0, 2) <= 12) {
+                        acc_expiry_valid = true;
+                        document.getElementById("cvc").focus();
+                        acc_expiry.style.borderColor = "green";
+                        acc_expiry.style.color = "green";
+                    } else if (acc_expiry.value.substring(0, 2) >= 01 && acc_expiry.value.substring(0, 2) <= 12 &&
+                        acc_expiry.value.substring(5, 9) >= 2022 && acc_expiry.value.substring(5, 9) <= 2031) {
+                        acc_expiry_valid = true;
+                        document.getElementById("cvc").focus();
+                        acc_expiry.style.borderColor = "green";
+                        acc_expiry.style.color = "green";
+                    } else {
+                        acc_expiry.style.borderColor = "red";
+                        acc_expiry.style.color = "red";
+                    }
+                } else {
+                    acc_expiry.style.borderColor = "red";
+                    acc_expiry.style.color = "red";
+                }
+            }
+
+            //CHECKING CVC
+            document.getElementById("cvc").onkeyup = function () {
+                var acc_cvc = document.getElementById('cvc');
+                //check 
+                if (acc_cvc.value.length == 3) {
+                    acc_cvc_valid = true;
+                    document.getElementById("apply").focus();
+                    acc_cvc.style.borderColor = "green";
+                    acc_cvc.style.color = "green";
+                } else {
+                    acc_cvc.style.borderColor = "red";
+                    acc_cvc.style.color = "red";
+                }
+            }
+            document.querySelector("#apply").addEventListener("click", function (event) {
+                if (acc_nr_valid == true && acc_name_valid == true && acc_expiry_valid == true &&
+                    acc_cvc_valid == true) {
+                    // document.getElementById('cashInput').style.display = "block";
+                    // event.preventDefault();
+                    document.getElementById("acc_form").submit();
+                } else {
+                    console.log("KEQ");
+                    event.preventDefault();
+                }
+            });
+        </script>
+        <script>
+            $('form').card({
+                ontainer: '.card-wrapper'
+            });
+            // Vanilla JavaScript
+            new Card({
+                form: document.querySelector('form'),
+                container: '.card-wrapper'
+            });
+
+            $('form').card({
+                formatting: true,
+                formSelectors: {
+                    numberInput: 'input[name="number"]',
+                    expiryInput: 'input[name="expiry"]',
+                    cvcInput: 'input[name="cvc"]',
+                    nameInput: 'input[name="name"]'
+                },
+                cardSelectors: {
+                    cardContainer: '.jp-card-container',
+                    card: '.jp-card',
+                    numberDisplay: '.jp-card-number',
+                    expiryDisplay: '.jp-card-expiry',
+                    cvcDisplay: '.jp-card-cvc',
+                    nameDisplay: '.jp-card-name'
+                },
+                // custom message
+                messages: {
+
+                    validDate: 'valid\nthru',
+                    monthYear: 'month/year'
+                },
+
+                placeholders: {
+                    number: '&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;',
+                    cvc: '&bull;&bull;&bull;',
+                    expiry: '&bull;&bull;/&bull;&bull;',
+                    name: 'Full Name'
+                },
+                masks: {
+                    cardNumber: false
+                },
+                classes: {
+                    valid: 'jp-card-valid',
+                    invalid: 'jp-card-invalid'
+                },
+                debug: false
+
+            });
+        </script>
 </main>
 <footer class="revealed">
     <div class="container">
@@ -1352,8 +1622,12 @@
 <script src="../js/carousel_with_thumbs.js"></script> <!-- DETAJET -->
 <script src="../js/sticky_sidebar.min.js"></script>
 <script src="../js/specific_listing.js"></script> <!-- PRODUKTET ||| e dyta per --->
-<script src="assets/scripts/jquery.min.js"></script>
+<script src="assets/vendor/jquery/jquery.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../js/datepicker/jquery-3.3.1.min.js"></script>
+<script src="../js/datepicker/jquery-ui.min.js"></script>
+<script src="../js/datepicker/jquery.slicknav.js"></script>
+<script src="../js/datepicker/main.js"></script>	
     <script>
     	// Client type Panel
 		$('input[name="client_type"]').on("click", function() {
