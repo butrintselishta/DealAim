@@ -338,7 +338,7 @@
             }).then(f).catch(a)) : a()
         }(window, document, localStorage);
     </script>
-        <style>
+    <style>
 			
         .jp-card {
             height: 90% !important;
@@ -443,6 +443,9 @@
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/vendor/linearicons/style.css">
     <link rel="stylesheet" href="assets/css/_page-profile.scss">
+    <script src="assets/scripts/jquery.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
@@ -688,10 +691,10 @@
                                 <a href="#myprofile" role="tab" data-toggle="tab">Profili im</a></li>
                             <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){ echo "<li ><a href='#bank_acc' role='tab' data-toggle='tab'>Llogaria Bankare dhe Bilanci</a></li>"; } ?>
                             <?php if($_SESSION['user']['status'] == SELLER) {
-					echo "<li><a href='#prod_add' role='tab' data-toggle='tab'>Shto një produkt </a></li>";
-					echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
-					echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
-					} ?>
+					        echo "<li><a href='#prod_add' role='tab' data-toggle='tab'>Shto një produkt </a></li>";
+					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
+					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
+				        	} ?>
                         </ul>
                         <div class="tab-content content-profile">
                             <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ ?>
@@ -952,8 +955,7 @@
                                         </div>
                                         <?php } ?>
                                         <p class="margin-top-30">
-                                            <input type="submit" class="btn_1" id="update_user_data" name="update_user_data"
-                                                value="Ndrysho">
+                                            <input type="submit" class="btn_1" id="update_user_data" name="update_user_data" value="Ndrysho">
                                         </p>
                                     </div>
                                     <?php unset($_SESSION['user_data_errors']); ?>
@@ -1035,9 +1037,9 @@
                                         <!-- RIGHT SECTION -->
                                         <div class="right" style="width:48%;">
                                             <?php 
-                                    $balan_perdoruesit = prep_stmt("SELECT user_balance FROM users WHERE user_id=?", $stmt_fetch['user_id'],"i");
-                                    $balanci_aktual = mysqli_fetch_array($balan_perdoruesit);
-                                ?>
+                                            $balan_perdoruesit = prep_stmt("SELECT user_balance FROM users WHERE user_id=?", $stmt_fetch['user_id'],"i");
+                                            $balanci_aktual = mysqli_fetch_array($balan_perdoruesit);
+                                            ?>
                                             <div class="divider" style="margin-bottom:50px;">
                                                 <span
                                                     style="background-color:#fff; text-decoration:underline;">Bilanci
