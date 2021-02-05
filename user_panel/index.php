@@ -160,7 +160,9 @@
 	}
 
     if(isset($_POST['btn_add_prod'])){
-        $category = $_POST['choose_cat'];die(var_dump($category));
+        $_SESSION['errorr'] = "<small style='red'> Gabim </small>";
+        header("location:". $_SERVER['PHP_SELF']); 
+        // $category = $_POST['choose_cat'];//die(var_dump($category));
     }
 	//updat
 
@@ -1257,7 +1259,7 @@
                                 <div class="divider">
                                     <span style="background-color:#fff">Vendosë produktin tënd në ankand</span>
                                 </div>
-                                <form class="add_prod_form" method="post" onkeyup="validate_form()">
+                                <form class="add_prod_form" method="post">
                                     <h3 style="text-decoration:underline;"> Te dhenat e produktit </h3>
                                     <div class="form-group row">
                                         <div class="col-4 col-form-label">
@@ -1281,7 +1283,7 @@
                                             <label for="" class="float-right" style="">Titulli ankandit</label> 
                                         </div>
                                         <div class="col-6">
-                                          <input type="text" class="form-control" id="auc_title" placeholder="Titulli ankandit">
+                                          <input type="text" class="form-control" id="auc_title" placeholder="Titulli ankandit" <?php if(isset($_SESSION['errorr'])){ echo "style='border:1px solid red'";} unset($_SESSION['errorr']); ?>>
                                         </div>
                                         <div class="divider"></div>
                                         <div class="col-4 col-form-label">
@@ -1699,36 +1701,6 @@
         <script src="../js/jquery.card.js"></script>
     
     <script>
-        function validate_form(){
-            var auc_title = document.getElementById("auc_title");
-            var auc_price = document.getElementById("auc_price");
-            var auc_end = document.getElementById("auc_end");
-            if(auc_title.value.length < 5){
-                auc_title.style.border ="1px solid #FF0000";
-                return false;
-            }else{
-                auc_price.style.border ="1px solid green";
-                auc_price.focus();
-                if(auc_price.value.match(/^\d+$/) && auc_price.value < 9999){
-                    if(auc_end.value = "" ){
-                        auc_price.style.border ="1px solid green";
-                         return true;
-                    }
-                    else{
-                    auc_price.style.border ="1px solid #FF0000";
-                    return false;
-                }
-                 }
-                 else{
-                    auc_price.style.border ="1px solid #FF0000";
-                    return false;
-                }
-            }
-           
-        }
-        
-</script>
-<script>
         //Phone number validator
         var input = document.querySelector("#phone");
         window.intlTelInput(input, {

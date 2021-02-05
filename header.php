@@ -67,8 +67,8 @@
     <!-- GOOGLE WEB FONT -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch"
-        crossorigin="anonymous">
+    <!-- <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch"
+        crossorigin="anonymous"> -->
 
     <script>
         ! function (e, n, t) {
@@ -103,6 +103,11 @@
         }(window, document, localStorage);
     </script>
     <style>
+        #spec_h3{
+           display:none;
+       }#spec_laptop, #spec_phone, #spec_cars, #spec_template{
+           display:none;
+       }
         .jp-card {
             height: 90% !important;
         }
@@ -180,7 +185,7 @@
     <!-- DatePicker -->
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="css/datepicker.css" type="text/css">
-    <script src="jquery-1.12.0.min.js" type="text/javascript"></script>
+    <!-- <script src="jquery-1.12.0.min.js" type="text/javascript"></script> -->
 
     <!-- SPECIFIC CSS -->
     <link href="css/home_1.css" rel="stylesheet">
