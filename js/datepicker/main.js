@@ -43,6 +43,11 @@
         dateFormat: "dd/mm/yy",
         maxDate: new Date('2002-07-07')
     });
+	$(".datepicker-2").datepicker({
+        dateFormat: "dd/MM/yy",
+        minDate: new Date(),
+		maxDate: new Date(Date.now() + 604800000)
+    });
     /*------------------
 		Nice Selector
 	--------------------*/

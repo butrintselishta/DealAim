@@ -62,7 +62,7 @@
     else{
         $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
     }
-	
+	//update users data
 	if(isset($_POST['update_user_data'])){
 		$user_usname = $_POST['username'];
 		$user_pass = trim($_POST['password']);
@@ -159,7 +159,10 @@
         }
 	}
 
-	// $stmt_id = $stmt_fetch['user_id'];
+    if(isset($_POST['btn_add_prod'])){
+        $category = $_POST['choose_cat'];die(var_dump($category));
+    }
+	//updat
 
 	//apply for BUYER
 	if(isset($_POST['bank_acc'])){
@@ -285,13 +288,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Ansonika">
-    <title>Allaia | Bootstrap eCommerce Template - ThemeForest</title>
+    <title>DealAim</title>
 
     <!-- Favicons-->
-    <link href="../css/card.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery.min.js"></script>
-    <script src="../js/jquery.card.js"></script>
-
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="../img/apple-touch-icon-57x57-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="../img/apple-touch-icon-72x72-precomposed.png">
@@ -303,8 +302,8 @@
     <!-- GOOGLE WEB FONT -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch"
-        crossorigin="anonymous">
+    <!-- <link rel="preload" href="../css.css?family=Roboto:300,400,500,700,900&display=swap" as="fetch"
+        crossorigin="anonymous"> -->
 
     <script>
         ! function (e, n, t) {
@@ -338,8 +337,84 @@
             }).then(f).catch(a)) : a()
         }(window, document, localStorage);
     </script>
+    <script>
+        var cat_bool = false; var auc_title_bool =false; var auc_price_bool = false; 
+        //chose category qe me i shfaqe specifikat varesisht prej kategorise se zgjedhur
+        function cat_choose(){
+            var cat = document.getElementById("choosed_cat"); //merre prej selektit vleren e zgjedhur
+            if(cat.value == ""){
+                cat.style.borderColor ="red";
+                var cat_bool = false;
+            }
+            else if(cat.value == "Laptop"){
+                cat_bool = true;
+                document.getElementById("btn_spec").style.display = "block";
+                document.getElementById("spec_h3").style.display = "block";
+                document.getElementById("spec_laptop").style.display="block";  
+                document.getElementById("spec_phone").style.display="none"; 
+                document.getElementById("spec_cars").style.display="none"; 
+                document.getElementById("spec_template").style.display="none"; 
+                cat.style.borderColor ="green";
+                document.getElementById("auc_title").focus();
+            }else if(cat.value == "Telefon"){
+                cat_bool = true;
+                document.getElementById("btn_spec").style.display = "block";
+                document.getElementById("spec_h3").style.display = "block";
+                document.getElementById("spec_laptop").style.display="none";  
+                document.getElementById("spec_phone").style.display="block"; 
+                document.getElementById("spec_cars").style.display="none"; 
+                document.getElementById("spec_template").style.display="none"; 
+                cat.style.borderColor ="green";
+                document.getElementById("auc_title").focus();
+            }else if(cat.value == "Vetura"){
+                cat_bool = true;
+                document.getElementById("btn_spec").style.display = "block";
+                document.getElementById("spec_h3").style.display = "block";
+                document.getElementById("spec_laptop").style.display="none";  
+                document.getElementById("spec_phone").style.display="none"; 
+                document.getElementById("spec_cars").style.display="block"; 
+                document.getElementById("spec_template").style.display="none"; 
+                cat.style.borderColor ="green";
+                document.getElementById("auc_title").focus();
+            }else if(cat.value == "Template"){
+                cat_bool = true;
+                document.getElementById("btn_spec").style.display = "block";
+                document.getElementById("spec_h3").style.display = "block";
+                document.getElementById("spec_laptop").style.display="none";  
+                document.getElementById("spec_phone").style.display="none"; 
+                document.getElementById("spec_cars").style.display="none"; 
+                document.getElementById("spec_template").style.display="block";
+                cat.style.borderColor ="green";
+                document.getElementById("auc_title").focus(); 
+            }else {
+                cat_bool = false;
+                document.getElementById("btn_spec").style.display = "none";
+                document.getElementById("spec_h3").style.display = "none";
+                document.getElementById("spec_laptop").style.display="none";  
+                document.getElementById("spec_phone").style.display="none"; 
+                document.getElementById("spec_cars").style.display="none"; 
+                document.getElementById("spec_template").style.display="none"; 
+                cat.style.borderColor ="red";
+            }
+        }
+        
+        
+    </script>
     <style>
-			
+       #spec_h3{
+           display:none;
+       }#spec_laptop, #spec_phone, #spec_cars, #spec_template{
+           display:none;
+       }
+		.add_prod_form{
+            width:80%;
+            background-color:#f8f8f8;
+            padding: 1em 0 .5em 0;
+            margin-top: 2em;
+        }
+        .add_prod_form label{
+            margin-top:.5em;
+        }
         .jp-card {
             height: 90% !important;
         }
@@ -367,7 +442,10 @@
             }
             .img_upl{
                 width:80%  !important;
-        }
+            }
+            .add_prod_form{
+            width:100% !important;
+            }
         }
         @media only screen and (max-width: 1199px){
             .checkmark {
@@ -375,7 +453,10 @@
             }
             .btn__1{
                 display:flow-root !important;
-			}
+            }
+            .add_prod_form{
+             width:100% !important;
+            }
 			/* .left{
 			width:48% !important;
 			}
@@ -425,12 +506,12 @@
     <link href="../css/bootstrap.custom.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/card.css" rel="stylesheet">
     
-
     <!-- DatePicker -->
     <link rel="stylesheet" href="../css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="../css/datepicker.css" type="text/css">
-    <script src="jquery-1.12.0.min.js" type="text/javascript"></script>
+    <!-- <script src="jquery-1.12.0.min.js" type="text/javascript"></script> -->
 
     <!-- SPECIFIC CSS -->
     <link href="../css/home_1.css" rel="stylesheet">
@@ -442,9 +523,6 @@
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/vendor/linearicons/style.css">
-    <link rel="stylesheet" href="assets/css/_page-profile.scss">
-    <script src="assets/scripts/jquery.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -495,7 +573,7 @@
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="index.php"><img src="img/logo_black.svg" alt="" width="100"
+                                            <a href="index.php"><img src="../img/logo_black.svg" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>
@@ -705,7 +783,7 @@
                                         <span style="background-color:#fff">Të dhënat bankare</span>
                                     </div>
                                     <center>
-                                        <div class="row no-gutters form-container active" id="">
+                                        <div class="row no-gutters form-container active"  >
                                             <form method="POST" action="index.php" id="acc_form" style="width:100%;">
                                                 <div class="col-12 pl-1">
                                                     <div class="card-wrapper"></div>
@@ -746,10 +824,11 @@
                                                             style="text-align:center;">
                                                     </div>
                                                 </div>
-                                                <div class="col-12 pl-1" id="">
+                                                <div class="col-12 pl-1"  >
                                                     <div class="text-center btn_center" style="margin-bottom:15px;">
                                                         <button type="submit" id="apply" name="bank_acc" value="Vazhdo"
-                                                            class="btn_1 ">APLIKO</button></div>
+                                                            class="btn_1 ">APLIKO</button>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -760,7 +839,7 @@
 
                             <?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ ?>
                             <div class="tab-pane fade in active" id="seller" style="">
-                                <div class="row no-gutters form-container active" id="">
+                                <div class="row no-gutters form-container active"  >
                                     <form method="POST" action="" id="form_seller" style="width:100%;">
                                         <small
                                             style="color:#000; font-weight:700; font-size:15px;text-align:center !important; text-decoration:underline;">
@@ -964,7 +1043,8 @@
                         
                                 <!-- END MY PROFILE -->
                                 <!-- BANK ACCOUNT -->
-                            <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER) 
+                            <?php 
+                            if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER) 
                             { 
 							$stmt_check_id = prep_stmt("SELECT * FROM users WHERE username = ?",$username, "s");
 							$stmt_fetch = mysqli_fetch_array($stmt_check_id);
@@ -1001,37 +1081,37 @@
                                     <div class="clearfix">
                                         <!-- LEFT SECTION -->
                                         <div class="left" style="width:48%;">
-                                            <div class="divider" style="margin-bottom:50px;">
-                                                <span style="background-color:#fff; text-decoration:underline;">Të
-                                                    dhënat bankare</span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Numri i xhirollogarisë</label>
-                                                <input type="text" class="form-control"
-                                                    value="<?php echo $acc_bank_number; ?>"
-                                                    style="text-align:center; font-weight:500;">
-                                            </div>
-                                            <div class="form-group">
-                                                <label> Emri dhe Mbiemri</label>
-                                                <input type="email" class="form-control"
-                                                    value="<?php echo $acc_bank_name; ?>"
-                                                    style="text-align:center; font-weight:500;">
-                                            </div>
-                                            <div class="form-group">
-                                                <label> Data skadencës</label>
-                                                <input type="email" class="form-control"
-                                                    value="<?php echo $acc_bank_expiry ?>"
-                                                    style="text-align:center; font-weight:500;">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>CVV Kodi </label>
-                                                <input type="text" value="<?php echo $cvc_substr ?>"
-                                                    class="form-control"
-                                                    style="text-align:center; font-weight:500;">
-                                            </div>
-                                            <p class="margin-top-30">
-                                                <button type="button" class="btn_1">Update</button>
-                                            </p>
+                                            <form method="post" action="">
+                                                <div class="divider" style="margin-bottom:50px;">
+                                                    <span style="background-color:#fff; text-decoration:underline;">Të
+                                                        dhënat bankare</span>
+                                                </div>
+                                                <!-- <div class="col-12 pl-1">
+                                                    <div class="card-wrapper"></div>
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label>Numri i xhirollogarisë</label>
+                                                    <input type="text" name="acc_number" id="number" class="form-control" value="<?php echo $acc_bank_number; ?>"
+                                                        style="text-align:center; font-weight:500;" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label> Emri dhe Mbiemri</label>
+                                                    <input type="email" name="acc_name" id="name" class="form-control" value="<?php echo $acc_bank_name; ?>"
+                                                        style="text-align:center; font-weight:500;" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label> Data skadencës</label>
+                                                    <input type="tel" name="acc_expiry" id="expiry" class="form-control" value="<?php echo $acc_bank_expiry ?>"
+                                                        style="text-align:center; font-weight:500;" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>CVV Kodi </label>
+                                                    <input type="text" name="acc_cvc" id="cvc" value="<?php echo $cvc_substr ?>"class="form-control" style="text-align:center; font-weight:500;" readonly>
+                                                </div>
+                                                <!-- <p class="margin-top-30">
+                                                    <button type="button" class="btn_1" name="update_bank_acc">Update</button>
+                                                </p> -->
+                                            </form>
                                         </div>
                                         <!-- END LEFT SECTION -->
                                         <!-- RIGHT SECTION -->
@@ -1171,6 +1251,443 @@
                                 </div>
                             </div>
                             <?php } ?>
+                            <!-- ADD Products -->
+                            <?php if($_SESSION['user']['status'] == SELLER){ ?>
+                            <div class="tab-pane fade" id="prod_add">
+                                <div class="divider">
+                                    <span style="background-color:#fff">Vendosë produktin tënd në ankand</span>
+                                </div>
+                                <form class="add_prod_form" method="post" onkeyup="validate_form()">
+                                    <h3 style="text-decoration:underline;"> Te dhenat e produktit </h3>
+                                    <div class="form-group row">
+                                        <div class="col-4 col-form-label">
+                                            <label for="" class="float-right" style="">Kategoria</label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <select class="form-control" id="choosed_cat" name="choose_cat" onchange="cat_choose();">
+                                                <?php 
+                                                $sel_cat = prep_stmt("SELECT * FROM categories WHERE parent_id != ?", 0, 'i');
+                                                echo "<option value=''> Zgjedh kategorinë </option>";
+                                                while($row_cat = mysqli_fetch_array($sel_cat)){
+                                                    echo "<option value='".$row_cat['cat_title']."'>".$row_cat['cat_title']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-4 col-form-label">
+                                            <label for="" class="float-right" style="">Titulli ankandit</label> 
+                                        </div>
+                                        <div class="col-6">
+                                          <input type="text" class="form-control" id="auc_title" placeholder="Titulli ankandit">
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="" class="float-right" style="margin-top:.5em;">Cmimi fillestar</label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="number" class="form-control float-left" id="auc_price" placeholder="Çmimi fllestar" style="width:40%">
+                                            <div class="input-group-prepend" style="padding:0 !important;">
+                                                 <div class="input-group-text" style="padding: .235rem .375rem">€</div>
+                                            </div>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="" class="float-right" style="">Ankandi fillon nga: </label> 
+                                        </div>
+                                        <div class="col-6">
+                                          <span id="error_from"></span>
+                                          <input type="text" id="auc_start" class="form-control"  value="Momenti i pranimit nga ana administratorit..." readonly>
+                                        </div>
+                                        <p id="demooo"></p>
+                                        <div class="divider"></div>
+                                        <div class="col-4 col-form-label">
+                                            <label class="float-right" style="">Ankandi mbaron pas: </label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <select class="form-control" name="auc_end" id="auc_end">
+                                                <option value=""> Zgjidh  sa ditë dëshiron të qëndroj në ankand produkti... </option>
+                                                <option value="1"> 1 </option>
+                                                <option value="2"> 2 </option>
+                                                <option value="3"> 3 </option>
+                                                <option value="4"> 4 </option>
+                                                <option value="5"> 5 </option>
+                                                <option value="6"> 6 </option>
+                                                <option value="7"> 7 </option>
+                                            </select>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="" id="auc_description" class="float-right" style="">Përshkrimi </label> 
+                                        </div>
+                                        <div class="col-6" style="padding-bottom:5px;">
+                                          <textarea rows="4" class="form-control" ></textarea>
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="inputEmail3" class="float-right" style="">Fotot </label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="file" class="form-control"   >
+                                        </div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="inputEmail3" class="float-right" style=""></label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="file" class="form-control"   >
+                                        </div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="inputEmail3" class="float-right" style=""> </label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="file" class="form-control"  >
+                                        </div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="inputEmail3" class="float-right" style=""></label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="file" class="form-control"  >
+                                        </div>
+                                        <div class="col-4 col-form-label">
+                                            <label for="inputEmail3" class="float-right" style=""> </label> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="file" class="form-control"  >
+                                        </div>
+                                    </div>
+                                    <!--- SPECIIFIKAT -->
+                                    <h3 style="text-decoration:underline;" id="spec_h3" > Specifikat </h3>
+                                    <!--- SPECIIFIKAT e laptopit-->
+                                    <div id="spec_laptop" >
+                                        <div class="form-group row" >
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" >
+                                                    <?php 
+                                                    $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 2, 'i');
+                                                    echo "<option value=''> Zgjedh prodhuesin </option>";
+                                                    while($row_man_lap = mysqli_fetch_array($sel_man_lap)){
+                                                        echo "<option value='".$row_man_lap['prod_manufacturer']."'>".$row_man_lap['prod_manufacturer']."</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Modeli:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_model" id="lap_model" class="form-control"   placeholder="Modeli laptopit..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Gjendja:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="lap_condition"   placeholder="Gjendja e laptopit..">
+                                                   <option value=""> Gjendja laptopit </option>
+                                                   <option value="I ri"> I ri </option>
+                                                   <option value="I përdorur"> I përdorur </option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Diagonalja ekranit (inch):</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_ekrani" class="form-control"   placeholder="Diagonalja ekranit (e shprehur me inch)..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Ngjyra:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_color" class="form-control"   placeholder="Ngjyra..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label class="float-right" style="">Procesori:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_processor" class="form-control"   placeholder="Procesori..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Memorja RAM (GB):</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="lap_ram"   placeholder="">
+                                                   3<option value=""> Memorja RAM(GB).. </option>
+                                                   <option value="2GB"> 2GB </option>
+                                                   <option value="4GB"> 4GB </option>
+                                                   <option value="6GB"> 6GB </option>
+                                                   <option value="8GB"> 8GB </option>
+                                                   <option value="16GB"> 16GB </option>
+                                                   <option value="24GB"> 24GB </option>
+                                                   <option value="32GB"> 32GB </option>
+                                                   <option value="32GB"> 64GB </option>
+                                                   <option value="32GB"> 128GB </option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Memorja e mbrendshme:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="lap_internal_memory"   placeholder="Lloji i memorjes së mbrendshme..">
+                                                   <option value=""> Memorja e mbrendshme.. </option>
+                                                   <option value="I ri"> HDD </option>
+                                                   <option value="I përdorur"> SSD </option>
+                                                   <option value="I përdorur"> Hybrid </option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Hapsira e memorjes se mbrendshme (GB):</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_internal_emory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme...">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Kartela Grafike:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="lap_graphic_card" class="form-control"   placeholder="Kartela Grafike..">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--- SPECIIFIKAT e telefonit-->
+                                    <div id="spec_phone" >
+                                        <div class="form-group row" >
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="phone_manufacturer"   placeholder="Zgjedh prodhuesin">
+                                                    <?php 
+                                                    $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 3, 'i');
+                                                    echo "<option value=''> Zgjedh prodhuesin </option>";
+                                                    while($row_man_lap = mysqli_fetch_array($sel_man_lap)){
+                                                        echo "<option value='".$row_man_lap['prod_manufacturer']."'>".$row_man_lap['prod_manufacturer']."</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Modeli:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_model" class="form-control"   placeholder="Modeli telefonit..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Gjendja:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="phone_condition"   placeholder="Gjendja e laptopit..">
+                                                   <option value=""> Gjendja telefonit </option>
+                                                   <option value="I ri"> I ri </option>
+                                                   <option value="I përdorur"> I përdorur </option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Ngjyra:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_color" class="form-control"   placeholder="Ngjyra">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Sistemi operativ:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                 <select class="form-control" name="phone_operating_system"   placeholder="Lloji i memorjes së mbrendshme..">
+                                                   <option value=""> Sistemi operativ.. </option>
+                                                   <option value="ios"> IOS </option>
+                                                   <option value="android"> Android </option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Memorja RAM (GB):</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_ram" class="form-control"   placeholder="Memorja RAM (e shprehur ne GB)..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Memorja e mbrendshme (GB):</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme (e shprehur me GB):..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label class="float-right" style="">Numri i SIM kartelave:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_sim" class="form-control"   placeholder="Numri i SIM kartelave..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label class="float-right" style="">Vendi i prodhimit:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="phone_origin_of_production" class="form-control"   placeholder="Vendi i prodhimit">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--- SPECIIFIKAT e veturave-->
+                                    <div id="spec_cars" >
+                                        <div class="form-group row" >
+                                            <div class="col-4 col-form-label">
+                                                <label for="inputEmail3" class="float-right" style="">Prodhuesi</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="man_lap"   placeholder="Zgjedh prodhuesin">
+                                                    <?php 
+                                                    $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 5, 'i');
+                                                    echo "<option value=''> Zgjedh prodhuesin </option>";
+                                                    while($row_man_lap = mysqli_fetch_array($sel_man_lap)){
+                                                        echo "<option value='".$row_man_lap['prod_manufacturer']."'>".$row_man_lap['prod_manufacturer']."</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Modeli:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="car_model" class="form-control"   placeholder="Modeli veturës..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Kilometrazha:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="car_km" class="form-control"   placeholder="Kilometrat e kaluara..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Viti prodhimit:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="car_year_of_production" class="form-control"   placeholder="Viti i prodhimit..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Tipi i veturës:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="car_type"  >
+                                                    <option value=""> Tipi i veturës </option>
+                                                    <option value="Veturë e vogël"> Veturë e vogël (2 ulëse) </option>
+                                                    <option value="Sedan"> Sedan</option>
+                                                    <option value="Kupe"> Kupe</option>
+                                                    <option value="Hatchback"> Hatchback</option>
+                                                    <option value="Universal"> Universal</option>
+                                                    <option value="Kabriolet"> Kabriolet</option>
+                                                    <option value="Kabriolet"> SUV</option>
+                                                    <option value="Kabriolet"> Minivan</option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Ngjyra veturës:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="car_color" class="form-control"   placeholder="Ngjyra veturës..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Transmisioneri:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="car_transmission"  >
+                                                    <option value=""> Transmisioneri.. </option>
+                                                    <option value="Manual"> Manual</option>
+                                                    <option value="Automatik"> Automatik</option>
+                                                    <option value="Gjysmë-automatik"> Gjysmë-automatik</option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Karburanti:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="car_fuel"  >
+                                                    <option value=""> Karburanti.. </option>
+                                                    <option value="Benzinë"> Benzinë</option>
+                                                    <option value="Naftë"> Naftë</option>
+                                                    <option value="Rrymë elektrike"> Rrymë elektrike</option>
+                                                    <option value="Gaz natyror i kompresuar"> Gaz natyror i kompresuar (CNG)</option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Kubikazha:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="car_cubics" class="form-control"   placeholder="Kubikazha e veturës..">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--- SPECIIFIKAT e templates-->
+                                    <div id="spec_template" >
+                                        <div class="form-group row" >
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Kategoria e templates..</label> 
+                                            </div>
+                                            <div class="col-6">
+                                            <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Teknologjitë e përdorura:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="template_used_tech" class="form-control"   placeholder="Teknologjitë e përdorura..">
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Layouti:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="template_layout"  >
+                                                    <option value=""> Layotui.. </option>
+                                                    <option value="Responsivë"> Responsivë</option>
+                                                    <option value="Jo resposivë"> Jo resposivë</option>
+                                                </select>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="col-4 col-form-label">
+                                                <label for="" class="float-right" style="">Dokumentimi:</label> 
+                                            </div>
+                                            <div class="col-6">
+                                                <select class="form-control" name="template_documented"  >
+                                                    <option value=""> Dokumentimi.. </option>
+                                                    <option value="I dokumentuar"> I dokumentuar</option>
+                                                    <option value="Jo i dokumentuar"> Jo i dokumentuar</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 pl-1" id="btn_spec" style="display:none;">
+                                        <div class="text-center btn_center" style="margin-bottom:15px;">
+                                            <button type="submit" id="btn_add_prod" name="btn_add_prod" value="" class="btn_1 ">Shto produktin</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <?php } ?>
                         </div>
                     </center>
                 </div>
@@ -1178,33 +1695,49 @@
             </div>  <!-- END MAIN CONTENT -->
         </div>
         <script src="../js/intlTelInput.js"></script>
+        <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="../js/jquery.card.js"></script>
+    
     <script>
+        function validate_form(){
+            var auc_title = document.getElementById("auc_title");
+            var auc_price = document.getElementById("auc_price");
+            var auc_end = document.getElementById("auc_end");
+            if(auc_title.value.length < 5){
+                auc_title.style.border ="1px solid #FF0000";
+                return false;
+            }else{
+                auc_price.style.border ="1px solid green";
+                auc_price.focus();
+                if(auc_price.value.match(/^\d+$/) && auc_price.value < 9999){
+                    if(auc_end.value = "" ){
+                        auc_price.style.border ="1px solid green";
+                         return true;
+                    }
+                    else{
+                    auc_price.style.border ="1px solid #FF0000";
+                    return false;
+                }
+                 }
+                 else{
+                    auc_price.style.border ="1px solid #FF0000";
+                    return false;
+                }
+            }
+           
+        }
+        
+</script>
+<script>
+        //Phone number validator
         var input = document.querySelector("#phone");
         window.intlTelInput(input, {
-            // allowDropdown: false,
-            // autoHideDialCode: false,
-            // autoPlaceholder: "off",
-            // dropdownContainer: document.body,
-            // excludeCountries: ["us"],
-            // formatOnDisplay: false,
-            // geoIpLookup: function(callback) {
-            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-            //     var countryCode = (resp && resp.country) ? resp.country : "";
-            //     callback(countryCode);
-            //   });
-            // },
-            // hiddenInput: "full_number",
-            // initialCountry: "auto",
-            // localizedCountries: { 'de': 'Deutschland' },
-            // nationalMode : false,
-            // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
-            // placeholderNumberType: "MOBILE",
-            // preferredCountries: ['cn', 'jp'],
-            // separateDialCode: true,
+            // allowDropdown: false, // autoHideDialCode: false, // autoPlaceholder: "off", // dropdownContainer: document.body, // excludeCountries: ["us"], // formatOnDisplay: false, // geoIpLookup: function(callback) { //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) { //     var countryCode = (resp && resp.country) ? resp.country : ""; //     callback(countryCode); //   }); // }, // hiddenInput: "full_number", // initialCountry: "auto", // localizedCountries: { 'de': 'Deutschland' }, // nationalMode : false, // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'], // placeholderNumberType: "MOBILE", // preferredCountries: ['cn', 'jp'], // separateDialCode: true,
             utilsScript: "../js/utils.js",
         });
     </script>
     <script>
+        //Phone number validator ...
         var input = document.querySelector("#phone"),
             errorMsg = document.querySelector("#error-msg"),
             validMsg = document.querySelector("#valid-msg");
@@ -1367,6 +1900,7 @@
                 }
             });
         </script>
+        <!-- BANK ACC APPLICATION -->
         <script>
             var acc_nr_valid = false;
             var acc_name_valid = false;
@@ -1478,6 +2012,7 @@
                 }
             });
         </script>
+        <!-- CREDUT CARD VALIDATOR -->
         <script>
             $('form').card({
                 ontainer: '.card-wrapper'
@@ -1623,8 +2158,8 @@
 <script src="../js/carousel-home.min.js"></script> <!-- INDEX -->
 <script src="../js/carousel_with_thumbs.js"></script> <!-- DETAJET -->
 <script src="../js/sticky_sidebar.min.js"></script>
-<script src="../js/specific_listing.js"></script> <!-- PRODUKTET ||| e dyta per --->
-<script src="assets/vendor/jquery/jquery.min.js"></script>
+<!-- <script src="../js/specific_listing.js"></script> PRODUKTET ||| e dyta per - -->
+<script src="assets/scripts/jquery.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../js/datepicker/jquery-3.3.1.min.js"></script>
 <script src="../js/datepicker/jquery-ui.min.js"></script>
