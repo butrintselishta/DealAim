@@ -637,9 +637,9 @@
                                                 <label class="float-right" style="">Sa ditë dëshironi që produkti juaj të qëndroj në ankand: </label> 
                                             </div>
                                             <div class="col-6">
-                                                <select class="form-control" name="auc_end" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("endError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" value="<?php if(isset($_SESSION['save_end'])){echo $_SESSION['save_end'];} unset($_SESSION['save_end']); ?>">
+                                                <select class="form-control" name="auc_end" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("endError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" value="<?php if(isset($_SESSION['save_end'])){echo $_SESSION['save_end'];} ?>">
                                                     <option value=""> Zgjidh  sa ditë dëshiron të qëndroj në ankand produkti juaj... </option>
-                                                    <option value="1"> 1 </option>
+                                                    <option value="1" <?php if(isset($_SESSION['save_end'])){ echo "selected"; unset($_SESSION['save_end']); }  ?>> 1 </option>
                                                     <option value="2"> 2 </option>
                                                     <option value="3"> 3 </option>
                                                     <option value="4"> 4 </option>
