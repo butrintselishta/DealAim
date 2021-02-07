@@ -6,30 +6,36 @@
     if($_SESSION['user']['status'] != SELLER){
         header("index.php");
     }
+    
+    $sel_user_id = prep_stmt("SELECT user_id FROM users WHERE username = ?", $_SESSION['user']['username'], "s");
+    $sel_user = mysqli_fetch_array($sel_user_id);
+    $user_id = $sel_user['user_id'];
 
     if(isset($_POST['btn_add_prod'])){
         $auc_category = $_POST['auc_category'];//die(var_dump($category));
         $auc_title = $_POST['auc_title'];
         $auc_price = str_replace(" ", "",$_POST['auc_price']);//die(var_dump($auc_price));
         $auc_start = $_POST['auc_start'];
-        $auc_end = $_POST['auc_end'];
+        $auc_end = $_POST['auc_end']; 
         $auc_desc = $_POST['auc_description'];
         $auc_photo1 = $_POST['auc_photo1']; $auc_photo2 = $_POST['auc_photo2']; $auc_photo3 = $_POST['auc_photo3']; $auc_photo4 = $_POST['auc_photo4']; $auc_photo5 = $_POST['auc_photo5'];
-
+       
+        //getting todays,tomorrows,one week later day from tomorrow date like epoch for comparing
         $start_at = strtotime($auc_start);
-        $day_after_today = strtotime(date("d/m/Y", strtotime("+1 day")));//tomorrow date
-        $day_after_sevendays = strtotime(date("d/m/Y", strtotime("+7 day")));//7 days from today
-        
+        $day_after_today = strtotime(date("d-m-Y", strtotime("+1 days")));//tomorrow date
+        $day_after_sevendays = strtotime(date("d-m-Y", strtotime("+1 week")));//7 days from today
+
         //GENERATING AN UNIQUE ID for every Product
         $unique_id = uniqid($_SESSION['user']['username']."_");
+        $select_cat_id = prep_stmt("SELECT cat_id FROM categories WHERE cat_title = ?", $auc_category, "s");
+        $selected_cat_id = mysqli_fetch_array($select_cat_id);
+        $selected_cat_id = $selected_cat_id['cat_id'];
 
-        //start from 12PM of the GIVEN AUCTION START DAY
-        $hourstoadd = 12;
-        $secondstoadd = $hourstoadd * (60*60);
-        $auc_start_time = $auc_start + $secondstoadd;
-        $start_time = date("d-m-Y h:i A", $auc_start_time);//die(var_dump($start_time));
-
-        $titleError = false; $priceError = false; $startError = false; $endError = false; $descError = false;$photosError = false;
+        $titleError = false; $priceError = false; $startError = false; $endError = false; $descError = false;$photo1Error = false;$photo2Error = false;$photo3Error = false; 
+        //laptop ERRORS
+        $lapManError = false; $lapModError = false; $lapConError = false; $lapDisError = false; $lapColError = false; $lapProcError = false; $lapRamError = false; $lapIntMemError = false; $lapIntMemSpaceError = false; $lapGrapError = false;
+        //phone Errors
+        $telManError = false;
         $_SESSION['add_prod_errors'] = array();
 
         if(strlen($auc_title) < 6){
@@ -113,17 +119,446 @@
             $descError = true;
             $_SESSION['add_prod_errors'] += ['descError' => "asdasf"];
         }
-        if(empty($auc_photo1) || empty($auc_photo2) || empty($auc_photo3)){
+        if(empty($auc_photo1)){
             $_SESSION['save_price'] = $auc_price;
             $_SESSION['save_title'] = $auc_title;
             $_SESSION['save_start'] = $auc_start;
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
-            $photosError = true;
-            $_SESSION['add_prod_errors'] += ['photosError' => "asdasf"];
+            $photo1Error = true;
+            $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+        }if(empty($auc_photo2)){
+            $_SESSION['save_price'] = $auc_price;
+            $_SESSION['save_title'] = $auc_title;
+            $_SESSION['save_start'] = $auc_start;
+            $_SESSION['save_end'] = $auc_end;
+            $_SESSION['save_desc'] = $auc_desc;
+            $photo2Error = true;
+            $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+        }if(empty($auc_photo3)){
+            $_SESSION['save_price'] = $auc_price;
+            $_SESSION['save_title'] = $auc_title;
+            $_SESSION['save_start'] = $auc_start;
+            $_SESSION['save_end'] = $auc_end;
+            $_SESSION['save_desc'] = $auc_desc;
+            $photo3Error = true;
+            $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+        }
+        if(is_uploaded_file($_FILES['auc_photo1']['tmp_name'])) {
+            $pic = $_FILES['auc_photo1'];
+            $picname = "photo1_" . $unique_id; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename_1   = $picname . "." . $imageFileType; 
+            $target_dir = "img/products/{$basename_1}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $photo1Error = true;
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+            }
+            if ($pic['size'] > 3000000) {
+                $photo1Error = true;
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $photo1Error = true;
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+            }
+            $source = $pic["tmp_name"];
+        }
+        if(is_uploaded_file($_FILES['auc_photo2']['tmp_name'])) {
+            $pic = $_FILES['auc_photo2'];
+            $picname = "photo2_" . $unique_id; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename_2   = $picname . "." . $imageFileType . " | "; 
+            $target_dir = "../img/products/{$basename_2}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $photo2Error = true;
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+            }
+            if ($pic['size'] > 3000000) {
+                $photo2Error = true;
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $photo2Error = true;
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+            }
+            $source = $pic["tmp_name"];
+        }
+        if(is_uploaded_file($_FILES['auc_photo3']['tmp_name'])) {
+            $pic = $_FILES['auc_photo3'];
+            $picname = "photo3_" . $unique_id; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename_3   = $picname . "." . $imageFileType . " | "; 
+            $target_dir = "../img/products/{$basename_3}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $photo3Error = true;
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+            }
+            if ($pic['size'] > 3000000) {
+                $photo3Error = true;
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $photo3Error = true;
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+            }
+            $source = $pic["tmp_name"];
+        }
+        if(is_uploaded_file($_FILES['auc_photo4']['tmp_name'])) {
+            $pic = $_FILES['auc_photo4'];
+            $picname = "photo4_" . $unique_id; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename_4   = $picname . "." . $imageFileType . " | "; 
+            $target_dir = "../img/products/{$basename_4}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $photo4Error = true;
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+            }
+            if ($pic['size'] > 3000000) {
+                $photo4Error = true;
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $photo4Error = true;
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+            }
+            $source = $pic["tmp_name"];
+        }
+        if(is_uploaded_file($_FILES['auc_photo5']['tmp_name'])) {
+            $pic = $_FILES['auc_photo5'];
+            $picname = "photo5_" . $unique_id; //emri i produktit: lea_1 psh
+            $imageFileType = strtolower(pathinfo($pic["name"], PATHINFO_EXTENSION));
+            $basename_5   = $picname . "." . $imageFileType . " | "; 
+            $target_dir = "../img/products/{$basename_5}"; //lokacioni, folderi ku me i bo move fotot
+            $check = getimagesize($pic["tmp_name"]);
+
+            if ($check == false) {
+                $photo5Error = true;
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+            }
+            if ($pic['size'] > 3000000) {
+                $photo5Error = true;
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+            }
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $photo5Error = true;
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+            }
+            $source = $pic["tmp_name"];
         }
 
-        if($titleError || $priceError || $startError || $endError || $descError){
+        $cat_exist = false;
+        $sel_cat_tit = prep_stmt("SELECT cat_title FROM categories WHERE parent_id != ?", 0, 'i');
+        while($sel_cat_title = mysqli_fetch_array($sel_cat_tit)){
+            // die($sel_cat_title['cat_title']);
+            if($sel_cat_title['cat_title'] == $auc_category){
+                $cat_exist = true;
+            }
+        }
+        if($cat_exist == true){
+            if($_POST['auc_category'] == "Laptop"){
+                $lap_man = $_POST['lap_manufacturer'];//die(var_dump($lap_man));
+                $lap_mod = $_POST['lap_model'];
+                $lap_condition = $_POST['lap_condition'];
+                $lap_display = $_POST['lap_display'];
+                $lap_col = $_POST['lap_color'];
+                $lap_proc = $_POST['lap_procesor'];    
+                $lap_ram = $_POST['lap_ram'];
+                $lap_intmem = $_POST['lap_internal_memory'];
+                $lap_intmem_space = $_POST['lap_internal_memory_space'];
+                $lap_grap =$_POST['lap_graphic_card'];
+                // die($lap_man.$lap_mod." ".$lap_condition." ".$lap_display." ".$lap_col." ".$lap_proc." ".$lap_ram." ".$lap_intmem." ".$lap_intmem_space." ".$lap_grap);
+                $sel_lap_man = prep_stmt("SELECT prod_manufacturer FROM prod_manufacturers WHERE cat_id = ?", 2, 'i');
+                $lap_manufacturers = array();
+                while($row_sel_lap_man = mysqli_fetch_array($sel_lap_man)){
+                    $lap_manufacturers[] = $row_sel_lap_man['prod_manufacturer'];
+                }
+                $sel_lap_man = prep_stmt("SELECT prod_manufacturer FROM prod_manufacturers WHERE cat_id = ?", 2, 'i');
+                $lap_manufacturers = array();
+                while($row_sel_lap_man = mysqli_fetch_array($sel_lap_man)){
+                    $lap_manufacturers[] = $row_sel_lap_man['prod_manufacturer'];
+                }
+
+                if(empty($lap_man)){
+                    $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapManError = true;
+                    $_SESSION['add_prod_errors'] += ['lapManError' => "asdasf"];
+                }else if(!array_search($lap_man, $lap_manufacturers)){
+                    $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapManError = true;
+                    $_SESSION['add_prod_errors'] += ['lapManError' => "asdasf"];
+                }
+                if(empty($lap_mod)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapModError = true;
+                    $_SESSION['add_prod_errors'] += ['lapModError' => "asdasf"];
+                }
+                if(empty($lap_condition)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMMod'] = $lap_mod;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapConError = true;
+                    $_SESSION['add_prod_errors'] += ['lapConError' => "asdasf"];
+                }
+                if(empty($lap_display)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapDisError = true;
+                    $_SESSION['add_prod_errors'] += ['lapDisError' => "asdasf"];
+                }
+                if(empty($lap_col)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapColError = true;
+                    $_SESSION['add_prod_errors'] += ['lapColError' => "asdasf"];
+                }else if(!ctype_alpha($lap_col) && !((strpos($lap_col, 'ë')) || (strpos($lap_col, 'Ë')) || (strpos($lap_col, 'ç')) || (strpos($lap_col, 'Ç')))){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapColError = true;
+                    $_SESSION['add_prod_errors'] += ['lapColError' => "asdasf"];
+                }
+                if(empty($lap_proc)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapProcError = true;
+                    $_SESSION['add_prod_errors'] += ['lapProcError' => "asdasf"];
+                }
+                if(empty($lap_ram)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    //
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapRamError = true;
+                    $_SESSION['add_prod_errors'] += ['lapRamError' => "asdasf"];
+                }else if(!is_numeric($lap_ram)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapRamError = true;
+                    $_SESSION['add_prod_errors'] += ['lapRamError' => "asdasf"];
+                }
+                if(empty($lap_intmem)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapIntMemError = true;
+                    $_SESSION['add_prod_errors'] += ['lapIntMemError' => "asdasf"];
+                }
+                if(empty($lap_intmem_space)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    //
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapIntMemSpaceError = true;
+                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => "asdasf"];
+                }else if(!is_numeric($lap_intmem_space)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    //
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $_SESSION['save_lapGrap'] = $lap_grap;
+                    $lapIntMemSpaceError = true;
+                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => "asdasf"];
+                }
+                if(empty($lap_grap)){
+                    $_SESSION['save_price'] = $auc_price;
+                    $_SESSION['save_title'] = $auc_title;
+                    $_SESSION['save_end'] = $auc_end;
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_lapMan'] = $lap_man;
+                    $_SESSION['save_lapMod'] = $lap_mod;
+                    $_SESSION['save_lapCon'] = $lap_condition;
+                    $_SESSION['save_lapDis'] = $lap_display;
+                    $_SESSION['save_lapCol'] = $lap_col;
+                    //
+                    $_SESSION['save_lapProc'] = $lap_proc;
+                    $_SESSION['save_lapRam'] = $lap_ram;
+                    $_SESSION['save_lapIntMem'] = $lap_intmem;
+                    $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
+                    $lapGrapError = true;
+                    $_SESSION['add_prod_errors'] += ['lapGrapError' => "asdasf"];
+                }
+
+                if($lapManError || $lapModError || $lapModError || $lapConError || $lapDisError || $lapColError || $lapProcError || $lapRamError || $lapIntMemError || $lapIntMemSpaceError || $lapGrapError || $telManError){
+                    header("location:myauctions.php"); die();
+                }
+                else{
+                    if (is_uploaded_file($_FILES['auc_photo1']['tmp_name'])) {
+                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    }if (is_uploaded_file($_FILES['auc_photo2']['tmp_name'])) {
+                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    } if (is_uploaded_file($_FILES['auc_photo3']['tmp_name'])) {
+                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    } if (is_uploaded_file($_FILES['auc_photo4']['tmp_name'])) {
+                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    } if (is_uploaded_file($_FILES['auc_photo5']['tmp_name'])) {
+                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                    }
+                    $prod_img = $basename_1 . $basename_2 . $basename_3 . $basename_4 . $basename_5;
+                    //die(var_dump($prod_img));
+                    
+                    //start from 12PM of the GIVEN AUCTION START DAY
+                    $hourstoadd = 12;
+                    $secondstoadd = $hourstoadd * (60*60);
+                    $auc_start_time = $day_after_today + $secondstoadd;
+                    $start_time = date("Y-m-d h:i", $auc_start_time);
+
+                    $daystoadd = $auc_end . " days";
+                    $auc_end_time = date('Y-m-d', $auc_start_time);
+                    $end_time = date("Y-m-d h:i", strtotime($auc_end_time . $daystoadd));
+                    
+                    $isApproved = 0;
+                    //INSERT PRODUKTIN pastaj SPECIFIKAT
+                    $insert_lap_prod = prep_stmt("INSERT INTO products(prod_unique_id, prod_img, prod_title, prod_cmimi, prod_from, prod_to, prod_pershkrimi,cat_id,user_id,prod_isApproved) VALUES(?,?,?,?,?,?,?,?,?,?)", array($unique_id,$basename_1,$auc_title, $auc_price, $start_time, $end_time,$auc_desc,$selected_cat_id,$user_id,$isApproved), "sssssssiii");
+                    if($insert_lap_prod){
+                        die("good");
+                    }else {die ("keq");}
+                }
+
+            }
+            // else if($_POST['auc_category'] == "Telefon"){
+            //     $tel_man = $_POST['phone_manufacturer'];
+                
+            //     if($tel_man != "Apple"){
+            //         $_SESSION['save_price'] = $auc_price;
+            //         $_SESSION['save_title'] = $auc_title;
+            //         $_SESSION['save_end'] = $auc_end;
+            //         $_SESSION['save_desc'] = $auc_desc;
+            //         $telManError = true;
+            //         $_SESSION['add_prod_errors'] += ['telManError' => "asdasf"];
+            //     }
+            // }
+        }else{
+            die("keqqqq");
+        }
+
+
+        if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error){
             header("location:myauctions.php"); die();
         }
     }
@@ -148,11 +583,11 @@
                         <div class="private box" >
                             <center>
                                 <div class="divider">
-                                    <span style="background-color:#fff">Vendosë produktin tënd në ankand</span>
+                                    <span style="background-color:#fff">Vendose produktin tënd në ankand</span>
                                 </div>
+
                                 <div class="row no-gutters">
-                                    <form class="add_prod_form" method="post" action="">
-                                       
+                                    <form  method="post" action="" enctype="multipart/form-data">
                                         <h3 style="text-decoration:underline;"> Te dhenat e produktit </h3>
                                         <div class="form-group row">
                                             <div class="col-4 col-form-label">
@@ -193,7 +628,7 @@
                                                 <label for="" class="float-right" style="">Ankandi fillon nga: </label> 
                                             </div>
                                             <div class="col-6">
-                                                <input type="text" name="auc_start" class="form-control datepicker-2" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("startError", $_SESSION['add_prod_errors'])){ echo "border-color:red;";}} ?>" value="<?php if(isset($_SESSION['save_start'])){echo $_SESSION['save_start'];}else{ echo "dd/mm/YY";} unset($_SESSION['save_start']); ?>">
+                                                <input type="text" name="auc_start" class="form-control datepicker-2" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("startError", $_SESSION['add_prod_errors'])){ echo "border-color:red;";}} ?>" value="<?php if(isset($_SESSION['save_start'])){echo $_SESSION['save_start'];}else{ echo date("d-m-Y",strtotime("+1day"));} unset($_SESSION['save_start']); ?>">
                                             </div>
                                             <p id="demooo"></p>
                                             <div class="divider"></div>
@@ -224,14 +659,14 @@
                                                 <label for="" class="float-right" style="">Fotot </label> 
                                             </div>
                                             <div class="col-6">
-                                                <input type="file" name="auc_photo1" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photosError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                <input type="file" name="auc_photo1" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
                                                 <label for="" class="float-right" style=""></label> 
                                             </div>
                                             <div class="col-6">
-                                                <input type="file" name="auc_photo2" class="form-control"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photosError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                <input type="file" name="auc_photo2" class="form-control"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
@@ -239,7 +674,7 @@
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-6">
-                                                <input type="file"  name="auc_photo3"  class="form-control"style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photosError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                <input type="file"  name="auc_photo3"  class="form-control"style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
                                             </div>
                                             <div class="col-4 col-form-label">
                                                 <label for=""  class="float-right" style=""></label> 
@@ -254,7 +689,7 @@
                                                 <input type="file" name="auc_photo5"  class="form-control"  >
                                             </div>
                                         </div>
-                                        <?php unset($_SESSION['add_prod_errors']['titleError']);unset($_SESSION['add_prod_errors']['priceError']);unset($_SESSION['add_prod_errors']['startError']); unset($_SESSION['add_prod_errors']['endError']);unset($_SESSION['add_prod_errors']['descError']);unset($_SESSION['add_prod_errors']['photosError']);?>
+                                        <?php unset($_SESSION['add_prod_errors']['titleError']);unset($_SESSION['add_prod_errors']['priceError']);unset($_SESSION['add_prod_errors']['startError']); unset($_SESSION['add_prod_errors']['endError']);unset($_SESSION['add_prod_errors']['descError']);unset($_SESSION['add_prod_errors']['photo1Error']);unset($_SESSION['add_prod_errors']['photo2Error']);unset($_SESSION['add_prod_errors']['photo3Error']);?>
                                         <!--- SPECIIFIKAT -->
                                         <h3 style="text-decoration:underline;" id="spec_h3" > Specifikat </h3>
                                         <!--- SPECIIFIKAT e laptopit-->
@@ -264,7 +699,7 @@
                                                     <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" >
+                                                    <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } } unset($_SESSION['add_prod_errors']['lapManError']); ?>" <?php if(isset($_SESSION['save_lapMan'])){ echo "value='".$_SESSION['save_lapMan']."'"; } ?>>
                                                         <?php 
                                                         $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 2, 'i');
                                                         echo "<option value=''> Zgjedh prodhuesin </option>";
@@ -276,17 +711,17 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Modeli:</label> 
+                                                    <label for="inputEmail3" class="float-right">Modeli:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_model" id="lap_model" class="form-control"   placeholder="Modeli laptopit..">
+                                                    <input type="text" name="lap_model" id="lap_model" class="form-control"   placeholder="Modeli laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapModError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapMod'])){ echo "value='".$_SESSION['save_lapMod']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="inputEmail3" class="float-right" style="">Gjendja:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="lap_condition"   placeholder="Gjendja e laptopit..">
+                                                    <select class="form-control" name="lap_condition"   placeholder="Gjendja e laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapConError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
                                                     <option value=""> Gjendja laptopit </option>
                                                     <option value="I ri"> I ri </option>
                                                     <option value="I përdorur"> I përdorur </option>
@@ -297,50 +732,39 @@
                                                     <label for="inputEmail3" class="float-right" style="">Diagonalja ekranit (inch):</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_ekrani" class="form-control"   placeholder="Diagonalja ekranit (e shprehur me inch)..">
+                                                    <input type="text" name="lap_display" class="form-control"   placeholder="Diagonalja ekranit (e shprehur me inch).." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapDisError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapDis'])){ echo "value='".$_SESSION['save_lapDis']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="inputEmail3" class="float-right" style="">Ngjyra:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_color" class="form-control"   placeholder="Ngjyra..">
+                                                    <input type="text" name="lap_color" class="form-control"   placeholder="Ngjyra.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapColError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapCol'])){ echo "value='".$_SESSION['save_lapCol']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label class="float-right" style="">Procesori:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_processor" class="form-control"   placeholder="Procesori..">
+                                                    <input type="text" name="lap_procesor" class="form-control"   placeholder="Procesori.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapProcError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapProc'])){ echo "value='".$_SESSION['save_lapProc']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="inputEmail3" class="float-right" style="">Memorja RAM (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="lap_ram"   placeholder="">
-                                                    3<option value=""> Memorja RAM(GB).. </option>
-                                                    <option value="2GB"> 2GB </option>
-                                                    <option value="4GB"> 4GB </option>
-                                                    <option value="6GB"> 6GB </option>
-                                                    <option value="8GB"> 8GB </option>
-                                                    <option value="16GB"> 16GB </option>
-                                                    <option value="24GB"> 24GB </option>
-                                                    <option value="32GB"> 32GB </option>
-                                                    <option value="32GB"> 64GB </option>
-                                                    <option value="32GB"> 128GB </option>
-                                                    </select>
+                                                    <input type="text" name="lap_ram" class="form-control"   placeholder="Hapsira e RAM memorjes (e shprehur në GB)..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapRamError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapRam'])){ echo "value='".$_SESSION['save_lapRam']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="inputEmail3" class="float-right" style="">Memorja e mbrendshme:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="lap_internal_memory"   placeholder="Lloji i memorjes së mbrendshme..">
+                                                    <select class="form-control" name="lap_internal_memory"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
                                                     <option value=""> Memorja e mbrendshme.. </option>
-                                                    <option value="I ri"> HDD </option>
-                                                    <option value="I përdorur"> SSD </option>
-                                                    <option value="I përdorur"> Hybrid </option>
+                                                    <option value="HDD"> HDD </option>
+                                                    <option value="SSD"> SSD </option>
+                                                    <option value="Hybrid"> Hybrid </option>
                                                     </select>
                                                 </div>
                                                 <div class="divider"></div>
@@ -348,16 +772,18 @@
                                                     <label for="inputEmail3" class="float-right" style="">Hapsira e memorjes se mbrendshme (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_internal_emory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme...">
+                                                    <input type="text" name="lap_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemSpaceError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapIntMemSpace'])){ echo "value='".$_SESSION['save_lapIntMemSpace']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="inputEmail3" class="float-right" style="">Kartela Grafike:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="lap_graphic_card" class="form-control"   placeholder="Kartela Grafike..">
+                                                    <input type="text" name="lap_graphic_card" class="form-control"   placeholder="Kartela Grafike.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapGrapError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapGrap'])){ echo "value='".$_SESSION['save_lapGrap']."'"; } ?>>
                                                 </div>
                                             </div>
+                                            <?php unset($_SESSION['add_prod_errors']['lapManError']);unset($_SESSION['add_prod_errors']['lapModError']);unset($_SESSION['add_prod_errors']['lapConError']); unset($_SESSION['add_prod_errors']['lapDisError']);unset($_SESSION['add_prod_errors']['lapColError']);unset($_SESSION['add_prod_errors']['lapProcError']);unset($_SESSION['add_prod_errors']['lapRamError']);unset($_SESSION['add_prod_errors']['lapIntMemError']);unset($_SESSION['add_prod_errors']['lapIntMemSpaceError']); unset($_SESSION['add_prod_errors']['lapGrapError']);?>
+                                            <?php unset($_SESSION['save_lapMod']); unset($_SESSION['save_lapDis']); unset($_SESSION['save_lapCol']); unset($_SESSION['save_lapProc']); unset($_SESSION['save_lapRam']);unset($_SESSION['save_lapIntMemSpace']); unset($_SESSION['save_lapGrap']); ?>
                                         </div>
                                         <!--- SPECIIFIKAT e telefonit-->
                                         <div id="spec_phone" >
@@ -366,7 +792,7 @@
                                                     <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="phone_manufacturer"   placeholder="Zgjedh prodhuesin">
+                                                    <select class="form-control" name="phone_manufacturer"   placeholder="Zgjedh prodhuesin" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("telManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } } unset($_SESSION['add_prod_errors']['telManError']); ?>">
                                                         <?php 
                                                         $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 3, 'i');
                                                         echo "<option value=''> Zgjedh prodhuesin </option>";
@@ -441,6 +867,7 @@
                                                     <input type="text" name="phone_origin_of_production" class="form-control"   placeholder="Vendi i prodhimit">
                                                 </div>
                                             </div>
+                                            <?php unset($_SESSION['add_prod_errors']['telManError']);?>
                                         </div>
                                         <!--- SPECIIFIKAT e veturave-->
                                         <div id="spec_cars" >
@@ -610,6 +1037,9 @@
                 document.getElementById("spec_template").style.display="none"; 
                 cat.style.borderColor ="green";
                 document.getElementById("auc_title").focus();
+                if(document.getElementById("lap_manufacturer").value == ""){
+                    document.getElementById("lap_manufacturer").style.border = "1px solid red";
+                }
             }else if(cat.value == "Telefon"){
                 cat_bool = true;
                 document.getElementById("btn_spec").style.display = "block";

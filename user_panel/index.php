@@ -611,7 +611,7 @@
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == SELLER){
                                                         echo "<li>";
-                                                        echo "";
+                                                        echo "<a href='../myauctions.php' class='shites'>Shto një produkt</a>";
                                                         echo "</li>";
                                                     }
                                                 }

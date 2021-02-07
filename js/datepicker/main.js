@@ -44,7 +44,7 @@
         maxDate: new Date('2002-07-07')
     });
 	$(".datepicker-2").datepicker({
-        dateFormat: "dd/mm/yy",
+        dateFormat: "dd-mm-yy",
         minDate: new Date(Date.now() + 86400000),
 		maxDate: new Date(Date.now() + 604800000)
     });
