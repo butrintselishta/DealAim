@@ -639,14 +639,15 @@
                                             <div class="col-6">
                                                 <select class="form-control" name="auc_end" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("endError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" value="<?php if(isset($_SESSION['save_end'])){echo $_SESSION['save_end'];} ?>">
                                                     <option value=""> Zgjidh  sa ditë dëshiron të qëndroj në ankand produkti juaj... </option>
-                                                    <option value="1" <?php if(isset($_SESSION['save_end'])){ echo "selected"; unset($_SESSION['save_end']); }  ?>> 1 </option>
-                                                    <option value="2"> 2 </option>
-                                                    <option value="3"> 3 </option>
-                                                    <option value="4"> 4 </option>
-                                                    <option value="5"> 5 </option>
-                                                    <option value="6"> 6 </option>
-                                                    <option value="7"> 7 </option>
+                                                    <option value="1" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 1){ echo "selected";  }  ?>> 1 </option>
+                                                    <option value="2" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 2){ echo "selected"; }  ?>> 2 </option>
+                                                    <option value="3" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 3){ echo "selected";  }  ?>> 3 </option>
+                                                    <option value="4" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 4){ echo "selected"; }  ?>> 4 </option>
+                                                    <option value="5" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 5){ echo "selected"; }  ?>> 5 </option>
+                                                    <option value="6" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 6){ echo "selected"; }  ?>> 6 </option>
+                                                    <option value="7" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 7){ echo "selected";}  ?>> 7 </option>
                                                 </select>
+                                                <?php  unset($_SESSION['save_end']);  ?>
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
@@ -724,9 +725,10 @@
                                                 <div class="col-6">
                                                     <select class="form-control" name="lap_condition"   placeholder="Gjendja e laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapConError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
                                                     <option value=""> Gjendja laptopit </option>
-                                                    <option value="I ri"> I ri </option>
-                                                    <option value="I përdorur"> I përdorur </option>
+                                                    <option value="I ri" <?php if(isset($_SESSION['save_lapCon']) && $_SESSION['save_lapCon'] == "I ri"){ echo "selected";} ?>> I ri </option>
+                                                    <option value="I përdorur" <?php if(isset($_SESSION['save_lapCon']) && $_SESSION['save_lapCon'] == "I përdorur"){ echo "selected";} ?>> I përdorur </option>
                                                     </select>
+                                                    <?php unset($_SESSION['save_lapCon']); ?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
@@ -763,9 +765,9 @@
                                                 <div class="col-6">
                                                     <select class="form-control" name="lap_internal_memory"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
                                                     <option value=""> Memorja e mbrendshme.. </option>
-                                                    <option value="HDD"> HDD </option>
-                                                    <option value="SSD"> SSD </option>
-                                                    <option value="Hybrid"> Hybrid </option>
+                                                    <option value="HDD" <?php if(isset($_SESSION['save_lapIntMem']) && $_SESSION['save_lapIntMem'] == "HDD"){ echo "selected";} ?>> HDD </option>
+                                                    <option value="SSD" <?php if(isset($_SESSION['save_lapIntMem']) && $_SESSION['save_lapIntMem'] == "SSD"){ echo "selected";} ?>> SSD </option>
+                                                    <option value="Hybrid" <?php if(isset($_SESSION['save_lapIntMem']) && $_SESSION['save_lapIntMem'] == "Hybrid"){ echo "selected";} ?>> Hybrid </option>
                                                     </select>
                                                 </div>
                                                 <div class="divider"></div>
