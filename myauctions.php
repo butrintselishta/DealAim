@@ -291,7 +291,8 @@
                     $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapManError = true;
                     $_SESSION['add_prod_errors'] += ['lapManError' => "asdasf"];
-                }else if(!array_search($lap_man, $lap_manufacturers)){
+                }
+                else if(array_search($lap_man, $lap_manufacturers) === false){
                     $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapManError = true;
                     $_SESSION['add_prod_errors'] += ['lapManError' => "asdasf"];
@@ -509,7 +510,7 @@
                 }
                 else{
                     if (is_uploaded_file($_FILES['auc_photo1']['tmp_name'])) {
-                        move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
+                        move_uploaded_file($source, $target_dir); die(var_dump(move_uploaded_file($source, $target_dir)));//nese po ngarkon per her te par, veq bone move ne folderin e specifikum
                     }if (is_uploaded_file($_FILES['auc_photo2']['tmp_name'])) {
                         move_uploaded_file($source, $target_dir); //nese po ngarkon per her te par, veq bone move ne folderin e specifikum
                     } if (is_uploaded_file($_FILES['auc_photo3']['tmp_name'])) {
