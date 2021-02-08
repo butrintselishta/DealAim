@@ -172,6 +172,13 @@
             text-align:center;
             margin-bottom:6px;
         }
+        .warning {
+            width:100%;
+            padding: 10px 10px 1px 10px;
+            background-color:#f9f9f9;
+            text-align:center;
+            margin-bottom:6px;
+        }
         .hide {
             display: none;
         }
