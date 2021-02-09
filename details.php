@@ -1,36 +1,101 @@
 ﻿<?php
+    require_once "db.php";
+
+    if(isset($_GET['prod_details'])){
+        $prod_details = $_GET['prod_details'];
+        $select_prod_data = prep_stmt("SELECT * FROM products WHERE prod_id=?", $prod_details, "i");
+        if(mysqli_num_rows($select_prod_data)>0){
+            $select_product = mysqli_fetch_array($select_prod_data); 
+        }else{
+            die("keq");
+        }
+        //SELECT SPECIFICATIONS
+        $select_prod_details = prep_stmt("SELECT * FROM prod_specifications WHERE prod_unique_id = ?", array($select_product['prod_unique_id']), "s");
+
+        //SELECT CAT_ID from CLICKED PRODUCT
+        $sel_cat_id = prep_stmt("SELECT cat_id FROM products WHERE prod_unique_id = ? ", $select_product['prod_unique_id'], "s");
+        $cat_id_fetch = mysqli_fetch_array($sel_cat_id);
+        $cat_id = $cat_id_fetch['cat_id'];
+
+        $spec_1 = ""; $spec_2 = ""; $spec_3=""; $spec_4=""; $spec_5 = ""; $spec_6=""; $spec_7=""; $spec_8=""; $spec_9=""; $spec_10="";
+    }
+
 	require "header.php";
 ?>
  
  
  <main>
+    <?php
+        while($sel_prod_spec = mysqli_fetch_array($select_prod_details)){
+
+            if($cat_id == 2){
+                $spec_1 = $sel_prod_spec['lap_man'];
+                $spec_2 = $sel_prod_spec['lap_mod'];
+                $spec_3 = $sel_prod_spec['lap_con'];
+                $spec_4 = $sel_prod_spec['lap_dia'];
+                $spec_5 = $sel_prod_spec['lap_col'];
+                $spec_6 = $sel_prod_spec['lap_proc'];
+                $spec_7 = $sel_prod_spec['lap_ram'];
+                $spec_8 = $sel_prod_spec['lap_im'];
+                $spec_9 = $sel_prod_spec['lap_ims'];
+                $spec_10 = $sel_prod_spec['lap_gc'];
+            }else if($cat_id == 3){
+                $spec_1 = $sel_prod_spec['tel_man'];
+                $spec_2 = $sel_prod_spec['tel_mod'];
+                $spec_3 = $sel_prod_spec['tel_cond'];
+                $spec_4 = $sel_prod_spec['tel_col'];
+                $spec_5 = $sel_prod_spec['tel_im'];
+                $spec_6 = $sel_prod_spec['tel_ram'];
+                $spec_7 = $sel_prod_spec['tel_scn'];
+                $spec_8 = $sel_prod_spec['tel_os'];
+                $spec_9 = $sel_prod_spec['tel_op'];
+            }else if($cat_id == 5){
+                $spec_1 = $sel_prod_spec['car_man'];
+                $spec_2 = $sel_prod_spec['car_mod'];
+                $spec_3 = $sel_prod_spec['car_km'];
+                $spec_4 = $sel_prod_spec['car_py'];
+                $spec_5 = $sel_prod_spec['car_type'];
+                $spec_6 = $sel_prod_spec['car_col'];
+                $spec_7 = $sel_prod_spec['car_tra'];
+                $spec_8 = $sel_prod_spec['car_fu'];
+                $spec_9 = $sel_prod_spec['car_cub'];
+            }
+            
+        }
+    ?>
     <div class="container margin_30">
         <div class="countdown_inner"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
-            <b style="font-size: 20px;"><div data-countdown="2021/01/07" class="countdown"></div></b>
+            <?php 
+                $sel_end = prep_stmt("SELECT prod_to FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
+                $sel_end_date = mysqli_fetch_array($sel_end); 
+            ?>
+            <b style="font-size: 20px;"><div data-countdown="<?php echo $sel_end_date['prod_to']; ?>" class="countdown"></div></b>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="all">
                     <div class="slider">
                         <div class="owl-carousel owl-theme main">
-                            <div style="background-image: url(img/products/shoes/1.jpg);" class="item-box"></div>
-                            <div style="background-image: url(img/products/shoes/2.jpg);" class="item-box"></div>
-                            <div style="background-image: url(img/products/shoes/3.jpg);" class="item-box"></div>
-                            <div style="background-image: url(img/products/shoes/4.jpg);" class="item-box"></div>
-                            <div style="background-image: url(img/products/shoes/5.jpg);" class="item-box"></div>
-                            <div style="background-image: url(img/products/shoes/6.jpg);" class="item-box"></div>
+                            <?php 
+                                $sel_all_prod_pics = prep_stmt("SELECT prod_img FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
+                                $sel_prod_pics = mysqli_fetch_array($sel_all_prod_pics);
+                                $sel_separated_prod_pics = explode("|", $sel_prod_pics['prod_img'],-1);
+                                foreach($sel_separated_prod_pics as $value)
+                                {
+                            ?>
+                             <a href="img/products/<?php if($cat_id == 2){echo "laptops";}elseif($cat_id == 3){echo "phones";}elseif($cat_id == 5){echo "cars";}else if($cat_id == 7){ echo "templates";} ?>/<?php echo $value; ?>" target="_blank"> <div style="background-image: url(img/products/<?php if($cat_id == 2){echo "laptops";}elseif($cat_id == 3){echo "phones";}elseif($cat_id == 5){echo "cars";}else if($cat_id == 7){ echo "templates";} ?>/<?php echo $value; ?>); background-repeat: no-repeat;background-size: contain;" class="item-box" ></div></a>
+                           <?php } ?>
                         </div>
                         <div class="left nonl"><i class="ti-angle-left"></i></div>
                         <div class="right"><i class="ti-angle-right"></i></div>
                     </div>
                     <div class="slider-two">
                         <div class="owl-carousel owl-theme thumbs">
-                            <div style="background-image: url(img/products/shoes/1.jpg);" class="item active"></div>
-                            <div style="background-image: url(img/products/shoes/2.jpg);" class="item"></div>
-                            <div style="background-image: url(img/products/shoes/3.jpg);" class="item"></div>
-                            <div style="background-image: url(img/products/shoes/4.jpg);" class="item"></div>
-                            <div style="background-image: url(img/products/shoes/5.jpg);" class="item"></div>
-                            <div style="background-image: url(img/products/shoes/6.jpg);" class="item"></div>
+                            <?php 
+                                foreach($sel_separated_prod_pics as $value)
+                                { ?>
+                                <div style="background-image: url(img/products/<?php if($cat_id == 2){echo "laptops";}elseif($cat_id == 3){echo "phones";}elseif($cat_id == 5){echo "cars";}else if($cat_id == 7){ echo "templates";} ?>/<?php echo $value; ?>);" class="item active"></div>
+                                 <?php } ?>
                         </div>
                         <div class="left-t nonl-t"></div>
                         <div class="right-t"></div>
@@ -47,7 +112,7 @@
                 </div>
                 <!-- /page_header -->
                 <div class="prod_info">
-                    <h1>Armor Air X Fear</h1>
+                    <h1><?php echo $select_product['prod_title']; ?></h1>
                     <!-- <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span> -->
                     <p>
                         <div class="col-lg-12">
@@ -57,22 +122,41 @@
                             <div class="table-responsive">
                                 <table class="table table-sm table-striped">
                                     <tbody>
+                                        <?php if($cat_id == 2 || $cat_id == 3 || $cat_id == 5){ ?>
                                         <tr>
-                                            <td><strong>Color</strong></td>
-                                            <td>Blue, Purple</td>
+                                            <td><strong>Prodhuesi</strong></td>
+                                            <td><?php echo $spec_1 ?></td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Size</strong></td>
-                                            <td>150x100x100</td>
+                                            <td><strong>Modeli</strong></td>
+                                            <td><?php echo $spec_2 ?></td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Weight</strong></td>
-                                            <td>0.6kg</td>
+                                            <td><strong>Gjendja</strong></td>
+                                            <td><?php echo $spec_3 ?></td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Manifacturer</strong></td>
-                                            <td>Manifacturer</td>
+                                            <td><strong>Ngjyra</strong></td>
+                                            <td><?php echo $spec_4 ?></td>
                                         </tr>
+                                        <?php } else if($car_id == 7){ ?>
+                                            <tr>
+                                                <td><strong>Kategoria</strong></td>
+                                                <td><?php echo $spec_1 ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Teknologjitë e përdorura</strong></td>
+                                                <td><?php echo $spec_2 ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Layout-i</strong></td>
+                                                <td><?php echo $spec_3 ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Dukomentimi</strong></td>
+                                                <td><?php echo $spec_4 ?></td>
+                                            </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -86,7 +170,7 @@
                                 <div class="col-lg-6 col-md-6  float-left">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend" style="width:100%;">
-                                        <input type="text" class="form-control" >
+                                        <input type="text" class="form-control" value="<?php echo $select_product['prod_price'] ?>">
                                         <span class="input-group-text">€</span>
                                     </div>
                                 </div>
@@ -175,65 +259,97 @@
                             <div class="row justify-content-between">
                                 <div class="col-lg-6">
                                     <h3>Detajet</h3>
-                                    <p>Lorem ipsum dolor sit amet, in eleifend <strong>inimicus elaboraret</strong> his, harum efficiendi mel ne. Sale percipit vituperata ex mel, sea ne essent aeterno sanctus, nam ea laoreet civibus electram. Ea
-                                        vis eius explicari. Quot iuvaret ad has.</p>
-                                    <p>Vis ei ipsum conclusionemque. Te enim suscipit recusabo mea, ne vis mazim aliquando, everti insolens at sit. Cu vel modo unum quaestio, in vide dicta has. Ut his laudem explicari adversarium, nisl <strong>laboramus hendrerit</strong>                                                te his, alia lobortis vis ea.</p>
-                                    <p>Perfecto eleifend sea no, cu audire voluptatibus eam. An alii praesent sit, nobis numquam principes ea eos, cu autem constituto suscipiantur eam. Ex graeci elaboraret pro. Mei te omnis tantas, nobis viderer
-                                        vivendo ex has.</p>
+                                    <?php 
+                                        $prod_description = preg_split("/\n+/", $select_product['prod_description']);
+                                        
+                                        foreach($prod_description as $p){
+                                            echo "<p>". $p . "</p>";
+                                        }?>
                                 </div>
                                 <div class="col-lg-5">
-                                    <h3>Specifikat</h3>
+                                    <h3>Të gjitha specifikat</h3>
                                     <div class="table-responsive">
                                         <table class="table table-sm table-striped">
                                             <tbody>
-                                                <tr>
-                                                    <td><strong>Color</strong></td>
-                                                    <td>Blue, Purple</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Size</strong></td>
-                                                    <td>150x100x100</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Weight</strong></td>
-                                                    <td>0.6kg</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Manifacturer</strong></td>
-                                                    <td>Manifacturer</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Color</strong></td>
-                                                    <td>Blue, Purple</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Size</strong></td>
-                                                    <td>150x100x100</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Weight</strong></td>
-                                                    <td>0.6kg</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Manifacturer</strong></td>
-                                                    <td>Manifacturer</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Color</strong></td>
-                                                    <td>Blue, Purple</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Size</strong></td>
-                                                    <td>150x100x100</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Weight</strong></td>
-                                                    <td>0.6kg</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Manifacturer</strong></td>
-                                                    <td>Manifacturer</td>
-                                                </tr>
+                                                <?php if($cat_id == 2){ ?>
+                                                    <tr>
+                                                        <td><strong>Prodhuesi</strong></td>
+                                                        <td><?php echo $spec_1;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Modeli</strong></td>
+                                                        <td><?php echo $spec_2;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Gjendja</strong></td>
+                                                        <td><?php echo $spec_3;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Diagonalja e ekranit (e shprehur në inch) </strong></td>
+                                                        <td><?php echo $spec_4. " inch";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Ngjyra</strong></td>
+                                                        <td><?php echo $spec_5;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Procesori</strong></td>
+                                                        <td><?php echo $spec_6;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Memorja RAM (e shprehur në GB) </strong></td>
+                                                        <td><?php echo $spec_7 . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Memorja e brendshme</strong></td>
+                                                        <td><?php echo $spec_8;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Hapsira e memorjes së brendshme (e shprehur në GB)</strong></td>
+                                                        <td><?php echo $spec_9 . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Kartela Grafike</strong></td>
+                                                        <td><?php echo $spec_10;?></td>
+                                                    </tr>
+                                                <?php }else if($cat_id==3){ ?>
+                                                    <tr>
+                                                        <td><strong>Prodhuesi</strong></td>
+                                                        <td><?php echo $spec_1;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Modeli</strong></td>
+                                                        <td><?php echo $spec_2;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Gjendja</strong></td>
+                                                        <td><?php echo $spec_3;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Ngjyra</strong></td>
+                                                        <td><?php echo $spec_4;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Memorja e brendshme (e shprehur në GB)</strong></td>
+                                                        <td><?php echo $spec_5  . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Memorja RAM (e shprehur në GB)</strong></td>
+                                                        <td><?php echo $spec_6 . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Numri i vendeve për SIM kartela</strong></td>
+                                                        <td><?php echo $spec_7?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Sistemi Operativ</strong></td>
+                                                        <td><?php echo $spec_8;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Vendi Prodhimit</strong></td>
+                                                        <td><?php echo $spec_9;?></td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -244,70 +360,6 @@
                     </div>
                 </div>
                 <!-- /TAB A -->
-                <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
-                    <div class="card-header" role="tab" id="heading-B">
-                        <h5 class="mb-0">
-                            <a class="collapsed" data-toggle="collapse" href="#collapse-B" aria-expanded="false" aria-controls="collapse-B">
-                            Reviews
-                        </a>
-                        </h5>
-                    </div>
-                    <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
-                        <div class="card-body">
-                            <div class="row justify-content-between">
-                                <div class="col-lg-6">
-                                    <div class="review_content">
-                                        <div class="clearfix add_bottom_10">
-                                            <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
-                                            <em>Published 54 minutes ago</em>
-                                        </div>
-                                        <h4>"Commpletely satisfied"</h4>
-                                        <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset
-                                            ut. Viderer petentium cu his.</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="review_content">
-                                        <div class="clearfix add_bottom_10">
-                                            <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><i class="icon-star empty"></i><em>4.0/5.0</em></span>
-                                            <em>Published 1 day ago</em>
-                                        </div>
-                                        <h4>"Always the best"</h4>
-                                        <p>Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /row -->
-                            <div class="row justify-content-between">
-                                <div class="col-lg-6">
-                                    <div class="review_content">
-                                        <div class="clearfix add_bottom_10">
-                                            <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star empty"></i><em>4.5/5.0</em></span>
-                                            <em>Published 3 days ago</em>
-                                        </div>
-                                        <h4>"Outstanding"</h4>
-                                        <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset
-                                            ut. Viderer petentium cu his.</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="review_content">
-                                        <div class="clearfix add_bottom_10">
-                                            <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><em>5.0/5.0</em></span>
-                                            <em>Published 4 days ago</em>
-                                        </div>
-                                        <h4>"Excellent"</h4>
-                                        <p>Sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /row -->
-                            <p class="text-right"><a href="leave-review.html" class="btn_1">Leave a review</a></p>
-                        </div>
-                        <!-- /card-body -->
-                    </div>
-                </div>
-                <!-- /tab B -->
             </div>
             <!-- /tab-content -->
         </div>
@@ -317,107 +369,36 @@
 
     <div class="container margin_60_35">
         <div class="main_title">
-            <h2>Të ngjashme</h2>
+            <h2>Të fundit</h2>
             <span>Produktet</span>
             <p>bllah bllah bllah bllah</p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
+            <?php
+                // $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC", 0, "i");   
+                // while($sel_latest_prod = mysqli_fetch_array($select_latest))
+                // {
+                //         $latest_prod_img = explode("|", $sel_latest_prod['prod_img'], -1);
+            ?>
             <div class="item">
                 <div class="grid_item">
-                    <span class="ribbon new">New</span>
+                    <span class="ribbon new">New</span><!-- class="ribbon new , ribbon hot, ribbon off"-->
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/4.jpg" alt="">
+                            <img class="owl-lazy" src="img/products/<?php if($cat_id == 2){ echo "laptops";}elseif($cat_id == 3){ echo "phones";} elseif($cat_id == 5){echo "cars";}else if($cat_id == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>" alt="">
                         </a>
                     </figure>
                     <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
                     <a href="product-detail-1.html">
-                        <h3>ACG React Terra</h3>
+                        <h3><?php echo $select_latest['prod_title']; ?></h3>
                     </a>
                     <div class="price_box">
-                        <span class="new_price">$110.00</span>
+                        <span class="new_price"><?php echo $select_latest['prod_price']; ?></span>
                     </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
                 </div>
                 <!-- /grid_item -->
             </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon new">New</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/5.jpg" alt="">
-                        </a>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Air Zoom Alpha</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$140.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon hot">Hot</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/8.jpg" alt="">
-                        </a>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Air Color 720</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$120.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon off">-30%</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/2.jpg" alt="">
-                        </a>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Okwahn II</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$90.00</span>
-                        <span class="old_price">$170.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
+            <?php //} ?>
             <!-- /item -->
         </div>
         <!-- /products_carousel -->

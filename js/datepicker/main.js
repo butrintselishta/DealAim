@@ -40,7 +40,7 @@
 	--------------------*/
 
     $(".datepicker-3").datepicker({
-        dateFormat: "dd/mm/yy",
+        dateFormat: "yy-mm-dd",
         maxDate: new Date('2002-07-07')
     });
 	$(".datepicker-2").datepicker({

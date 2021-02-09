@@ -26,7 +26,16 @@ session_start();
         }
         return $conn;
     }
-    
+    function user_id(){
+		$conn = db();
+		$user_id = "";
+		if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
+			$sel_user_id = prep_stmt("SELECT user_id FROM users WHERE username = ?", $_SESSION['user']['username'], "s");
+			$sel_user = mysqli_fetch_array($sel_user_id);
+			$user_id = $sel_user['user_id'];
+		}
+		return $user_id;
+	}
     //prepared statments
     //1 parameter -> $test1 = prep_stmt("SELECT * FROM `users` WHERE id=?", $id, "i");
 	//pa parameter -> $test2 = prep_stmt("SELECT id FROM users", null, null);
