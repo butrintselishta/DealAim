@@ -46,10 +46,70 @@
 		if (empty($city)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!ctype_alpha($city)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Qyteti duhet të jetë në rangun A-ZH</small>"]; } elseif((strlen($city) < 4) || (strlen($city) > 15)) { $cityError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 4 deri në 15 shkronja</small>"]; }
 		
 		//POSTAL CODE ERROR
-		if (empty($post)) { $postnrError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; }elseif(!is_numeric($post)) { $postnrError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email;$_SESSION['save_city'] = $city; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"]; }elseif(strlen($post) !== 5) { $postnrError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city;$_SESSION['save_postnr'] = $post; $_SESSION['save_address'] = $address; $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm 5 numra</small>"]; } if (empty($address)) { $addressError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_postnr'] = $post;  $_SESSION['save_bday'] = $bday; $_SESSION['signup_errors'] += ["addressError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; }
-
+		if (empty($post)) {
+			$postnrError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['save_fname'] = $fname;
+			$_SESSION['save_lname'] = $lname;
+			$_SESSION['save_phone'] = $phone;
+			$_SESSION['save_email'] = $email;
+			$_SESSION['save_city'] = $city;
+			$_SESSION['save_address'] = $address;
+			$_SESSION['save_bday'] = $bday;
+			$_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+		}
+		elseif(!is_numeric($post)) {
+			$postnrError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['save_fname'] = $fname;
+			$_SESSION['save_lname'] = $lname;
+			$_SESSION['save_phone'] = $phone;
+			$_SESSION['save_email'] = $email;
+			$_SESSION['save_city'] = $city;
+			$_SESSION['save_postnr'] = $post;
+			$_SESSION['save_address'] = $address;
+			$_SESSION['save_bday'] = $bday;
+			$_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"];
+		}
+		elseif(strlen($post) !== 5) {
+			$postnrError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['save_fname'] = $fname;
+			$_SESSION['save_lname'] = $lname;
+			$_SESSION['save_phone'] = $phone;
+			$_SESSION['save_email'] = $email;
+			$_SESSION['save_city'] = $city;
+			$_SESSION['save_postnr'] = $post;
+			$_SESSION['save_address'] = $address;
+			$_SESSION['save_bday'] = $bday;
+			$_SESSION['signup_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm 5 numra</small>"];
+		}
+		if (empty($address)) {
+			$addressError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['save_fname'] = $fname;
+			$_SESSION['save_lname'] = $lname;
+			$_SESSION['save_phone'] = $phone;
+			$_SESSION['save_email'] = $email;
+			$_SESSION['save_city'] = $city;
+			$_SESSION['save_postnr'] = $post;
+			$_SESSION['save_postnr'] = $post;
+			$_SESSION['save_bday'] = $bday;
+			$_SESSION['signup_errors'] += ["addressError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+		}
 		//BDAY ERRORS
-		if (!(is_numeric($bday)) && !(strpos($bday, '/'))) { $bdayError = true; $_SESSION['save_user'] = $user; $_SESSION['save_fname'] = $fname; $_SESSION['save_lname'] = $lname; $_SESSION['save_phone'] = $phone; $_SESSION['save_email'] = $email; $_SESSION['save_city'] = $city; $_SESSION['save_address'] = $address; $_SESSION['signup_errors'] += ["bdayError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Datëlindja nuk është në formatin e duhur</small>"]; }
+		if (!(is_numeric($bday)) && !(strpos($bday, '-'))) {
+			$bdayError = true;
+			$_SESSION['save_user'] = $user;
+			$_SESSION['save_fname'] = $fname;
+			$_SESSION['save_lname'] = $lname;
+			$_SESSION['save_phone'] = $phone;
+			$_SESSION['save_email'] = $email;
+			$_SESSION['save_city'] = $city;
+			$_SESSION['save_postnr'] = $post;
+			$_SESSION['save_address'] = $address;
+			$_SESSION['signup_errors'] += ["bdayError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Datëlindja nuk është në formatin e duhur</small>"];
+		}
 
 		if($userError || $passwordError || $fnameError || $lnameError || $emailError || $phoneError || $bdayError || $cityError || $postnrError || $addressError){
 			header("location:signin.php"); die();
@@ -88,7 +148,7 @@
 				mail($to,$subject,$txt,$headers);
 
 				$_SESSION['new_user_correct'] = "<h4 style='color:#265725; font-weight:bold; text-align:center;'> SUKSES! </h4>
-				<p style='color:#265725;'> Llogaria juaj është krijuar me sukses, ju lutem konfirmojeni atë në linkun qe i'u kemi dërguar në email</p>"; 
+				<p style='color:#265725;'> Llogaria juaj është krijuar me sukses, ju lutem konfirmojeni atë në linkun qe i'u kemi dërguar në email!</p>"; 
 				header("location:signin.php");die();
 			}
 			else

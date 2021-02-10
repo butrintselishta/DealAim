@@ -1011,7 +1011,7 @@
                     $_SESSION['save_carCub'] = $car_cub;
                     $carKmError = true;
                     $_SESSION['add_prod_errors'] += ["carKmError"=>""];
-                }else if(!is_numeric($car_km)){
+                }else if(!filter_var($car_km, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
                     $_SESSION['save_start'] = $auc_start;
@@ -1585,7 +1585,7 @@
                                         <div id="spec_cars" >
                                             <div class="form-group row" >
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Prodhuesi</label> 
+                                                    <label for="inputEmail3" class="float-right" style="">Prodhuesi: </label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="car_man"   placeholder="Zgjedh prodhuesin" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">

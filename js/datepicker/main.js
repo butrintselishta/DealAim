@@ -41,7 +41,7 @@
 
     $(".datepicker-3").datepicker({
         dateFormat: "yy-mm-dd",
-        maxDate: new Date('2002-07-07')
+        maxDate: "-16y"
     });
 	$(".datepicker-2").datepicker({
         dateFormat: "dd-mm-yy",

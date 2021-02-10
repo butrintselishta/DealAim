@@ -17,6 +17,9 @@
         $cat_id_fetch = mysqli_fetch_array($sel_cat_id);
         $cat_id = $cat_id_fetch['cat_id'];
 
+        $cat_ttl = prep_stmt("SELECT cat_title FROM categories WHERE cat_id = ?", $cat_id, "i");
+		$cat_title = mysqli_fetch_array($cat_ttl);
+
         $spec_1 = ""; $spec_2 = ""; $spec_3=""; $spec_4=""; $spec_5 = ""; $spec_6=""; $spec_7=""; $spec_8=""; $spec_9=""; $spec_10="";
     }
 
@@ -105,9 +108,10 @@
             <div class="col-md-6">
                 <div class="breadcrumbs">
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li>Page active</li>
+                        <li><a href="#">DealAIM</a></li>
+                        <li><a href="#">Kategoria</a></li>
+                        <li><?php echo $cat_title['cat_title']; ?></li>
+                        <li><a href="#">Faqja aktive</a></li>
                     </ul>
                 </div>
                 <!-- /page_header -->
@@ -122,7 +126,7 @@
                             <div class="table-responsive">
                                 <table class="table table-sm table-striped">
                                     <tbody>
-                                        <?php if($cat_id == 2 || $cat_id == 3 || $cat_id == 5){ ?>
+                                        <?php if($cat_id == 2 || $cat_id == 3){ ?>
                                         <tr>
                                             <td><strong>Prodhuesi</strong></td>
                                             <td><?php echo $spec_1 ?></td>
@@ -139,7 +143,25 @@
                                             <td><strong>Ngjyra</strong></td>
                                             <td><?php echo $spec_4 ?></td>
                                         </tr>
-                                        <?php } else if($car_id == 7){ ?>
+                                        <!--- VETURA -->
+                                        <?php } else if($cat_id == 5){ ?>
+                                        <tr>
+                                            <td><strong>Prodhuesi</strong></td>
+                                            <td><?php echo $spec_1 ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Modeli</strong></td>
+                                            <td><?php echo $spec_2 ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Kilometrazha</strong></td>
+                                            <td><?php echo $spec_3 . " KM" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Viti i prodhimit</strong></td>
+                                            <td><?php echo $spec_4 ?></td>
+                                        </tr>
+                                        <?php }  else if($car_id == 7){ ?>
                                             <tr>
                                                 <td><strong>Kategoria</strong></td>
                                                 <td><?php echo $spec_1 ?></td>
@@ -349,6 +371,43 @@
                                                         <td><strong>Vendi Prodhimit</strong></td>
                                                         <td><?php echo $spec_9;?></td>
                                                     </tr>
+                                                <?php }else if($cat_id == 5){ ?>
+                                                    <tr>
+                                                        <td><strong>Prodhuesi</strong></td>
+                                                        <td><?php echo $spec_1;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Modeli</strong></td>
+                                                        <td><?php echo $spec_2;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Kilometrazha (të kaluara)</strong></td>
+                                                        <td><?php echo $spec_3;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Viti i prodhimit</strong></td>
+                                                        <td><?php echo $spec_4;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Tipi i veturës</strong></td>
+                                                        <td><?php echo $spec_5  . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Ngjyra</strong></td>
+                                                        <td><?php echo $spec_6 . " GB";?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Transmisioneri</strong></td>
+                                                        <td><?php echo $spec_7?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Lloji karburanti</strong></td>
+                                                        <td><?php echo $spec_8;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Kubikazha </strong></td>
+                                                        <td><?php echo $spec_9;?></td>
+                                                    </tr>  
                                                 <?php } ?>
                                             </tbody>
                                         </table>

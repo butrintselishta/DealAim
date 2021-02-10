@@ -179,6 +179,9 @@
             text-align:center;
             margin-bottom:6px;
         }
+        .col-form-label{
+            margin-top:0.5em;
+        }
         .hide {
             display: none;
         }

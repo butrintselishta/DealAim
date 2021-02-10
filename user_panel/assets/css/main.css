@@ -22,6 +22,9 @@
     #main-content {
         width: 100%;
     }
+    .bank_balance {
+        width: 75% !important
+    }
 }
 
 .layout-fullwidth #wrapper #left-sidebar {
@@ -301,6 +304,9 @@ html.fullscreen-bg #wrapper {
     .navbar-nav .open .dropdown-menu.notifications>li>a {
         padding: 12px 15px;
     }
+    .bank_balance {
+        width: 100%
+    }
 }
 
 .navbar-brand {
@@ -312,12 +318,18 @@ html.fullscreen-bg #wrapper {
     .navbar>.container-fluid .navbar-brand {
         margin-left: 0;
     }
+    .bank_balance {
+        width: 100%
+    }
 }
 
 @media screen and (min-width: 769px) {
     .navbar>.container .navbar-brand,
     .navbar>.container-fluid .navbar-brand {
         margin-left: -15px;
+    }
+    .bank_balance {
+        width: 100%
     }
 }
 
@@ -351,6 +363,9 @@ html.fullscreen-bg #wrapper {
     #navbar-search {
         display: none;
     }
+    .bank_balance {
+        width: 100%
+    }
 }
 
 #navbar-menu {
@@ -368,6 +383,9 @@ html.fullscreen-bg #wrapper {
         *vertical-align: auto;
         *zoom: 1;
         *display: inline;
+    }
+    .bank_balance {
+        width: 100%
     }
 }
 
@@ -572,6 +590,9 @@ html.fullscreen-bg #wrapper {
 @media screen and (max-width: 768px) {
     .btn-toggle-fullwidth {
         display: none;
+    }
+    .bank_balance {
+        width: 100%
     }
 }
 
@@ -1040,11 +1061,17 @@ textarea.parsley-error {
     .auth-box.lockscreen {
         width: 35%;
     }
+    .bank_balance {
+        width: 75% !important
+    }
 }
 
 @media screen and (max-width: 1279px) {
     .auth-box {
         width: 90%;
+    }
+    .bank_balance {
+        width: 75% !important
     }
 }
 
@@ -1055,6 +1082,9 @@ textarea.parsley-error {
     .auth-box.lockscreen {
         width: 50%;
         padding: 40px 20px;
+    }
+    .bank_balance {
+        width: 75% !important
     }
 }
 
@@ -1067,6 +1097,9 @@ textarea.parsley-error {
     }
     .auth-box.lockscreen {
         width: 90%;
+    }
+    .bank_balance {
+        width: 75% !important
     }
 }
 
@@ -3359,6 +3392,9 @@ textarea.parsley-error {
     .section-heading .section-title {
         margin-bottom: 10px;
     }
+    .bank_balance {
+        width: 75% !important
+    }
 }
 
 ul.list-justify>li {
@@ -3547,6 +3583,9 @@ ul.list-justify.large-number span {
     .page-error .text {
         margin-bottom: 40px;
     }
+    .bank_balance {
+        width: 75% !important
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -3563,6 +3602,9 @@ ul.list-justify.large-number span {
     .page-error .number.left,
     .page-error .text {
         font-size: 1.4em;
+    }
+    .bank_balance {
+        width: 75% !important
     }
 }
 
@@ -3774,6 +3816,12 @@ ul.list-connected-app>li:first-child .connected-app {
 
 ul.list-connected-app>li:last-child .connected-app {
     border-bottom: none;
+}
+
+@media screen and (max-width: 1199px) {
+    .bank_balance {
+        width: 75% !important
+    }
 }
 
 

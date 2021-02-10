@@ -66,16 +66,16 @@
 				</div>
 				<?php } } else { ?> 
 			</div>
-			<div class="row small-gutters justify-content-center">
-				<div class="col-6 col-md-4 col-xl-3 " style="width:100%">
-					<div class="grid_item">
-						<div class="gabim" >
-							<h4> NUK KA PRODUKTE </h4>
-							<p> Fatkeqësisht nuk ka produkte të kësaj kategorie në ankand për momentin! </p>
+			<div class="row justify-content-center">
+					<div class="col-6 col-md-6 col-xl-6">
+						<div class="grid_item">
+							<div class="gabim" style="overflow-wrap:anywhere">
+								<h4> NUK KA PRODUKTE </h4>
+								<p> Fatkeqësisht nuk ka produkte të kësaj kategorie në ankand për momentin! </p>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+			</row>
 				<?php } ?>
 				<!-- /col -->
 				
