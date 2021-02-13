@@ -6,6 +6,8 @@ session_start();
 	DEFINE('CONFIRMED',1); 
 	DEFINE('BUYER',2); 
 	DEFINE('SELLER',3);
+	DEFINE('MODERATOR',100);
+	DEFINE('ADMIN', 101);
 	DEFINE('DEVELOPMENT', 1);
 	DEFINE('KEY', "testtest");
 	if (DEVELOPMENT == 1) {

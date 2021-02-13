@@ -338,7 +338,7 @@
                                         <!-- /dropdown-cart-->
                                     <li>
                                         <div class="dropdown dropdown-access">
-                                            <a href="<?php if(isset($_SESSION['logged'])){ echo "profile.php ";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
+                                            <a href="<?php if(isset($_SESSION['logged'])){ echo "user_panel.php ";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
                                             <div class="dropdown-menu">
                                                 <?php if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){   ?>
                                                 <a style="font-size: 15px;font-weight:italic;">Statusi:

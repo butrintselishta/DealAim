@@ -3,8 +3,10 @@
 	
 	// die(var_dump($randomFloat));
   	$token_type = false;
-	if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
-		header("location:profile.php"); 
+	if(isset($_SESSION['logged']) && $_SESSION['logged'] === true){
+		header("location:user_panel"); 
+	}else {
+		header("signin.php");
 	}
 	if(isset($_POST['signup'])){
 		$user = trim($_POST['username']);
@@ -189,11 +191,16 @@
 						$_SESSION['user'] += ["username"=>"{$user_signin}"];
 						$_SESSION['user'] += ["status"=>SELLER];
 						header("location:index.php"); die();
+					}elseif($row['status'] === MODERATOR){
+						$_SESSION['logged'] = true;
+						$_SESSION['user'] += ["username"=>"{$user_signin}"];
+						$_SESSION['user'] += ["status"=>MODERATOR];
+						header("location:deal_admin_aim");die();
 					}elseif($row['status'] === ADMIN){
 						$_SESSION['logged'] = true;
 						$_SESSION['user'] += ["username"=>"{$user_signin}"];
 						$_SESSION['user'] += ["status"=>ADMIN];
-						header("location:admin.php");die();
+						header("location:deal_admin_aim");die();
 					}
 					
 				}

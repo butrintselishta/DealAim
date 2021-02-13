@@ -4,6 +4,7 @@
         header("location:../signin.php");
 	}
 
+
 	 //PRODUKTET dhe BRENDET dynamic multilevel menu
 	 //create a multidimensional array to hold a list of menu and parent menu
 	 //build the array lists with data from the menu table
@@ -1003,7 +1004,7 @@
                             
                                
                             <div class="tab-pane fade  <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED || isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){  echo " "; } else { echo ' in active';}?>" id="myprofile">
-                                        <?php
+                                <?php
 								if(isset($_SESSION['prep_stmt_error'])){
 									echo "<div class='gabim'>";
 									echo $_SESSION['prep_stmt_error'];

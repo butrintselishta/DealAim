@@ -6,8 +6,30 @@
     if($_SESSION['user']['status'] != SELLER){
         header("index.php");
     }
-    
-
+   
+    // $dir = "img/products/templates/";
+    // $allFiles = scandir($dir);
+    // $files = array_diff($allFiles, array('.', '..')); //die(var_dump($files)); 
+    // foreach($files as $file){
+    //     $fl = $file;
+    // }
+    // $exp = explode(".", $fl);//die(var_dump($exp[1]));
+    // if($exp[1] == "zip"){
+    //     $path = $dir . $fl;
+    //     public ZipArchive::open ( );
+    //     if(is_resource($zip)){
+    //         $zip->extractTo($dir); die(var_dump($zip));die($zip);
+    //     }else{
+    //         die("zip keq");
+    //     }
+    // }else{die("keq");}
+    // if($res == true){
+    //     $path = dirname(__FILE__)."/img/products/templates/";
+    //     $zip->extractTo($path);die(var_dump($res));
+    //     $zip->close();die(var_dump($zip));
+    // }else{
+    //     die("keq");
+    // }
     if(isset($_POST['btn_add_prod'])){
         $auc_category = $_POST['auc_category'];//die(var_dump($category));
         $auc_title = ucfirst($_POST['auc_title']); 
@@ -629,11 +651,18 @@
                         move_uploaded_file($source_5, $target_dir_5);
                     } 
                     $photo_1_base = $basename_1; $photo_2_base = "|" . $basename_2; $photo_3_base = "|" . $basename_3; $photo_4_base = "|" . $basename_4; $photo_5_base = "|" . $basename_5;
-                    
-                    $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
-                    //INSERT PRODUKTIN 
 
-                  
+                    $prod_img = "";
+                    if(empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base;
+                    }elseif(!empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base;
+                    }elseif(empty($basename_4) && !empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_5_base;
+                    }else { $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    }
+
+                    //INSERT PRODUKTIN 
                     $insert_lap_prod = prep_stmt("INSERT INTO products(prod_unique_id, prod_img, prod_title, prod_price, prod_from, prod_to, prod_description,cat_id,user_id,prod_isApproved) VALUES(?,?,?,?,?,?,?,?,?,?)", array($unique_id,$prod_img,$auc_title, $auc_price, $start_time, $end_time,$auc_desc,$selected_cat_id,user_id(),$isApproved), "sssssssiii");
                     //INSERT SPECIFIKAT
                     $insert_lap_spec = prep_stmt("INSERT INTO prod_specifications(lap_man, lap_mod, lap_con, lap_dia,lap_col,lap_proc, lap_ram, lap_im, lap_ims, lap_gc,prod_unique_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)", array($lap_man,$lap_mod, $lap_condition,$lap_display, $lap_col, $lap_proc, $lap_ram,$lap_intmem,$lap_intmem_space,$lap_grap, $unique_id), "sssssssssss");
@@ -914,7 +943,16 @@
                     } 
                     $photo_1_base = $basename_1; $photo_2_base = "|" . $basename_2; $photo_3_base = "|" . $basename_3; $photo_4_base = "|" . $basename_4; $photo_5_base = "|" . $basename_5;
 
-                    $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    $prod_img = "";
+                    if(empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base;
+                    }elseif(!empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base;
+                    }elseif(empty($basename_4) && !empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_5_base;
+                    }else { $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    }
+
                     //INSERT PRODUKTIN
                     $insert_phone_prod = prep_stmt("INSERT INTO products(prod_unique_id, prod_img, prod_title, prod_price, prod_from, prod_to, prod_description,cat_id,user_id,prod_isApproved) VALUES(?,?,?,?,?,?,?,?,?,?)", array($unique_id,$prod_img,$auc_title, $auc_price, $start_time, $end_time,$auc_desc,$selected_cat_id,user_id(),$isApproved), "sssssssiii");
                     //INSERT SPECIFIKAT E PRODUKTIT
@@ -1209,7 +1247,15 @@
                     } 
                     $photo_1_base = $basename_1; $photo_2_base = "|" . $basename_2; $photo_3_base = "|" . $basename_3; $photo_4_base = "|" . $basename_4; $photo_5_base = "|" . $basename_5;
 
-                    $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    $prod_img = "";
+                    if(empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base;
+                    }elseif(!empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base;
+                    }elseif(empty($basename_4) && !empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_5_base;
+                    }else { $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    }
 
                     //INSERT PRODUKTIN
                     $insert_car_prod = prep_stmt("INSERT INTO products(prod_unique_id, prod_img, prod_title, prod_price, prod_from, prod_to, prod_description,cat_id,user_id,prod_isApproved) VALUES(?,?,?,?,?,?,?,?,?,?)", array($unique_id,$prod_img,$auc_title, $auc_price, $start_time, $end_time,$auc_desc,$selected_cat_id,user_id(),$isApproved), "sssssssiii");
