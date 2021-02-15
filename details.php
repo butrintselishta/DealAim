@@ -200,6 +200,16 @@
                                 <div class="col-lg-6 col-md-6 float-right">
                                 <div class="btn_add_to_cart" ><a href="#" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;">Bido</a></div>
                             </div><!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
+                            <p id="statusi"></p>
+                            <script>
+                                var statuss = document.getElementById("statusi");
+                                var today = Date.now();
+                                console.log(today);
+                                var endsIn = "<?php echo strtotime($sel_end_date['prod_to']); ?>"
+                                if(today > endsIn) {
+                                    statuss.innerHTML = "PERFUNDOI";
+                                }
+                                </script>
                             </div>
                         </div>
                     </div>

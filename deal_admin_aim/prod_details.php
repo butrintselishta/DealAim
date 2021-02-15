@@ -14,7 +14,7 @@ require_once '../db.php';
         }else{
             header("location:index.php");
         }
-        //SELECT Product and Product SPECIFICATIONS
+        //SELECT Product 
         $stmt_prod = prep_stmt("SELECT prod_id,prod_img, prod_title, prod_price, prod_from, prod_to, prod_description, cat_title, username, prod_isApproved FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE prod_unique_id = ?", $unique_id, 's');
 
         while($prod_fetch = mysqli_fetch_array($stmt_prod)){
@@ -29,7 +29,7 @@ require_once '../db.php';
             $prod_username = $prod_fetch['username'];
             $prod_isApproved = $prod_fetch['prod_isApproved'];
         }
-        
+        //SELECT  Product SPECIFICATIONS
         $stmt_prod_spec = prep_stmt("SELECT * FROM prod_specifications WHERE prod_unique_id = ?", $unique_id,'s');
         $spec_1 = ""; $spec_2 = ""; $spec_3 = ""; $spec_4 = ""; $spec_5 = ""; $spec_6 = ""; $spec_7 = ""; $spec_8 = ""; $spec_9 = ""; $spec_10 = "";
         while($spec_fetch = mysqli_fetch_array($stmt_prod_spec)){
@@ -53,8 +53,8 @@ require_once '../db.php';
                 $spec_6 = $spec_fetch['tel_ram'];
                 $spec_7 = $spec_fetch['tel_scn'];
                 $spec_8 = $spec_fetch['tel_os'];
-                $spac_9 = $spec_fetch['tel_op'];
-            }else if($prod_cat_title == "Vetur"){
+                $spec_9 = $spec_fetch['tel_op'];
+            }else if($prod_cat_title == "Vetura"){
                 $spec_1 = $spec_fetch['car_man'];
                 $spec_2 = $spec_fetch['car_mod'];
                 $spec_3 = $spec_fetch['car_km'];
@@ -63,7 +63,60 @@ require_once '../db.php';
                 $spec_6 = $spec_fetch['car_col'];
                 $spec_7 = $spec_fetch['car_tra'];
                 $spec_8 = $spec_fetch['car_fu'];
-                $spac_9 = $spec_fetch['car_cub'];
+                $spec_9 = $spec_fetch['car_cub'];
+            }
+        }
+
+        //action
+        if(isset($_POST['confirm'])){
+            $prod_title_pos = $_POST['prod_title'];
+            $prod_price_pos = floatval(str_replace(" €", "", $_POST['prod_price']));
+            $prod_from_pos = date("Y-m-d h:i:s", strtotime($_POST['prod_from']));
+            $prod_to_pos = date("Y-m-d h:i:s", strtotime($_POST['prod_to']));
+            $prod_desc_pos = $_POST['prod_desc']; //die($prod_from . '<br/>'. $prod_to . '<br/>' . $prod_desc);
+            $prod_isApproved_pos = $_POST['confirmation'];
+           
+            $today = date("Y-m-d H:i:s");
+            $prod_from_upd = ""; $prod_to_upd = "";
+            if($prod_from_pos < $today){
+                $prod_from_upd = date("Y-m-d 12:00:00", strtotime("+1 day"));
+                $prod_to_upd = date("Y-m-d h:i:s",strtotime($prod_to_pos . "+1 day"));
+            }else{
+                $prod_from_upd = $prod_from_pos;
+                $prod_to_upd = $prod_to_pos;
+            }
+            
+            if($prod_cat_title == "Laptop"){
+                $lap_man = $_POST['lap_man'];
+                $lap_mod = $_POST['lap_mod'];
+                $lap_con = $_POST['lap_con'];
+                $lap_dis = $_POST['lap_dis'];
+                $lap_col = $_POST['lap_col'];
+                $lap_proc = $_POST['lap_proc'];
+                $lap_ram = $_POST['lap_ram'];
+                $lap_im = $_POST['lap_im'];
+                $lap_ims = $_POST['lap_ims'];
+                $lap_gc = $_POST['lap_gc'];
+                
+                if($prod_title == $prod_title_pos && $prod_price == $prod_price_pos && $prod_desc == $prod_desc_pos && $spec_1 == $lap_man && $spec_2 == $lap_mod && $spec_3 == $lap_con && $spec_4 == $lap_dis && $spec_5 == $lap_col && $spec_6 == $lap_proc && $spec_7 == $lap_ram && $spec_8 == $lap_im && $spec_9 == $lap_ims && $spec_10 == $lap_gc){
+                    if(!prep_stmt("UPDATE products SET prod_from = ?, prod_to = ?, prod_isApproved = ? WHERE prod_id = ?", array($prod_from_upd, $prod_to_upd, $prod_isApproved_pos, $prod_id), "ssii")){
+                        $_SESSION['data_not_changed'] = "";
+                        header("location:".$_SERVER['HTTP_REFERER']); die();
+                    }else{
+                        $_SESSION['data_changed'] ="";
+                        header("location:index.php"); die();
+                    }
+                }
+                else{
+                    if(!prep_stmt("UPDATE products SET prod_from = ?, prod_to = ?, prod_isApproved = ? WHERE prod_id = ?", array($prod_from_upd, $prod_to_upd, $prod_isApproved_pos, $prod_id), "ssii")){
+                        $_SESSION['data_not_changed'] = "";
+                        header("location:".$_SERVER['HTTP_REFERER']); die();
+                    }else{
+                        $_SESSION['data_changed'] ="";
+                        header("location:index.php"); die();
+                    }
+                }
+
             }
         }
     }
@@ -115,6 +168,12 @@ require_once '../db.php';
         </div>
         <div class="row">
             <div class="profile-section" style="padding: 0 12px;">
+                <?php if(isset($_SESSION['data_not_changed'])){ ?>
+                <div class='alert alert-danger alert-dismissible' role='alert'>
+                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <i class='fa fa-times-circle'></i> Diçka shkoi gabim, ju lutem provoni më vonë
+                </div>
+                <?php } unset($_SESSION['data_not_changed']); ?>
                 <div class="media">
                     <div class="medial">
                         <?php 
@@ -163,40 +222,40 @@ require_once '../db.php';
                 </div>
                 <div class="col-md-5 text-right">
                     <div class="panel-content" style="padding-top:0;">
-                    <small class="text-muted text-right"> Kërkesa u bë më: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo date("d-M-Y H:i A", strtotime($prod_from)); ?></small> </small>
+                    <small class="text-muted text-right"> Kërkesa u bë më: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo date("d-M-Y H:i:s A", strtotime($prod_from)); ?></small> </small>
                     </div>
                 </div>
                 <div class="col-md-12"> <hr> </div>
                 <!-- te dhenat -->
-                <form id="advanced-form" data-parsley-validate novalidate method="post">
+                <form id="advanced-form" data-parsley-validate novalidate method="post" action="">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input1">Titulli i ankandit</label>
-                            <input type="text" id="text-input1" class="form-control" name="auc_title" value="<?php echo $prod_title;?>" required data-parsley-minlength="1">
+                            <input type="text" id="text-input1" class="form-control" name="prod_title" value="<?php echo $prod_title;?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input2">Çmimi fillestar</label>
-                            <input type="text" id="text-input2" class="form-control" value="<?php echo $prod_price . " €" ?>" required data-parsley-minlength="1">
+                            <input type="text" id="text-input2" name="prod_price" class="form-control" value="<?php echo $prod_price . " €" ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input1">Dalja produktit në ankand</label>
-                            <input type="text" id="text-input1" value="<?php echo date("d-M-Y H:i A", strtotime($prod_from)); ?>" class="form-control" required data-parsley-minlength="1">
+                            <input type="text" id="text-input1" name="prod_from" value="<?php echo date("d-M-Y H:i A", strtotime($prod_from)); ?>" readonly class="form-control" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                         <label for="text-input1">Përfundimi i ankandit për këtë produkt</label>
-                            <input type="text" id="text-input1" value="<?php echo date("d-M-Y H:i A", strtotime($prod_to)); ?>" class="form-control" required data-parsley-minlength="1">
+                            <input type="text" id="text-input1" name="prod_to" value="<?php echo date("d-M-Y H:i A", strtotime($prod_to)); ?>" class="form-control" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="panel-content" style="padding:0 0 15px 0">
                             <label> Përshkrimi </label>
-                            <textarea class="note-codable" id="markdown-editor" value="" name="markdown-content" data-provide="markdown" rows="10" readonly><?php echo $prod_desc;?></textarea>
+                            <textarea class="note-codable" id="markdown-editor" name="prod_desc" value="" name="markdown-content" data-provide="markdown" rows="10"><?php echo $prod_desc;?></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -265,132 +324,132 @@ require_once '../db.php';
                             <input type="text" id="text-input1" name="lap_gc" value="<?php echo $spec_10; ?>" class="form-control" required data-parsley-minlength="1">
                         </div>
                     </div>
-                <?php }else if($prod_cat_title == "Telefon") { ?>
+                    <?php }else if($prod_cat_title == "Telefon") { ?>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1"></label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Prodhuesi</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_man" value="<?php echo $spec_1; ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Modeli</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_mod" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Gjendja </label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_con" value="<?php echo $spec_3; ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Ngjyra</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_col" value="<?php echo $spec_4; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Memorja e mbrendshme</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_im" value="<?php echo $spec_5; ?>"required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Memorja RAM</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_ram" value="<?php echo $spec_6; ?>"required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Numri i SIM kartelave</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_sim" value="<?php echo $spec_7; ?>"required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Sistemi Operativ</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_os" value="<?php echo $spec_8; ?>"required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Vendi i prodhimit</label>
+                            <input type="text" id="text-input1" class="form-control" name="tel_op" value="<?php echo $spec_9; ?>"required data-parsley-minlength="1">
                         </div>
                     </div>
-                <?php }else if($prod_cat_title == "Vetur"){ ?>
+                    <?php }else if($prod_cat_title == "Vetura"){ ?>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Prodhuesi</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_man" value="<?php echo $spec_1; ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Modeli</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_mod" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Kilometrazha </label>
+                            <input type="text" id="text-input1" class="form-control" name="car_km" value="<?php echo $spec_3; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Viti i prodhimit</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_col" value="<?php echo $spec_4; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Lloji</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_type" value="<?php echo $spec_5; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Ngjyra</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_col" value="<?php echo $spec_6; ?>"required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Transmisioneri</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_trans" value="<?php echo $spec_7; ?>"required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="text-input1">Min. 8 Characters</label>
-                            <input type="text" id="text-input1" class="form-control" required data-parsley-minlength="8">
+                            <label for="text-input1">Karburanti </label>
+                            <input type="text" id="text-input1" class="form-control" name="car_fuels" value="<?php echo $spec_8; ?>"required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
-                <?php } ?>
-                <div class="col-md-12">
-                    <div class="form-group text-center">
-                        <label for="text-input1">Konfirmimi</label>
-                        <select class="form-control text-center">
-                            <option value="">Zgjidh konfirmimin...</option>
-                            <option value="1" class="text-success">Prano</option>
-                            <option value="2" class="text-danger">Refuzo</option>
-                        </select>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="text-input1">Kubikazha</label>
+                            <input type="text" id="text-input1" class="form-control" name="car_cub" value="<?php echo $spec_9; ?>" required data-parsley-minlength="1">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="text-center btn_center" style="margin-bottom:20px;">
-                        <button type="submit" name="Konfirmo"  value="Vazhdo" class="btn btn-primary ">Konfirmo</button>
+                    <?php } ?>
+                    <div class="col-md-12">
+                        <div class="form-group text-center">
+                            <label for="text-input1">Konfirmimi</label>
+                            <select class="form-control text-center" name="confirmation" required data-parsley-minlength="1">
+                                <option value="">Zgjidh konfirmimin...</option>
+                                <option value="1" class="text-success">Prano</option>
+                                <option value="2" class="text-danger">Refuzo</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-md-12">
+                        <div class="text-center btn_center" style="margin-bottom:20px;">
+                            <button type="submit" name="confirm"  value="Vazhdo" class="btn btn-primary ">Konfirmo</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -675,10 +734,10 @@ $(function() {
 
 
         // notification popup
-        toastr.options.closeButton = true;
-        toastr.options.positionClass = 'toast-bottom-right';
-        toastr.options.showDuration = 1000;
-        toastr['info']('Përshëndetje, mirë se erdhët në pjesën administrative të Deal AIM');
+        // toastr.options.closeButton = true;
+        // toastr.options.positionClass = 'toast-bottom-right';
+        // toastr.options.showDuration = 1000;
+        // toastr['info']('Përshëndetje, mirë se erdhët në pjesën administrative të Deal AIM');
 
     });
 </script>

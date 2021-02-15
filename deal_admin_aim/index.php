@@ -43,7 +43,7 @@ require_once '../db.php';
                     <li><a href="#">Messages</a></li>
                     <li><a href="#">Settings</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="../logout.php">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -65,6 +65,12 @@ require_once '../db.php';
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel-content">
+                        <?php if(isset($_SESSION['data_changed'])){ ?>
+                            <div class="alert alert-success alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<i class="fa fa-check-circle"></i> Konfirmimi i produktit u krye me sukses!
+							</div>
+                         <?php } unset($_SESSION['data_changed']);?>
                         <h3 class="heading"><i class="fa fa-square"></i>Produkte në pritje!</h3>
                         <div class="table-responsive">
                             <table class="table table-striped no-margin">
@@ -123,7 +129,7 @@ require_once '../db.php';
                                 </thead>
                                 <tbody>
                                 <?php 
-                                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? or prod_isApproved = ?", array(1,2) , 'ii');
+                                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? or prod_isApproved = ? ORDER BY prod_id DESC", array(1,2) , 'ii');
                                     if(mysqli_num_rows($sel_prod) > 0){
                                         while($row_prod = mysqli_fetch_array($sel_prod)){
                                 ?>
@@ -556,10 +562,10 @@ require_once '../db.php';
 
 
         // notification popup
-        toastr.options.closeButton = true;
-        toastr.options.positionClass = 'toast-bottom-right';
-        toastr.options.showDuration = 1000;
-        toastr['info']('Hello, welcome to DiffDash, a unique admin dashboard.');
+        // toastr.options.closeButton = true;
+        // toastr.options.positionClass = 'toast-bottom-right';
+        // toastr.options.showDuration = 1000;
+        // toastr['info']('Hello, welcome to DiffDash, a unique admin dashboard.');
 
     });
 </script>

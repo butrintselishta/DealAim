@@ -4,7 +4,7 @@
 	if(isset($_GET['sub_cat'])){
 		$cat_id = $_GET['sub_cat'];
 		//change isAPPROVED TO 1
-		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved = ?", array($cat_id,0), "ii");
+		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved = ?", array($cat_id,1), "ii");
 		// $select_all_prod_spec = prep_stmt("SELECT * FROM prod_specifications WHERE cat_id = ?", $cat_id,"i");
 
 		$cat_ttl = prep_stmt("SELECT cat_title FROM categories WHERE cat_id = ?", $cat_id, "i");

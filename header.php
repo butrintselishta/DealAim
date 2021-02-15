@@ -348,8 +348,12 @@
                                                                 echo "<b style='color:#CF2928'> I REGJISTRUAR </b>";
                                                             }elseif($_SESSION['user']['status'] == BUYER){
                                                                 echo "<b style='color:#F0AC1A'>BLERËS</b>";
-                                                            }else{
+                                                            }elseif($_SESSION['user']['status'] == SELLER){
                                                                 echo "<b style='color:#5ABC35'>SHITËS</b>";
+                                                            }elseif($_SESSION['user']['status'] == MODERATOR){
+                                                                echo "<b style='color:#5ABC35'>MODERATOR</b>";
+                                                            }else{
+                                                                echo "<b style='color:#5ABC35'>ADMINISTRATOR</b>";
                                                             }
                                                         }
                                                     ?> 
@@ -368,7 +372,11 @@
                                                 <!-- -->
                                                 <ul>
                                                     <li>
-                                                        <a href="user_panel/index.php"><i class="ti-user"></i>Paneli</a>
+                                                        <?php if($_SESSION['user']['status'] == MODERATOR || $_SESSION['user']['status'] == ADMIN){?>
+                                                            <a href="deal_admin_aim/index.php"><i class="ti-user"></i>Paneli</a>
+                                                        <?php }else { ?>
+                                                            <a href="user_panel/index.php"><i class="ti-user"></i>Paneli</a>
+                                                        <?php } ?>
                                                     </li>
                                                     <li>
                                                         <a href="logout.php"><i class="ti-shift-left-alt"></i>Ç'kyçu</a>

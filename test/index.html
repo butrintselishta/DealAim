@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="//code.jquery.com/jquery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        function getcmimi() {
+            var cmimi_usr = document.getElementById('cmimi').value;
+            updatePrice(cmimi_usr);
+        }
+
+        function updatePrice(A) { //tento per me shtu bid
+            console.log(A);
+            $.ajax({
+                url: "test.php",
+                type: "get",
+                data: {
+                    "price": A //get value : vlera inputit userit 
+                },
+                success: function(response) {
+                    $('#cmimiResult').html(response);
+
+                },
+                error: function(xhr) {
+                    console.log("ERROR!");
+                }
+            });
+        }
+
+        function updateCmimiFundit() { //update tabelen e ofertuesve te fundit
+            $.ajax({
+                url: "test.php",
+                type: "get",
+                data: {
+                    "type": "cmimiFundit"
+                },
+                success: function(response) {
+                    $('#cmimiFundit').val(response);
+                    setTimeout(updateCmimiFundit, 1000);
+                },
+                error: function(xhr) {
+                    console.log("ERROR!");
+                }
+            });
+        }
+        setTimeout(updateCmimiFundit, 1000);
+    </script>
+
+    <p>Cmimi:</p>
+    <input type="text" id="cmimi" name="" value="">
+    <input type="submit" onclick="getcmimi()">
+    <input type="text" id="cmimiFundit" value="">
+    <div id="cmimiResult"></div>
+</body>
+
+</html>
