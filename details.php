@@ -1,6 +1,5 @@
 ﻿<?php
     require_once "db.php";
-
     if(isset($_GET['prod_details'])){
         $prod_details = $_GET['prod_details'];
         $select_prod_data = prep_stmt("SELECT * FROM products WHERE prod_id=?", $prod_details, "i");
@@ -8,6 +7,9 @@
             $select_product = mysqli_fetch_array($select_prod_data); 
         }else{
             die("keq");
+        }
+        if(strtotime(date("Y-m-d h:i:s",strtotime($select_product['prod_from']))) > time()){
+            header("location:index.php");
         }
         //SELECT SPECIFICATIONS
         $select_prod_details = prep_stmt("SELECT * FROM prod_specifications WHERE prod_unique_id = ?", array($select_product['prod_unique_id']), "s");
@@ -187,34 +189,84 @@
                     </p>
                     
                     <div class="row">
+                        <script>
+                            //popup message edhe disabled input
+                            function verifyUser() {
+                                document.getElementById("get_price").style.borderColor = "red";
+                                document.getElementById("get_price").style.background = "#EFB3AB";
+                                document.getElementById("oferto").disabled= true;
+                                var popup = document.getElementById("myPopup");
+                                popup.classList.toggle("show");
+                               
+                            }
+                            function getPrice() {
+                                var given_price = document.getElementById('get_price').value;
+                                var uniqid = document.getElementById('get_uniqid').value;
+                                updatePrice(given_price,uniqid);
+                            }
+                            function updatePrice(price,id) { //tento per me shtu bid
+                                $.ajax({
+                                    url: "checkUserPrice.php",
+                                    type: "get",
+                                    data: {
+                                        'user_price': price, 
+                                        'unique_id': id 
+                                        //get value : vlera inputit userit 
+                                    },
+                                    success: function(response) {
+                                        if(response == "CmimiVogel"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Cmimi i dhënë duhet të jetë të pakten 1€ më shumë se cmimi aktual!</small>");
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }
+                                        if(response == "ok"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju ofertuat me sukses shumën prej <b>"+ price +"€</b> !</small>");
+                                            $('#get_price').css("border-color", 'green');
+                                            $('#get_price').css("background-color", '#D4EDDA');
+                                        }
+
+                                    },
+                                    error: function(xhr) {
+                                        console.log("ERROR!");
+                                    }
+                                });
+                             }
+                        </script>
                         <div class="col-lg-12 col-md-6">
                             <div class="price_main">
-                                <div class="col-lg-6 col-md-6  float-left">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend" style="width:100%;">
-                                        <input type="text" class="form-control" value="<?php echo $select_product['prod_price'] ?>">
-                                        <span class="input-group-text">€</span>
+                                    <div class="col-lg-6 col-md-6  float-left">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend" style="width:100%;">
+                                                <input type="text" class="form-control" id="get_price" value="<?php echo $select_product['prod_price'] ?>">
+                                                <span class="input-group-text">€</span>
+                                                <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
+                                            </div>
+                                            <p id="statusi" style="margin-top:0;"> </p> 
+                                        </div>
                                     </div>
-                                </div>
-                                </div>
-                                <form method="post" action="">
-                                <div class="col-lg-6 col-md-6 float-right" >
-                                    <div class="btn_add_to_cart">
-                                        <button class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;"  <?php if($select_product['user_id'] == user_id() || !isset($_SESSION['logged'])){ ECHO "disabled"; } ?>>OFERTO</button>
+                                    <div class="col-lg-6 col-md-6 float-right" >
+                                        <div class="btn_add_to_cart">
+                                            <input type="submit" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO"  onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUse1r();'; } ?>">
+                                            <?php 
+                                                if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari në web aplikacionin tonë!</span>"; 
+                                                }elseif($_SESSION['user']['status'] == CONFIRMED){
+                                                    echo "<span class='popuptext' id='myPopup'>Së pari duhet të aplikoni për blerës, pastaj mund të bëni ofertat tuaja!</span>"; 
+                                                }elseif($select_product['user_id'] == user_id()){
+                                                    echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni për <b> produktin tuaj </b>!</span>";
+                                                } 
+                                               ?> 
+                                        </div> 
                                     </div>
-                                </div>
-                                        </form>
-                                <!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
-                            <p id="statusi"></p>
-                            <!-- <script>
-                                var statuss = document.getElementById("statusi");
-                                var today = Date.now();
-                                console.log(today);
-                                var endsIn = "<?php echo strtotime($sel_end_date['prod_to']); ?>"
-                                if(today > endsIn) {
-                                    statuss.innerHTML = "PERFUNDOI";
-                                }
-                                </script> -->
+                                    <!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
+                                    <!-- <script>
+                                    var statuss = document.getElementById("statusi");
+                                    var today = Date.now();
+                                    console.log(today);
+                                    var endsIn = "<?php echo strtotime($sel_end_date['prod_to']); ?>"
+                                    if(today > endsIn) {
+                                        statuss.innerHTML = "PERFUNDOI";
+                                    }
+                                    </script> -->
                             </div>
                         </div>
                     </div>
