@@ -197,11 +197,16 @@
                                     </div>
                                 </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 float-right">
-                                <div class="btn_add_to_cart" ><a href="#" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;">Bido</a></div>
-                            </div><!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
+                                <form method="post" action="">
+                                <div class="col-lg-6 col-md-6 float-right" >
+                                    <div class="btn_add_to_cart">
+                                        <button class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;"  <?php if($select_product['user_id'] == user_id() || !isset($_SESSION['logged'])){ ECHO "disabled"; } ?>>OFERTO</button>
+                                    </div>
+                                </div>
+                                        </form>
+                                <!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
                             <p id="statusi"></p>
-                            <script>
+                            <!-- <script>
                                 var statuss = document.getElementById("statusi");
                                 var today = Date.now();
                                 console.log(today);
@@ -209,7 +214,7 @@
                                 if(today > endsIn) {
                                     statuss.innerHTML = "PERFUNDOI";
                                 }
-                                </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>

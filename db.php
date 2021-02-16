@@ -8,7 +8,7 @@ session_start();
 	DEFINE('SELLER',3);
 	DEFINE('MODERATOR',100);
 	DEFINE('ADMIN', 101);
-	DEFINE('DEVELOPMENT', 0);
+	DEFINE('DEVELOPMENT', 1);
 	DEFINE('KEY', "testtest");
 	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);

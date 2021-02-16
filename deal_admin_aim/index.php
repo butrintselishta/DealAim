@@ -68,11 +68,17 @@ require_once '../db.php';
                         <?php if(isset($_SESSION['data_changed'])){ ?>
                             <div class="alert alert-success alert-dismissible" role="alert">
 								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<i class="fa fa-check-circle"></i> Konfirmimi i produktit u krye me sukses!
+								<i class="fa fa-check-circle"></i> Konfirmimi i produktit u krye me sukses. <?php if($_SESSION['data_changed'] == 1) { echo "<b style='text-transform:uppercase;'>Produkti doli në ankand! </b>";}else if($_SESSION['data_changed'] == 2){ echo "<b style='text-transform:uppercase;color:#9c1e08;'>Produkti nuk u lejua të dal në ankand! </b>";} ?>
 							</div>
                          <?php } unset($_SESSION['data_changed']);?>
                         <h3 class="heading"><i class="fa fa-square"></i>Produkte në pritje!</h3>
                         <div class="table-responsive">
+                        
+                            <?php 
+                                $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_from FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 0, 'i');
+                                if(mysqli_num_rows($sel_prod) > 0){
+                                    while($row_prod = mysqli_fetch_array($sel_prod)){
+                            ?>
                             <table class="table table-striped no-margin">
                                 <thead>
                                     <tr>
@@ -87,11 +93,6 @@ require_once '../db.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php 
-                                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_from FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 0, 'i');
-                                    if(mysqli_num_rows($sel_prod) > 0){
-                                        while($row_prod = mysqli_fetch_array($sel_prod)){
-                                ?>
                                     <tr>
                                         <td><?php echo $row_prod['prod_id']; ?></td>
                                         <td><b><?php echo $row_prod['username']; ?></b></td>
@@ -100,11 +101,17 @@ require_once '../db.php';
                                         <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
                                         <td><?php echo date("d-M-Y", strtotime($row_prod['prod_from'])); ?></td>
                                         <td><span class="label label-warning">Në pritje</span></td>
-                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>" target="_blank"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
-                                <?php } } ?>
                                 </tbody>
                             </table>
+                            <?php } }
+                                else { ?>
+                                   <div class="alert alert-info alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <i class="fa fa-info-circle"></i> Për momentin nuk ka asnjë produkt në pritje.
+                                    </div>
+                                <?php } ?>
                         </div>
                     </div>
                 </div>

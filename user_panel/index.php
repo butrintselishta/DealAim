@@ -884,6 +884,7 @@
                             <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){ echo "<li ><a href='#bank_acc' role='tab' data-toggle='tab'>Llogaria Bankare </a></li>
                             <li><a href='#bank_balance' role='tab' data-toggle='tab'>Bilanci im</a></li>"; } ?>
                             <?php if($_SESSION['user']['status'] == SELLER) {
+                            echo "<li><a href='#active_auc' role='tab' data-toggle='tab'>Ankandet aktive</a></li>";
 					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
 					        echo "<li><a href='#prod_buy' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
 				        	} ?>
@@ -1338,35 +1339,73 @@
                             </div>
                             <?php } ?>
                             <?php if($_SESSION['user']['status'] == SELLER){ ?>
+                                <div class="tab-pane fade bank_balance" id="active_auc">
+                                    <div class="divider" style="margin-bottom:50px;">
+                                        <span
+                                            style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet tuaja që janë aktive në ankand!
+                                            </b></span>
+                                    </div>
+                                    <?php 
+                                        $sel_active_auc = prep_stmt("SELECT * FROM products WHERE user_id = ? AND prod_isApproved = ?", array(user_id(), 1), "ii");
+                                        if(mysqli_num_rows($sel_active_auc) > 0){
+                                            while($row_active_auc = mysqli_fetch_array($sel_active_auc)){
+                                                $act_auc_username = $_SESSION['user']['username'];
+                                                $act_auc_id = $row_active_auc['prod_id']; 
+                                                $act_auc_title = $row_active_auc['prod_title'];
+                                                $act_auc_to = $row_active_auc['prod_to']; 
+                                    ?>
+                                    <table class="table table-dark" style="background: #212529;color:white;border: 0.5px solid #32383E;">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">Përdoruesi</th>
+                                            <th scope="col">Ttitulli i ankandit</th>
+                                            <th scope="col">Kur përfundon?</th>
+                                            <th scope="col">Çmimi aktual</th>
+                                            <th scope="col">Fituesi për momentin</th>
+                                            <th scope="col">Detajet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><b><?php echo $act_auc_username;  ?></b></td>
+                                                <td><?php echo $act_auc_title ?></td>
+                                                <td><?php echo date("d-M-Y h:i A", strtotime($act_auc_to)); ?></td>
+                                                <td>???????</td>
+                                                <td style="color:green; font-weight:900;">???????</td>
+                                                <td><a href="../details.php?prod_details=<?php echo $act_auc_id ?>" style="color:white;">Detajet</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <?php } } else{ ?>
+                                        <div class="gabim" style="overflow-wrap:anywhere">
+                                            <h4> NUK KA PRODUKTE </h4>
+                                            <p> Ju nuk keni asnjë produkt aktiv në ankand! <br/> Në rast se doni të futni ndonjë produkt në ankand klikoni <a href="myauctions.php"> këtu </a>  </p>
+                                        </div>
+                                    <?php } ?>
+                                </div>
                                 <div class="tab-pane fade" id="prod_sell">
-                                    <div class="profile-section">
-                                        <div class="clearfix">
-                                            <div class="row justify-content-center">
-                                                <div class="col-6 col-md-6 col-xl-6">
-                                                    <div class="grid_item" style="margin: 2em 0 -5em 0;">
-                                                        <div class="gabim" style="overflow-wrap:anywhere">
-                                                            <h4> NUK KA PRODUKTE </h4>
-                                                            <p> Ju nuk keni shitur ende asnjë produkt!.<br/> Nëse dëshironi të vendosni produktin tuaj në ankand kliko <a href="myauctions.php"> këtu </a>  </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </row>
+                                    <div class="divider" style="margin-bottom:50px;">
+                                        <span
+                                            style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni shitur përmes ksaj llogarie!
+                                            </b></span>
+                                    </div>
+                                    <div class="grid_item" style="margin: 1em 0 1em 0;">
+                                        <div class="gabim" style="overflow-wrap:anywhere">
+                                            <h4> NUK KA PRODUKTE </h4>
+                                            <p> Ju nuk keni shitur ende asnjë produkt!.<br/> Nëse dëshironi të vendosni produktin tuaj në ankand kliko <a href="myauctions.php"> këtu </a>  </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="prod_buy">
-                                    <div class="profile-section">
-                                        <div class="clearfix">
-                                            <div class="row justify-content-center">
-                                                <div class="col-6 col-md-6 col-xl-6">
-                                                    <div class="grid_item" style="margin: 2em 0 -5em 0;">
-                                                        <div class="gabim" style="overflow-wrap:anywhere">
-                                                            <h4> NUK KA PRODUKTE </h4>
-                                                            <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse </b>!  </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </row>
+                                    <div class="divider" style="margin-bottom:50px;">
+                                        <span
+                                            style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni blerë nga kjo llogari!
+                                            </b></span>
+                                    </div>
+                                    <div class="grid_item" style="margin: 1em 0 1em 0;">
+                                        <div class="gabim" style="overflow-wrap:anywhere">
+                                            <h4> NUK KA PRODUKTE </h4>
+                                            <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse </b>!  </p>
                                         </div>
                                     </div>
                                 </div>
