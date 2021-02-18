@@ -43,21 +43,24 @@
                     "type": "cmimiFundit"
                 },
                 success: function(response) {
-                    $('#cmimiFundit').val(response);
-                    setTimeout(updateCmimiFundit, 1000);
+                    console.log(response);
+                    $('#cmimiFundit').html(response);
+                    setTimeout(updateCmimiFundit, 8000);
                 },
                 error: function(xhr) {
                     console.log("ERROR!");
                 }
             });
         }
-        setTimeout(updateCmimiFundit, 1000);
+        setTimeout(updateCmimiFundit, 8000);
     </script>
 
     <p>Cmimi:</p>
     <input type="text" id="cmimi" name="" value="">
     <input type="submit" onclick="getcmimi()">
-    <input type="text" id="cmimiFundit" value="">
+    <table id="cmimiFundit">
+
+    </table>
     <div id="cmimiResult"></div>
 </body>
 

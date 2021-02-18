@@ -422,7 +422,7 @@
                                                     $sql = mysqli_fetch_array($st);
                                                     echo "<hr style='margin:0.4em 0 0.4em 0'>";
                                                     echo "<a style='font-size:15px;font-weight:italic;'>Bilanci:
-                                                        <b style='color:green'> €". floatval($sql[0])." </b>
+                                                        <b style='color:green'> €". $sql[0]." </b>
                                                     </a>";
                                                 }
                                                 ?>

@@ -122,11 +122,39 @@
                     <!-- <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span> -->
                     <p>
                         <div class="col-lg-12">
-                            <h5 style="text-decoration: underline;">
-                                <a href="#specifikat">Specifikat</a>
+                            <h5 style="text-decoration: none;">
+                                <a>Ofertuesit e fundit</a>
                             </h5>
+                            <script>  
+                            var prod_id = <?php echo  $prod_details; ?>         
+                            function updateCmimiFundit() { //update tabelen e ofertuesve te fundit
+                                $.ajax({
+                                    url: "checkLatestOffers.php",
+                                    type: "get",
+                                    data: {
+                                        "type": "cmimiFundit",
+                                        "prod_id": prod_id
+                                    },
+                                    success: function(response) {
+                                        console.log(response);
+                                        $('#cmimiFundit').html(response);
+                                        // setTimeout(updateCmimiFundit, 1000);
+                                    },
+                                    error: function(xhr) {
+                                        console.log("ERROR!");
+                                    }
+                                });
+                            }
+                            // setTimeout(updateCmimiFundit, 1000);
+                        </script>
                             <div class="table-responsive">
                                 <table class="table table-sm table-striped">
+                                    <thead id="cmimiFundit">
+                                       
+                                        
+                                    </thead>
+                                </table>
+                                <!-- <table class="table table-sm table-striped">
                                     <tbody>
                                         <?php if($cat_id == 2 || $cat_id == 3){ ?>
                                         <tr>
@@ -145,7 +173,7 @@
                                             <td><strong>Ngjyra</strong></td>
                                             <td><?php echo $spec_4 ?></td>
                                         </tr>
-                                        <!--- VETURA -->
+                                        <!--- VETURA 
                                         <?php } else if($cat_id == 5){ ?>
                                         <tr>
                                             <td><strong>Prodhuesi</strong></td>
@@ -182,13 +210,32 @@
                                             </tr>
                                         <?php } ?>
                                     </tbody>
-                                </table>
+                                </table> -->
                             </div>
                             <!-- /table-responsive -->
                         </div>
                     </p>
                     
                     <div class="row">
+                    <script type="text/javascript">
+                        //let only one decimal point
+                        function isNumberKey(txt, evt) {
+                        var charCode = (evt.which) ? evt.which : evt.keyCode;
+                        if (charCode == 46) {
+                            //Check if the text already contains the . character
+                            if (txt.value.indexOf('.') === -1) {
+                            return true;
+                            } else {
+                            return false;
+                            }
+                        } else {
+                            if (charCode > 31 &&
+                            (charCode < 48 || charCode > 57))
+                            return false;
+                        }
+                        return true;
+                        }
+                    </script>
                         <script>
                             //popup message edhe disabled input
                             function verifyUser() {
@@ -202,22 +249,28 @@
                             function getPrice() {
                                 var given_price = document.getElementById('get_price').value;
                                 var uniqid = document.getElementById('get_uniqid').value;
-                                updatePrice(given_price,uniqid);
+                                var inputOferto = document.getElementById('oferto').value;
+                                updatePrice(given_price,uniqid,inputOferto);
                             }
-                            function updatePrice(price,id) { //tento per me shtu bid
+                            function updatePrice(price,id,input) { //tento per me shtu bid
                                 $.ajax({
                                     url: "checkUserPrice.php",
                                     type: "get",
                                     data: {
                                         'user_price': price, 
-                                        'unique_id': id 
+                                        'unique_id': id,
+                                        'ofert_input': input
                                         //get value : vlera inputit userit 
                                     },
                                     success: function(response) {
+                                        console.log(response);
                                         if(response == "notLogged"){
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }else if(response == "notBuyerSeller"){
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "sameUser"){
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }else if(response == "notNumber"){
@@ -225,20 +278,27 @@
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }else if(response == "smallPrice"){
-                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Cmimi i dhënë duhet të jetë të pakten 1€ më shumë se cmimi aktual!</small>");
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Oferta duhet të jetë të paktën <b>1€ </b>mbi çmimin aktual!</small>");
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }else if(response == "smallBalance"){
                                             $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nuk keni balanc të mjaftushëm!</small>");
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "expiredDateTime"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Ankandi për këtë produkt është mbyllur!</small>");
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "prepError"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Diçka shkoi gabim, ju lutem provoni më vonë!</small>");
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
                                         }
-                                        if(response == "ok"){
-                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju ofertuat me sukses shumën prej <b>"+ price +"€</b> !</small>");
+                                        else if(response == "ok"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju ofertuat me sukses shumën prej <b style='font-size: 14px; text-shadow: 1px 0.1px 0.3px #5ee062;'>"+ parseFloat(price).toFixed(2) +"€</b> !</small>");
                                             $('#get_price').css("border-color", 'green');
                                             $('#get_price').css("background-color", '#D4EDDA');
-                                        }
-
+                                         }
                                     },
                                     error: function(xhr) {
                                         console.log("ERROR!");
@@ -251,7 +311,7 @@
                                     <div class="col-lg-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo $select_product['prod_price'] ?>">
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo $select_product['prod_price'] ?>" onkeypress="return isNumberKey(this, event);" >
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>
@@ -260,7 +320,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 float-right" >
                                         <div class="btn_add_to_cart">
-                                            <input type="submit" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO"  onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>">
+                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>">
                                             <?php 
                                                 if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
                                                 }elseif($_SESSION['user']['status'] == CONFIRMED){
@@ -286,7 +346,7 @@
                     </div>
                 </div>
                 <!-- /prod_info -->
-                <div class="product_actions">
+                <!-- <div class="product_actions">
                     <div class="col-lg-12">
                         <h5 style="text-align: center; padding-top: 1em;">Ofertusit e fundit</h5>
                         <div class="table-responsive">
@@ -323,9 +383,9 @@
                                 </thead>
                             </table>
                         </div>
-                        <!-- /table-responsive -->
+                        <!-- /table-responsive
                     </div>
-                </div>
+                </div> -->
                 <!-- /product_actions -->
             </div>
         </div>
