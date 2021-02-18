@@ -214,8 +214,22 @@
                                         //get value : vlera inputit userit 
                                     },
                                     success: function(response) {
-                                        if(response == "CmimiVogel"){
+                                        if(response == "notLogged"){
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "notBuyerSeller"){
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "notNumber"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Cmimi dhënë nuk është në fromatin e duhur!</small>");
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "smallPrice"){
                                             $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Cmimi i dhënë duhet të jetë të pakten 1€ më shumë se cmimi aktual!</small>");
+                                            $('#get_price').css("border-color", 'red');
+                                            $('#get_price').css("background-color", '#EFB3AB');
+                                        }else if(response == "smallBalance"){
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Nuk keni balanc të mjaftushëm!</small>");
                                             $('#get_price').css("border-color", 'red');
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }
@@ -237,7 +251,7 @@
                                     <div class="col-lg-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control" id="get_price" value="<?php echo $select_product['prod_price'] ?>">
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo $select_product['prod_price'] ?>">
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>
@@ -246,9 +260,9 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 float-right" >
                                         <div class="btn_add_to_cart">
-                                            <input type="submit" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO"  onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUse1r();'; } ?>">
+                                            <input type="submit" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO"  onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>">
                                             <?php 
-                                                if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari në web aplikacionin tonë!</span>"; 
+                                                if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
                                                 }elseif($_SESSION['user']['status'] == CONFIRMED){
                                                     echo "<span class='popuptext' id='myPopup'>Së pari duhet të aplikoni për blerës, pastaj mund të bëni ofertat tuaja!</span>"; 
                                                 }elseif($select_product['user_id'] == user_id()){

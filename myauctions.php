@@ -371,7 +371,7 @@
                 ucfirst($lap_mod = $_POST['lap_model']);
                 $lap_condition = $_POST['lap_condition'];
                 $lap_display = $_POST['lap_display'];
-                $lap_col = ucfirst($_POST['lap_color']);
+                $lap_col = ucfirst($_POST['lap_color']); 
                 $lap_proc = $_POST['lap_procesor'];    
                 $lap_ram = $_POST['lap_ram'];
                 $lap_intmem = $_POST['lap_internal_memory'];
@@ -773,7 +773,7 @@
                     $phoneColError = true;
                     $_SESSION['add_prod_errors'] += ["phoneColError"=>""];
                 }else if(!ctype_alpha($phone_col) && !((strpos($phone_col, 'ë')) || (strpos($phone_col, 'Ë')) || (strpos($phone_col, 'ç')) || (strpos($phone_col, 'Ç')))){
-                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_price'] = $auc_price; die(var_dump($phone_col ));
                     $_SESSION['save_title'] = $auc_title; 
                     $_SESSION['save_end'] = $auc_end; 
                     $_SESSION['save_desc'] = $auc_desc;
@@ -1401,7 +1401,7 @@
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" name="auc_description"  class="float-right" style="">Përshkrimi </label> 
+                                                <label class="float-right" style="">Përshkrimi </label> 
                                             </div>
                                             <div class="col-6" style="padding-bottom:5px;">
                                             <textarea rows="4" id="auc_description" name="auc_description" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("descError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" ><?php if(isset($_SESSION['save_desc'])){ echo $_SESSION['save_desc']; } unset($_SESSION['save_desc']);?></textarea>

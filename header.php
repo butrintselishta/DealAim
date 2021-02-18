@@ -103,7 +103,13 @@
         }(window, document, localStorage);
     </script>
     <style>
-
+        /* oferto disabled button */
+        a.btn__1:disabled,
+        .btn__1:disabled,
+        .btn__1:hover:disabled{
+            background-color: #035af9;
+            color: #ff0d0d !important
+        }
         /* The actual popup */
         .btn_add_to_cart .popuptext {
         visibility: hidden;
@@ -168,12 +174,14 @@
                 margin-left: 25%;
             }
             .form-group1 {
-                width: 50%;
+                width: 50% !important;
+                float:left;
             }
             .input-group-bal {
                 width:60% !important;
             }
             .btn__1{
+                float:right;
                 display:flow-root !important;
             }
             
@@ -181,6 +189,9 @@
         @media only screen and (max-width: 1199px){
             .checkmark {
                 margin-left:0% !important;
+            }
+            .form-group1 {
+                width: 100%;
             }
             .btn__1{
                 display:flow-root !important;
@@ -411,7 +422,7 @@
                                                     $sql = mysqli_fetch_array($st);
                                                     echo "<hr style='margin:0.4em 0 0.4em 0'>";
                                                     echo "<a style='font-size:15px;font-weight:italic;'>Bilanci:
-                                                        <b style='color:green'> €". $sql[0]." </b>
+                                                        <b style='color:green'> €". floatval($sql[0])." </b>
                                                     </a>";
                                                 }
                                                 ?>

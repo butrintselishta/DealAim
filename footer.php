@@ -1,14 +1,5 @@
 <?php 
    require_once 'db.php';
-
-   $_SESSION['isVisited'] = false;
-   $i = 0;
-   if(isset($_SESSION['isVisited'])){
-       $_SESSION['isVisited'] = true;
-       $i++;
-       $user_ip = $_SERVER['REMOTE_ADDR'];
-       $st = prep_stmt("INSERT INTO user_visits(visit_nr, user_ip) VALUES (?,?)", array($i, $user_ip), "is");
-   }
 ?>
 <footer class="revealed">
     <div class="container">
