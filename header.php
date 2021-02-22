@@ -56,6 +56,8 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="js/jquery.card.js"></script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
@@ -281,7 +283,7 @@
                             <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                                 <?php } ?>
                                 <div id="logo">
-                                    <a href="index.php"><img src="img/logo.svg" alt="" width="100" height="35"></a>
+                                    <a href="index.php"><img src="img/logo/deal_aim_logo-transparent.png" alt="" width="100" height="35"></a>
                                 </div>
                             </div>
                             <?php  if(isset($_SESSION['logged']) && $_SESSION['logged'] == true)
@@ -418,7 +420,7 @@
                                                 
                                                 <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
                                                 {   
-                                                    $st = prep_stmt("SELECT CAST(user_balance as decimal(6,2)) FROM users WHERE username=?", $_SESSION['user']['username'], 's');
+                                                    $st = prep_stmt("SELECT CAST(user_balance as decimal(8,2)) FROM users WHERE username=?", $_SESSION['user']['username'], 's');
                                                     $sql = mysqli_fetch_array($st);
                                                     echo "<hr style='margin:0.4em 0 0.4em 0'>";
                                                     echo "<a style='font-size:15px;font-weight:italic;'>Bilanci:

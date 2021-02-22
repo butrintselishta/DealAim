@@ -45,11 +45,17 @@
 				{
 					while($row_prod =mysqli_fetch_array($select_all_prod)){
 						$prod_pics = explode("|", $row_prod['prod_img']);
+						$today = time();
+						$prod_sts = "";
+						if(($today - strtotime($row_prod['prod_from'])) < 86400){
+							$prod_sts = "<span class='ribbon hot'> E re </span>";
+						}
+						
 				?>
 				<div class="col-6 col-md-4 col-xl-3">
 					<div class="grid_item">
 						<figure>
-							<span class="ribbon off"><!-- if it is from more than 2 days ago show old else show new --></span>
+							<?php echo $prod_sts; ?>
 							<a href="details.php?prod_details=<?php echo $row_prod['prod_id'];?>">
 								<img class="img-fluid lazy" src="img/products/<?php if($cat_id == 2){echo "laptops";}else if($cat_id==3){echo "phones";}else if($cat_id == 5){ echo "cars";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
 							</a>

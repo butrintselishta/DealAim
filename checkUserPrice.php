@@ -1,15 +1,16 @@
 <?php
 require_once "db.php";
-$price = floatval($_GET['user_price']);
-$pri = CAST(($price) AS DECIMAL(12,2)) 
+$price = floatval($_GET['user_price']); 
+// $pri = CAST(($price) AS DECIMAL(12,2)) 
 $uniqid = $_GET['unique_id']; ;
 $input = $_GET['ofert_input']; 
 $sel_prod = prep_stmt("SELECT * FROM products WHERE prod_unique_id = ?", $uniqid, "s");
 $prod_fetch = mysqli_fetch_array($sel_prod);
 
 $sel_balance = prep_stmt("SELECT * FROM users WHERE user_id = ?", user_id(), "i");
-$balance_fetch = mysqli_fetch_array($sel_balance); 
+$balance_fetch = mysqli_fetch_array($sel_balance); //die(var_dump($price <= $prod_fetch['prod_price']+1));
 $today = date("Y-m-d H:i:s");
+// die(var_dump(prep_stmt("UPDATE products SET prod_price=? WHERE user_id=?", array($price, $prod_fetch['prod_id']),"si")));
 
 if(!isset($_SESSION['logged'])){
     echo "notLogged";
@@ -23,7 +24,7 @@ if(!isset($_SESSION['logged'])){
 }elseif(!is_numeric($price)){
     echo "notNumber";
     die();
-}else if($price <= $prod_fetch['prod_price']+1){
+}else if($price <= $prod_fetch['prod_price']+0.99){
     echo "smallPrice";
     die();
 }elseif($balance_fetch['user_balance'] < $price){
@@ -42,7 +43,7 @@ else{
             if(!prep_stmt("UPDATE users SET user_balance=? WHERE user_id=?", array($user_balance, user_id()),"si")){
                 echo "prepError"; die();
             }else{
-                if(!prep_stmt("UPDATE products SET CAST(prod_price as DECIMAL(6,2))=? WHERE user_id=?", array($price, $prod_fetch['prod_id']),"si")){
+                if(!prep_stmt("UPDATE products SET prod_price=? WHERE prod_id=?", array($price, $prod_fetch['prod_id']),"si")){
                     echo "prepError"; die();
                 }else{
                     echo "ok";

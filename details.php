@@ -69,7 +69,7 @@
         }
     ?>
     <div class="container margin_30">
-        <div class="countdown_inner"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
+        <div class="countdown_inner" id="main_count_down"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
             <?php 
                 $sel_end = prep_stmt("SELECT prod_to FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
                 $sel_end_date = mysqli_fetch_array($sel_end); 
@@ -125,36 +125,10 @@
                             <h5 style="text-decoration: none;">
                                 <a>Ofertuesit e fundit</a>
                             </h5>
-                            <script>  
-                            var prod_id = <?php echo  $prod_details; ?>         
-                            function updateCmimiFundit() { //update tabelen e ofertuesve te fundit
-                                $.ajax({
-                                    url: "checkLatestOffers.php",
-                                    type: "get",
-                                    data: {
-                                        "type": "cmimiFundit",
-                                        "prod_id": prod_id
-                                    },
-                                    success: function(response) {
-                                        console.log(response);
-                                        $('#cmimiFundit').html(response);
-                                        // setTimeout(updateCmimiFundit, 1000);
-                                    },
-                                    error: function(xhr) {
-                                        console.log("ERROR!");
-                                    }
-                                });
-                            }
-                            // setTimeout(updateCmimiFundit, 1000);
-                        </script>
+                            
                             <div class="table-responsive">
+                                
                                 <table class="table table-sm table-striped">
-                                    <thead id="cmimiFundit">
-                                       
-                                        
-                                    </thead>
-                                </table>
-                                <!-- <table class="table table-sm table-striped">
                                     <tbody>
                                         <?php if($cat_id == 2 || $cat_id == 3){ ?>
                                         <tr>
@@ -173,7 +147,7 @@
                                             <td><strong>Ngjyra</strong></td>
                                             <td><?php echo $spec_4 ?></td>
                                         </tr>
-                                        <!--- VETURA 
+                                        <!--- VETURA -->
                                         <?php } else if($cat_id == 5){ ?>
                                         <tr>
                                             <td><strong>Prodhuesi</strong></td>
@@ -210,7 +184,7 @@
                                             </tr>
                                         <?php } ?>
                                     </tbody>
-                                </table> -->
+                                </table>
                             </div>
                             <!-- /table-responsive -->
                         </div>
@@ -295,7 +269,7 @@
                                             $('#get_price').css("background-color", '#EFB3AB');
                                         }
                                         else if(response == "ok"){
-                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju ofertuat me sukses shumën prej <b style='font-size: 14px; text-shadow: 1px 0.1px 0.3px #5ee062;'>"+ parseFloat(price).toFixed(2) +"€</b> !</small>");
+                                            $('#statusi').html("<small class='form-text text-muted' style='font-weight:bold; color:green !important;'>Ju ofertuat me sukses shumën prej <b style='font-size: 14px; text-shadow: 1px 0.1px 0.3px #5ee062;'>"+ parseFloat(price).toFixed(2) +"€ </b> !</small> <span style='font-size:14px;font-weight:bold;color:green'>&#10004;</span> ");
                                             $('#get_price').css("border-color", 'green');
                                             $('#get_price').css("background-color", '#D4EDDA');
                                          }
@@ -311,7 +285,7 @@
                                     <div class="col-lg-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo $select_product['prod_price'] ?>" onkeypress="return isNumberKey(this, event);" >
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2); ?>" onkeypress="return isNumberKey(this, event);" >
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>
@@ -331,61 +305,117 @@
                                                ?> 
                                         </div> 
                                     </div>
-                                    <!-- <span class="new_price">$148.00</span><span class=""></span> <span class="old_price"></span> -->
-                                    <!-- <script>
-                                    var statuss = document.getElementById("statusi");
-                                    var today = Date.now();
-                                    console.log(today);
-                                    var endsIn = "<?php echo strtotime($sel_end_date['prod_to']); ?>"
-                                    if(today > endsIn) {
-                                        statuss.innerHTML = "PERFUNDOI";
-                                    }
-                                    </script> -->
+                                    <?php 
+
+                                    ?>
+                                     <?php 
+                                        $sel_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
+                                        if(mysqli_num_rows($sel_winner) > 0){
+                                            while($row_win = mysqli_fetch_array($sel_winner)){
+                                                $winner_username = $row_win['username'];
+                                                $winner_price = $row_win['offer_price']; 
+                                            }
+                                        }
+                                    ?>
+                                    <script> 
+                                        var product_id = <?php echo  $prod_details; ?>;   
+                                        var date_to = <?php echo strtotime($select_product['prod_to']); ?>;
+                                        function countdownTo00() { 
+                                        //shiko count down, kur bie ne 00 bej disable inputin dhe butonin
+                                            $.ajax({
+                                                url: "countDownDown.php",
+                                                type: "get",
+                                                data: {
+                                                    "prod_id":product_id,
+                                                    "date_to":date_to
+                                                },
+                                                success: function(response) {
+                                                    if(response == "down_to_0"){
+                                                        $('#get_price').css("color", "green");
+                                                        $('#get_price').css("font-weight", "800");
+                                                        $('#get_price').attr("disabled",true);
+                                                        $('#oferto').val("I MBYLLUR");
+                                                        $('#oferto').css("background-color", "#ddd");
+                                                        $('#oferto').attr("disabled",true);
+
+                                                        $("#count_down").html("<i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_username ?></b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_price . "€" ?></b> ");
+                                                        $('#main_count_down').css("background-color", "#ddd");
+                                                        $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_username ?></b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_price . "€" ?></b> ")
+                                                    }else{
+                                                        console.log(response);
+                                                    }
+                                                    setTimeout(countdownTo00, 1000);
+                                                },
+                                                error: function(xhr) {
+                                                    console.log("ERROR!");
+                                                }
+                                            });
+                                        }
+                                        setTimeout(countdownTo00, 1000);
+                                    </script>
                             </div>
                         </div>
                     </div>
+                    <div class="countdown_inner" id="count_down" style="background:#f3f3f3;color:red"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
+                        <?php 
+                            $sel_end = prep_stmt("SELECT prod_to FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
+                            $sel_end_date = mysqli_fetch_array($sel_end); 
+                        ?>
+                        <b style="font-size: 20px;"><div data-countdown="<?php echo $sel_end_date['prod_to']; ?>" class="countdown" style="background:#f3f3f3; color:red; font-weight:900"></div></b>
+                    </div>
                 </div>
                 <!-- /prod_info -->
-                <!-- <div class="product_actions">
+                <div class="product_actions">
                     <div class="col-lg-12">
-                        <h5 style="text-align: center; padding-top: 1em;">Ofertusit e fundit</h5>
+                        <h5 style="text-align: center; padding-top: 1em;">Ofertuesit e fundit</h5>
                         <div class="table-responsive">
+                            <script>  
+                                var prod_id = <?php echo  $prod_details; ?>   
+                                    
+                                function updateCmimiFundit() { 
+                                   //update tabelen e ofertuesve te fundit
+                                    $.ajax({
+                                        url: "checkLatestOffers.php",
+                                        type: "get",
+                                        data: {
+                                            "type": "cmimiFundit",
+                                            "prod_id": prod_id
+                                        },
+                                        success: function(response) {
+                                            if($.trim(response) == "offerError"){
+                                                $('#gabimOferte').html("<div class='gabim'  style='margin-top:-3%;'><p style='font-weight:bold; color:red;'> Momentalisht nuk ka asnjë ofertë për këtë produkt! </p></div>");
+                                            }else{
+                                                $('#gabimOferte').hide();
+                                                $('#cmimiFundit').html(response);
+                                            }
+                                            setTimeout(updateCmimiFundit, 1000);
+                                        },
+                                        error: function(xhr) {
+                                            console.log("ERROR!");
+                                        }
+                                    });
+                                }
+                                setTimeout(updateCmimiFundit, 1000);
+                            </script>
                             <table class="table table-sm table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"> Koha </th>
-                                        <th scope="col"> Ofertuesi </th>
-                                        <th scope="col"> Çmimi </th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col"> 27.01.2021 13:58 </th>
-                                        <th scope="col"> B.......t </th>
-                                        <th scope="col"> 1200 &nbsp;<i>€</i></th>
-                                    </tr>
-                                    <tr>
-                                        <th></th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col"> 27.01.2021 13:58 </th>
-                                        <th scope="col"> B.......t </th>
-                                        <th scope="col"> 1100 &nbsp;<i>€</i></th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col"> 27.01.2021 13:58 </th>
-                                        <th scope="col"> B.......t </th>
-                                        <th scope="col"> 1050 &nbsp;<i>€</i></th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col"> 27.01.2021 13:58 </th>
-                                        <th scope="col"> B.......t </th>
-                                        <th scope="col"> 1000 &nbsp;<i>€</i></th>
+                                <thead id="" style="background-color: #2d2d2d;color: white;">
+                                    <tr style="width:33%">
+                                        <th scope='col'><b> Koha </b></th>
+                                        <th scope='col'> Ofertuesi </th>
+                                        <th scope='col'> Çmimi </th>
                                     </tr>
                                 </thead>
+                                <thead id="cmimiFundit">   
+                                        <!-- here are shown the 4 last rows without the least one --->
+                                </thead>
                             </table>
+                            <div id="gabimOferte">
+                                
+                            </div>
                         </div>
-                        <!-- /table-responsive
+                        <!-- /table-responsive-->
                     </div>
-                </div> -->
+                </div>
                 <!-- /product_actions -->
             </div>
         </div>

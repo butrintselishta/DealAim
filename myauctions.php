@@ -1269,6 +1269,9 @@
                     }
                 }
             }
+            else if($_POST['auc_category'] == "Template"){
+                
+            }
         }else{
             die("keqqqq");
         }
@@ -1728,6 +1731,12 @@
                                         <!--- SPECIIFIKAT e templates-->
                                         <div id="spec_template" >
                                             <div class="form-group row" >
+                                                <div class="col-4 col-form-label">
+                                                    <label for="" class="float-right" style="">Template (.zip)</label> 
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="file" name="auc_photo4" class="form-control"  >
+                                                </div>
                                                 <div class="col-4 col-form-label">
                                                     <label for="" class="float-right" style="">Kategoria e templates..</label> 
                                                 </div>
