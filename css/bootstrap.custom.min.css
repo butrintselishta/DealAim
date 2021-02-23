@@ -337,7 +337,8 @@ small {
 
 .img-fluid {
     max-width: 100%;
-    height: auto
+    height: 15rem;
+    object-fit: cover;
 }
 
 .container,

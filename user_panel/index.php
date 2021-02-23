@@ -405,7 +405,7 @@
     <title>DealAim</title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../img/logo/logo_circle.ico" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="../img/apple-touch-icon-57x57-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="../img/apple-touch-icon-72x72-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
@@ -667,7 +667,7 @@
                             <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                                 <?php } ?>
                                 <div id="logo">
-                                    <a href="index.php"><img src="../img/logo.svg" alt="" width="100" height="35"></a>
+                                    <a href="index.php"><img src="../img/logo/logo_dealaim.png" alt="" width="100" height="35"></a>
                                 </div>
                             </div>
                             <?php  if(isset($_SESSION['logged']) && $_SESSION['logged'] == true)
@@ -687,7 +687,7 @@
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="index.php"><img src="../img/logo_black.svg" alt="" width="100"
+                                            <a href="index.php"><img src="../img/logo/logo_dealaim_black.png" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>
@@ -800,7 +800,7 @@
                                                 
                                                 <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER)
                                                 {   
-                                                    $st = prep_stmt("SELECT CAST(user_balance as decimal(6,2)) FROM users WHERE username=?", $_SESSION['user']['username'], 's');
+                                                    $st = prep_stmt("SELECT CAST(user_balance as decimal(8,2)) FROM users WHERE username=?", $_SESSION['user']['username'], 's');
                                                     $sql = mysqli_fetch_array($st);
                                                     echo "<hr style='margin:0.4em 0 0.4em 0'>";
                                                     echo "<a style='font-size:15px;font-weight:italic;'>Bilanci:
@@ -891,9 +891,9 @@
                         </ul>
                         <div class="tab-content content-profile">
                             <?php if(isset($_GET['form_buyer']) && $_SESSION['user']['status'] == CONFIRMED){ ?>
-                            <div class="tab-pane fade in active" id="buyer" style="">
+                            <div class="tab-pane fade in active" id="buyer">
                                 <!-- BANK ACCOUNT APPLICATION -->
-                                <div class="private box" id="showForm" style="display">
+                                <div class="private box" id="showForm" >
                                     <div class="divider">
                                         <span style="background-color:#fff">Të dhënat bankare</span>
                                     </div>
@@ -953,7 +953,7 @@
                             <?php } ?>
 
                             <?php if(isset($_GET['form_seller']) && $_SESSION['user']['status'] == BUYER){ ?>
-                            <div class="tab-pane fade in active" id="seller" style="">
+                            <div class="tab-pane fade in active" id="seller">
                                 <div class="row no-gutters form-container active"  >
                                     <form method="POST" action="" id="form_seller" style="width:100%;">
                                         <small
@@ -1063,7 +1063,7 @@
                                         <div class="media">
                                             <div class="media-body">
                                                 <img src="../img/profile_pictures/<?php echo $profile_pic; ?>" class="user-photo media-object"
-                                                    alt="User" style="border:0;width:150px; height:150px; border-radius:50%;">
+                                                    alt="User" style="border:0;width:150px; height:150px; border-radius:50%;object-fit:cover;">
                                             </div>
                                         </div>
                                         <div class="media-body" style="padding-top:10px;">

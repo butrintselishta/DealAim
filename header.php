@@ -312,7 +312,7 @@
                                                 <a href="index.php" target="_parent">Ballina</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="solden_products.php"
                                                     target="_parent">Të shitura</a>
                                             </li>
                                             <li>

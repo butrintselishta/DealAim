@@ -1270,7 +1270,35 @@
                 }
             }
             else if($_POST['auc_category'] == "Template"){
-                
+                $temp_cat = $_POST['template_category'];
+                $temp_ut = $_POST['template_used_tech'];
+                $temp_layout = $_POST['template_layout'];
+                $temp_doc = $_POST['template_documented'];
+
+                if(is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
+                    $template_rar = $_FILES['template_zip'];
+                    $picname = "template_" . $unique_id; //emri i produktit: lea_1 psh
+                    $imageFileType = strtolower(pathinfo($template_rar["name"], PATHINFO_EXTENSION));
+                    $basenane_temp   = $picname . "." . $imageFileType; 
+                    $check = getimagesize($template_rar["tmp_name"]);
+        
+                    if ($check == false) {
+                        $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+                    }
+                    if ($template_rar['size'] > 300000000) {
+                        die("size");
+                    }
+                    if ($imageFileType != "zip" && $imageFileType != "rar") {
+                        $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+                    }
+                    $source_temp = $template_rar["tmp_name"];
+                }
+                if (is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
+                    $target_dir_temp = "img/products/templates/$basenane_temp";
+                    move_uploaded_file($source_temp, $target_dir_temp);
+                    die();
+                }
+
             }
         }else{
             die("keqqqq");
@@ -1341,7 +1369,7 @@
                                         <h3 style="text-decoration:underline;"> Te dhenat e produktit </h3>
                                         <div class="form-group row">
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style="">Kategoria</label> 
+                                                <label for="" class="float-right"  >Kategoria</label> 
                                             </div>
                                             <div class="col-6">
                                                 <select class="form-control" id="choosed_cat" name="auc_category" onchange="cat_choose();">
@@ -1358,7 +1386,7 @@
 
                                         <div class="form-group row">
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Titulli ankandit</label> 
+                                                    <label for="" class="float-right"  >Titulli ankandit</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" class="form-control" name="auc_title" placeholder="Titulli ankandit" style="<?php if(isset($_SESSION['add_prod_errors'])){
@@ -1379,7 +1407,7 @@
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style="">Ankandi fillon nga: </label> 
+                                                <label for="" class="float-right"  >Ankandi fillon nga: </label> 
                                             </div>
                                             <div class="col-6">
                                                 <input type="text" name="auc_start" class="form-control datepicker-2" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("startError", $_SESSION['add_prod_errors'])){ echo "border-color:red;";}} ?>" value="<?php if(isset($_SESSION['save_start'])){echo $_SESSION['save_start'];}else{ echo date("d-m-Y",strtotime("+1day"));} unset($_SESSION['save_start']); ?>">
@@ -1387,7 +1415,7 @@
                                             <p id="demooo"></p>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label class="float-right" style="">Sa ditë dëshironi që produkti juaj të qëndroj në ankand: </label> 
+                                                <label class="float-right"  >Sa ditë dëshironi që produkti juaj të qëndroj në ankand: </label> 
                                             </div>
                                             <div class="col-6">
                                                 <select class="form-control" name="auc_end" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("endError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" value="<?php if(isset($_SESSION['save_end'])){echo $_SESSION['save_end'];} ?>">
@@ -1404,41 +1432,41 @@
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label class="float-right" style="">Përshkrimi </label> 
+                                                <label class="float-right"  >Përshkrimi </label> 
                                             </div>
                                             <div class="col-6" style="padding-bottom:5px;">
                                             <textarea rows="4" id="auc_description" name="auc_description" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("descError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" ><?php if(isset($_SESSION['save_desc'])){ echo $_SESSION['save_desc']; } unset($_SESSION['save_desc']);?></textarea>
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style="">Fotot </label> 
+                                                <label for="" class="float-right"  >Fotot </label> 
                                             </div>
                                             <div class="col-6">
                                                 <input type="file" name="auc_photo1" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style=""></label> 
+                                                <label for="" class="float-right"  ></label> 
                                             </div>
                                             <div class="col-6">
                                                 <input type="file" name="auc_photo2" class="form-control"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style=""> </label> 
+                                                <label for="" class="float-right"  > </label> 
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-6">
                                                 <input type="file"  name="auc_photo3"  class="form-control"style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
                                             </div>
                                             <div class="col-4 col-form-label">
-                                                <label for=""  class="float-right" style=""></label> 
+                                                <label for=""  class="float-right"  ></label> 
                                             </div>
                                             <div class="col-6">
                                                 <input type="file" name="auc_photo4" class="form-control"  >
                                             </div>
                                             <div class="col-4 col-form-label">
-                                                <label for="" class="float-right" style=""> </label> 
+                                                <label for="" class="float-right"  > </label> 
                                             </div>
                                             <div class="col-6">
                                                 <input type="file" name="auc_photo5"  class="form-control"  >
@@ -1451,7 +1479,7 @@
                                         <div id="spec_laptop" >
                                             <div class="form-group row" >
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Prodhuesi:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } } unset($_SESSION['add_prod_errors']['lapManError']); ?>" <?php if(isset($_SESSION['save_lapMan'])){ echo "value='".$_SESSION['save_lapMan']."'"; } ?>>
@@ -1473,7 +1501,7 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Gjendja:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Gjendja:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="lap_condition"   placeholder="Gjendja e laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapConError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
@@ -1485,35 +1513,35 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Diagonalja ekranit (inch):</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Diagonalja ekranit (inch):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_display" class="form-control"   placeholder="Diagonalja ekranit (e shprehur me inch).." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapDisError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapDis'])){ echo "value='".$_SESSION['save_lapDis']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Ngjyra:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Ngjyra:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_color" class="form-control"   placeholder="Ngjyra.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapColError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapCol'])){ echo "value='".$_SESSION['save_lapCol']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label class="float-right" style="">Procesori:</label> 
+                                                    <label class="float-right"  >Procesori:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_procesor" class="form-control"   placeholder="Procesori.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapProcError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapProc'])){ echo "value='".$_SESSION['save_lapProc']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Memorja RAM (GB):</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Memorja RAM (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_ram" class="form-control"   placeholder="Hapsira e RAM memorjes (e shprehur në GB)..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapRamError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapRam'])){ echo "value='".$_SESSION['save_lapRam']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Memorja e mbrendshme:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Memorja e mbrendshme:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="lap_internal_memory"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>">
@@ -1525,14 +1553,14 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Hapsira e memorjes se mbrendshme (GB):</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Hapsira e memorjes se mbrendshme (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemSpaceError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapIntMemSpace'])){ echo "value='".$_SESSION['save_lapIntMemSpace']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Kartela Grafike:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Kartela Grafike:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="lap_graphic_card" class="form-control"   placeholder="Kartela Grafike.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapGrapError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapGrap'])){ echo "value='".$_SESSION['save_lapGrap']."'"; } ?>>
@@ -1545,7 +1573,7 @@
                                         <div id="spec_phone" >
                                             <div class="form-group row" >
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Prodhuesi:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Prodhuesi:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="phone_manufacturer"   placeholder="Zgjedh prodhuesin" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1560,14 +1588,14 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Modeli:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Modeli:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="phone_model" class="form-control"   placeholder="Modeli telefonit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneModError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneMod'])){echo "value='".$_SESSION['save_phoneMod']."'";} ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Gjendja:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Gjendja:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="phone_condition"   placeholder="Gjendja e laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneConError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1578,14 +1606,14 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Ngjyra:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Ngjyra:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="phone_color" class="form-control"   placeholder="Ngjyra"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneColError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneCol'])){echo "value='".$_SESSION['save_phoneCol']."'";} ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Sistemi operativ:</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Sistemi operativ:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="phone_operating_system"   placeholder="Lloji i memorjes së mbrendshme.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneOsError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1596,21 +1624,21 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Memorja RAM (GB):</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Memorja RAM (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="phone_ram" class="form-control"   placeholder="Memorja RAM (e shprehur ne GB).." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneRamError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneRam'])){echo "value='".$_SESSION['save_phoneRam']."'";} ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Memorja e mbrendshme (GB):</label> 
+                                                    <label for="inputEmail3" class="float-right"  >Memorja e mbrendshme (GB):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="phone_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme (e shprehur me GB):.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneIntMemSpaceError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>"  <?php if(isset($_SESSION['save_phoneIntMemSpace'])){echo "value='".$_SESSION['save_phoneIntMemSpace']."'";} ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label class="float-right" style="">Numri i SIM kartelave:</label> 
+                                                    <label class="float-right"  >Numri i SIM kartelave:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="phone_sim"   placeholder="Lloji i memorjes së mbrendshme.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneSimError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1621,7 +1649,7 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label class="float-right" style="">Vendi i prodhimit:</label> 
+                                                    <label class="float-right"  >Vendi i prodhimit:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="phone_origin_of_production" class="form-control"   placeholder="Vendi i prodhimit" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneOriginError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>"<?php if(isset($_SESSION['save_phoneOrigin'])){echo "value='".$_SESSION['save_phoneOrigin']."'";} ?> >
@@ -1634,7 +1662,7 @@
                                         <div id="spec_cars" >
                                             <div class="form-group row" >
                                                 <div class="col-4 col-form-label">
-                                                    <label for="inputEmail3" class="float-right" style="">Prodhuesi: </label> 
+                                                    <label for="inputEmail3" class="float-right"  >Prodhuesi: </label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="car_man"   placeholder="Zgjedh prodhuesin" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1649,28 +1677,28 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Modeli:</label> 
+                                                    <label for="" class="float-right" >Modeli:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="car_model" class="form-control"   placeholder="Modeli veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carModError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carMod'])){ echo "value='".$_SESSION['save_carMod']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Kilometrazha (e shprehur me KM):</label> 
+                                                    <label for="" class="float-right">Kilometrazha (e shprehur me KM):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="car_km" class="form-control"   placeholder="Kilometrat e kaluara.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carKmError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carKm'])){ echo "value='".$_SESSION['save_carKm']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Viti prodhimit:</label> 
+                                                    <label for="" class="float-right"  >Viti prodhimit:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="car_year_of_production" class="form-control"   placeholder="Viti i prodhimit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carYopError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carYop'])){ echo "value='".$_SESSION['save_carYop']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Tipi i veturës:</label> 
+                                                    <label for="" class="float-right"  >Tipi i veturës:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="car_type" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carTypeError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1687,14 +1715,14 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Ngjyra veturës:</label> 
+                                                    <label for="" class="float-right"  >Ngjyra veturës:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="car_color" class="form-control"   placeholder="Ngjyra veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carColError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carCol'])){ echo "value='".$_SESSION['save_carCol']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Transmisioneri:</label> 
+                                                    <label for="" class="float-right"  >Transmisioneri:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="car_transmission"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carTransError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1706,7 +1734,7 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Karburanti:</label> 
+                                                    <label for="" class="float-right"  >Karburanti:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="car_fuel" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carFuelsError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
@@ -1719,7 +1747,7 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Kubikazha (e shprehur në kubik):</label> 
+                                                    <label for="" class="float-right"  >Kubikazha (e shprehur në kubik):</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="car_cubics" class="form-control"   placeholder="Kubikazha e veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carCubError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carCub'])){ echo "value='".$_SESSION['save_carCub']."'"; } ?>>
@@ -1732,27 +1760,28 @@
                                         <div id="spec_template" >
                                             <div class="form-group row" >
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Template (.zip)</label> 
+                                                    <label for="" class="float-right"  >Template (.zip)</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="file" name="auc_photo4" class="form-control"  >
+                                                    <input type="file" name="template_zip" class="form-control">
                                                 </div>
+                                                <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Kategoria e templates..</label> 
+                                                    <label for="" class="float-right"  >Kategoria e templates..</label> 
                                                 </div>
                                                 <div class="col-6">
                                                 <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates..">
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Teknologjitë e përdorura:</label> 
+                                                    <label for="" class="float-right"  >Teknologjitë e përdorura:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <input type="text" name="template_used_tech" class="form-control"   placeholder="Teknologjitë e përdorura..">
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Layouti:</label> 
+                                                    <label for="" class="float-right"  >Layouti:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="template_layout"  >
@@ -1763,7 +1792,7 @@
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right" style="">Dokumentimi:</label> 
+                                                    <label for="" class="float-right"  >Dokumentimi:</label> 
                                                 </div>
                                                 <div class="col-6">
                                                     <select class="form-control" name="template_documented"  >

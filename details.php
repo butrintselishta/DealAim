@@ -8,12 +8,6 @@
         }else{
             die("keq");
         }
-        // $prod_tooo = $select_product['prod_to'];die(var_dump($prod_tooo));
-        // if(!mysqli_query(db(), "CREATE EVENT myevent ON SCHEDULE AT $prod_tooo DO UPDATE products SET prod_isApproved=2 WHERE prod_id = 7")){
-        //     die("keq");
-        // }else{
-        //     die("keq");
-        // }
 
         if(strtotime(date("Y-m-d h:i:s",strtotime($select_product['prod_from']))) > time()){
             header("location:index.php");
@@ -30,6 +24,10 @@
 		$cat_title = mysqli_fetch_array($cat_ttl);
 
         $spec_1 = ""; $spec_2 = ""; $spec_3=""; $spec_4=""; $spec_5 = ""; $spec_6=""; $spec_7=""; $spec_8=""; $spec_9=""; $spec_10="";
+
+        $today = time();
+        $get_num_offers = prep_stmt("SELECT offer_id FROM prod_offers WHERE prod_id=?", $prod_details,"i");
+        $get_nr = mysqli_num_rows($get_num_offers);
     }
    
 	require "header.php";
@@ -75,7 +73,39 @@
             
         }
     ?>
+    
+    <?php 
+        $sel_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
+        $winner = ""; $winner_price = "";
+        if(mysqli_num_rows($sel_winner) > 0){
+            while($row_win = mysqli_fetch_array($sel_winner)){
+                $winner_username = $row_win['username'];
+                $winner_price = $row_win['offer_price'];
+                $winner_u = substr($winner_username, 0, 1);
+                $username_n = substr($winner_username, -1);
+                $usname_str = str_repeat("*", strlen($winner_username)-2);
+                $winner = $winner_u . $usname_str . $username_n;
+            }
+        }
+    ?>
     <div class="container margin_30">
+        <?php if($today >= strtotime($select_product['prod_to'])){ 
+                if($get_nr === 0){
+                    echo "
+                    <div class='countdown_inner' style='background-color:#EFB3AB;'>
+                        <div>
+                            <h4 style='color:red; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> 
+                        </div>
+                        <i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt, rrjedhimisht produkti nuk është shitur! </i>
+                    </div>";
+                }else {
+                    echo "
+                    <div class='countdown_inner' style='background-color:#ddd;'>
+                        <div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner ."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".$winner_price ."€ </b> 
+                    </div>";
+                }
+        ?>
+        <?php }else { ?>
         <div class="countdown_inner" id="main_count_down"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
             <?php 
                 $sel_end = prep_stmt("SELECT prod_to FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
@@ -83,6 +113,7 @@
             ?>
             <b style="font-size: 20px;"><div data-countdown="<?php echo $sel_end_date['prod_to']; ?>" class="countdown"></div></b>
         </div>
+        <?php } ?>
         <div class="row">
             <div class="col-md-6">
                 <div class="all">
@@ -292,7 +323,7 @@
                                     <div class="col-lg-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2); ?>" onkeypress="return isNumberKey(this, event);" >
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" >
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>
@@ -312,20 +343,6 @@
                                                ?> 
                                         </div> 
                                     </div>
-                                     <?php 
-                                        $sel_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
-                                        $winner = ""; $winner_price = "";
-                                        if(mysqli_num_rows($sel_winner) > 0){
-                                            while($row_win = mysqli_fetch_array($sel_winner)){
-                                                $winner_username = $row_win['username'];
-                                                $winner_price = $row_win['offer_price'];
-                                                $winner_u = substr($winner_username, 0, 1);
-                                                $username_n = substr($winner_username, -1);
-                                                $usname_str = str_repeat("*", strlen($winner_username)-2);
-                                                $winner = $winner_u . $usname_str . $username_n;
-                                            }
-                                        }
-                                    ?>
 
                                     <script> 
                                         var winner = "<?php echo  $winner; ?>"; 
@@ -382,6 +399,20 @@
                             </div>
                         </div>
                     </div>
+                    <?php if($today >= strtotime($select_product['prod_to'])){ 
+                              if($get_nr === 0){
+                                echo "
+                                    <div class='countdown_inner' style='background:#f3f3f3;color:red'>
+                                     <i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt! &nbsp; </i>
+                                    </div>
+                                ";
+                              }else {
+                                  echo "<div class='countdown_inner' style='background:#f3f3f3;color:red'>
+                                             <i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".$winner_price ."€ </b> 
+                                        </div>";
+                              }
+                    ?>
+                    <?php } else { ?>
                     <div class="countdown_inner" id="count_down" style="background:#f3f3f3;color:red"><i style="font-size:16px;">Përfundon për:&nbsp; </i>
                         <?php 
                             $sel_end = prep_stmt("SELECT prod_to FROM products WHERE prod_unique_id = ?", $select_product['prod_unique_id'], "s");
@@ -389,6 +420,7 @@
                         ?>
                         <b style="font-size: 20px;"><div data-countdown="<?php echo $sel_end_date['prod_to']; ?>" class="countdown" style="background:#f3f3f3; color:red; font-weight:900"></div></b>
                     </div>
+                    <?php } ?>
                 </div>
                 <!-- /prod_info -->
                 <div class="product_actions">

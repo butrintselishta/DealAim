@@ -4860,7 +4860,7 @@ body.modal-open .mm-slideout {
     font-size: 0.875rem;
     margin: 3px 0 0 0;
     color: #444;
-    font-weight: 500;
+    font-weight: 750;
     display: inline-block
 }
 
@@ -5316,27 +5316,43 @@ input.qty2:focus {
 }
 
 .ribbon.new {
-    background-color: #9933cc
-}
-
-.ribbon.new:before {
-    border-color: #9933cc transparent transparent
-}
-
-.ribbon.hot {
     background-color: #0C0
 }
 
-.ribbon.hot:before {
+.ribbon.new:before {
     border-color: #0C0 transparent transparent
 }
 
+.ribbon.hot {
+    background-color: #EE9D1E
+}
+
+.ribbon.hot:before {
+    border-color: #EE9D1E transparent transparent
+}
+
 .ribbon.off {
-    background-color: #F33
+    background-color: rgb(241, 71, 48)
 }
 
 .ribbon.off:before {
-    border-color: #F33 transparent transparent
+    border-color: rgb(241, 71, 48) transparent transparent
+}
+
+.ribbon.closed {
+    background-color: rgb(255, 0, 0)
+}
+
+.ribbon.closed:before {
+    border-color: rgb(255, 0, 0) transparent transparent
+}
+
+.ribbon.opened {
+    background-color: #9933cc
+}
+
+.ribbon.opened:before {
+    border-color: #9933cc transparent transparent
 }
 
 .box_general {
