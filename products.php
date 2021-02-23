@@ -4,8 +4,8 @@
 	if(isset($_GET['sub_cat'])){
 		$cat_id = $_GET['sub_cat'];
 		//change isAPPROVED TO 1
-		$today = date("Y-m-d h:i:s");
-		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved = ? AND prod_from <= ?", array($cat_id,1,$today), "iis");
+		$today = date("Y-m-d H:i:s");
+		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved != ? AND prod_from <= ?", array($cat_id,0,$today), "iis");
 		// $select_all_prod_spec = prep_stmt("SELECT * FROM prod_specifications WHERE cat_id = ?", $cat_id,"i");
 
 		$cat_ttl = prep_stmt("SELECT cat_title FROM categories WHERE cat_id = ?", $cat_id, "i");
@@ -41,6 +41,8 @@
 		<div class="container margin_30">
 			<div class="row small-gutters ">
 				<?php 
+				// $sel_count_offers = prep_stmt("SELECT count(prod_id) FROM prod_offers WHERE offer_time >= now() - INTERVAL 24 HOUR and prod_id=?", $select_all_prod['prod_id']);
+				// $count_offers = mysqli_fetch_array($sel_count_offers);
 				if(mysqli_num_rows($select_all_prod))
 				{
 					while($row_prod =mysqli_fetch_array($select_all_prod)){

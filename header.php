@@ -49,7 +49,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Ansonika">
-    <title>Allaia | Bootstrap eCommerce Template - ThemeForest</title>
+    <title>DealAIM</title>
 
     <!-- Favicons-->
     <link href="css/card.css" rel="stylesheet">
@@ -58,7 +58,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo/logo_circle.ico" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
@@ -283,7 +283,7 @@
                             <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                                 <?php } ?>
                                 <div id="logo">
-                                    <a href="index.php"><img src="img/logo/deal_aim_logo-transparent.png" alt="" width="100" height="35"></a>
+                                    <a href="index.php"><img src="img/logo/logo_dealaim.png" alt="" width="100" height="35"></a>
                                 </div>
                             </div>
                             <?php  if(isset($_SESSION['logged']) && $_SESSION['logged'] == true)
@@ -303,7 +303,7 @@
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="index.php"><img src="img/logo_black.svg" alt="" width="100"
+                                            <a href="index.php"><img src="img/logo/logo_dealaim_black.png" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>

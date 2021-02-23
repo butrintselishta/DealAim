@@ -85,7 +85,7 @@ require_once '../db.php';
                 $prod_from_upd = $prod_from_pos;
                 $prod_to_upd = $prod_to_pos;
             }
-
+            
             
             $specific_1 = ""; $specific_2 = ""; $specific_3=""; $specific_4 = ""; $specific_5=""; $specific_6=""; $specific_7=""; $specific_8=""; $specific_9=""; $specific_10="";
             if($prod_cat_title == "Laptop"){
@@ -201,8 +201,13 @@ require_once '../db.php';
                         $_SESSION['data_not_changed'] = "";
                         header("location:".$_SERVER['HTTP_REFERER']); die();
                     }else{
-                        $_SESSION['data_changed'] = $prod_isApproved_pos;
-                        header("location:index.php"); die();
+                        if($prod_isApproved_pos == 1){
+                            if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                die("aass");
+                            }else{
+                                die("sdsf");
+                            }
+                        }
                     }
                 }
                 

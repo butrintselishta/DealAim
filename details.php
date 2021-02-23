@@ -8,6 +8,13 @@
         }else{
             die("keq");
         }
+        // $prod_tooo = $select_product['prod_to'];die(var_dump($prod_tooo));
+        // if(!mysqli_query(db(), "CREATE EVENT myevent ON SCHEDULE AT $prod_tooo DO UPDATE products SET prod_isApproved=2 WHERE prod_id = 7")){
+        //     die("keq");
+        // }else{
+        //     die("keq");
+        // }
+
         if(strtotime(date("Y-m-d h:i:s",strtotime($select_product['prod_from']))) > time()){
             header("location:index.php");
         }
@@ -24,7 +31,7 @@
 
         $spec_1 = ""; $spec_2 = ""; $spec_3=""; $spec_4=""; $spec_5 = ""; $spec_6=""; $spec_7=""; $spec_8=""; $spec_9=""; $spec_10="";
     }
-
+   
 	require "header.php";
 ?>
  
@@ -305,19 +312,24 @@
                                                ?> 
                                         </div> 
                                     </div>
-                                    <?php 
-
-                                    ?>
                                      <?php 
                                         $sel_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
+                                        $winner = ""; $winner_price = "";
                                         if(mysqli_num_rows($sel_winner) > 0){
                                             while($row_win = mysqli_fetch_array($sel_winner)){
                                                 $winner_username = $row_win['username'];
-                                                $winner_price = $row_win['offer_price']; 
+                                                $winner_price = $row_win['offer_price'];
+                                                $winner_u = substr($winner_username, 0, 1);
+                                                $username_n = substr($winner_username, -1);
+                                                $usname_str = str_repeat("*", strlen($winner_username)-2);
+                                                $winner = $winner_u . $usname_str . $username_n;
                                             }
                                         }
                                     ?>
+
                                     <script> 
+                                        var winner = "<?php echo  $winner; ?>"; 
+                                        var winner_price = "<?php echo  $winner_price; ?>"; 
                                         var product_id = <?php echo  $prod_details; ?>;   
                                         var date_to = <?php echo strtotime($select_product['prod_to']); ?>;
                                         function countdownTo00() { 
@@ -330,7 +342,20 @@
                                                     "date_to":date_to
                                                 },
                                                 success: function(response) {
-                                                    if(response == "down_to_0"){
+                                                    if(response == "no_offers_down_to_0"){
+                                                        $('#gabimOferte').hide();
+                                                        $('#get_price').css("color", "red");
+                                                        $('#get_price').css("font-weight", "800");
+                                                        $('#get_price').attr("disabled",true);
+                                                        $('#oferto').val("I MBYLLUR");
+                                                        $('#oferto').css("background-color", "#ddd");
+                                                        $('#oferto').attr("disabled",true);
+
+                                                        $("#count_down").html("<i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt! &nbsp; </i>");
+                                                        $('#main_count_down').css("background-color", "#EFB3AB");
+                                                        $("#main_count_down").html("<div><h4 style='color:red; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt, rrjedhimisht produkti nuk është shitur! </i> ")
+                                                    }
+                                                    else if(response == "down_to_0"){
                                                         $('#get_price').css("color", "green");
                                                         $('#get_price').css("font-weight", "800");
                                                         $('#get_price').attr("disabled",true);
@@ -338,11 +363,12 @@
                                                         $('#oferto').css("background-color", "#ddd");
                                                         $('#oferto').attr("disabled",true);
 
-                                                        $("#count_down").html("<i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_username ?></b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_price . "€" ?></b> ");
+                                                        $("#count_down").html("<i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+ winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ");
                                                         $('#main_count_down').css("background-color", "#ddd");
-                                                        $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_username ?></b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'><?php echo $winner_price . "€" ?></b> ")
-                                                    }else{
-                                                        console.log(response);
+                                                        $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ")
+                                                    }
+                                                    else{
+                                                        console.log("bbb")
                                                     }
                                                     setTimeout(countdownTo00, 1000);
                                                 },
