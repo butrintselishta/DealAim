@@ -1,4 +1,5 @@
 <?php 
+    
     require_once("db.php");
     if($_SESSION['logged']==false){
         header("location:signin.php");
@@ -56,6 +57,8 @@
         $phoneManError = false; $phoneModError=false; $phoneColError = false; $phoneConError = false; $phoneOsError = false; $phoneRamError = false; $phoneIntMemSpaceError = false; $phoneSimError = false; $phoneOriginError = false;
         //cars Errors
         $carManError = false; $carModError = false;  $carKmError = false; $carYopError = false; $carTypeError = false; $carColError = false; $carTransError = false; $carFuelsError = false; $carCubError = false;
+        //template Errors
+        $tempZipError = false; $tempCatError = false; $tempUtError = false; $tempLayoutError = false; $tempDocError = false;
         $_SESSION['add_prod_errors'] = array();
         //error MESAZHI
         $error_msg = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
@@ -773,7 +776,7 @@
                     $phoneColError = true;
                     $_SESSION['add_prod_errors'] += ["phoneColError"=>""];
                 }else if(!ctype_alpha($phone_col) && !((strpos($phone_col, 'ë')) || (strpos($phone_col, 'Ë')) || (strpos($phone_col, 'ç')) || (strpos($phone_col, 'Ç')))){
-                    $_SESSION['save_price'] = $auc_price; die(var_dump($phone_col ));
+                    $_SESSION['save_price'] = $auc_price; //die(var_dump($phone_col ));
                     $_SESSION['save_title'] = $auc_title; 
                     $_SESSION['save_end'] = $auc_end; 
                     $_SESSION['save_desc'] = $auc_desc;
@@ -1269,36 +1272,203 @@
                     }
                 }
             }
-            else if($_POST['auc_category'] == "Template"){
+            else if($_POST['auc_category'] == "Template")
+            {
+                $ZIP_ERROR = [
+                    ZipArchive::ER_EXISTS => 'File already exists.',
+                    ZipArchive::ER_INCONS => 'Zip archive inconsistent.',
+                    ZipArchive::ER_INVAL => 'Invalid argument.',
+                    ZipArchive::ER_MEMORY => 'Malloc failure.',
+                    ZipArchive::ER_NOENT => 'No such file.',
+                    ZipArchive::ER_NOZIP => 'Not a zip archive.',
+                    ZipArchive::ER_OPEN => "Can't open file.",
+                    ZipArchive::ER_READ => 'Read error.',
+                    ZipArchive::ER_SEEK => 'Seek error.',
+                  ];
+                function openZip($file_to_open) {
+                    $target = dirname(__FILE__) . "/templates/";
+                    $zip = new ZipArchive();
+                    $x = $zip->open($file_to_open);
+                    if($x === true) {   
+                        $zip->extractTo($target);
+                        $zip->close();
+                    } else {
+                    $msg = isset($ZIP_ERROR[$zip])? $ZIP_ERROR[$zip] : 'Unknown error.';
+                    return ['error'=>$msg];
+                        die("Dicka shkoi gabim");
+                    }
+                }
+                
                 $temp_cat = $_POST['template_category'];
                 $temp_ut = $_POST['template_used_tech'];
                 $temp_layout = $_POST['template_layout'];
                 $temp_doc = $_POST['template_documented'];
 
-                if(is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
-                    $template_rar = $_FILES['template_zip'];
-                    $picname = "template_" . $unique_id; //emri i produktit: lea_1 psh
-                    $imageFileType = strtolower(pathinfo($template_rar["name"], PATHINFO_EXTENSION));
-                    $basenane_temp   = $picname . "." . $imageFileType; 
-                    $check = getimagesize($template_rar["tmp_name"]);
-        
-                    if ($check == false) {
-                        $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
-                    }
-                    if ($template_rar['size'] > 300000000) {
-                        die("size");
-                    }
-                    if ($imageFileType != "zip" && $imageFileType != "rar") {
-                        $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
-                    }
-                    $source_temp = $template_rar["tmp_name"];
+                if(empty($temp_cat)){
+                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_title'] = $auc_title; 
+                    $_SESSION['save_end'] = $auc_end; 
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_tempUt'] = $temp_ut;
+                    $_SESSION['save_tempLayout'] = $temp_layout;
+                    $_SESSION['save_tempDoc'] = $temp_doc;
+                    $tempCatError = true;
+                    $_SESSION['add_prod_errors'] += ["tempCatError"=>""];
                 }
-                if (is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
-                    $target_dir_temp = "img/products/templates/$basenane_temp";
-                    move_uploaded_file($source_temp, $target_dir_temp);
-                    die();
+                if(empty($temp_ut)){
+                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_title'] = $auc_title; 
+                    $_SESSION['save_end'] = $auc_end; 
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_tempCat'] = $temp_cat;
+                    $_SESSION['save_tempLayout'] = $temp_layout;
+                    $_SESSION['save_tempDoc'] = $temp_doc;
+                    $tempUtError = true;
+                    $_SESSION['add_prod_errors'] += ["tempUtError"=>""];
+                }
+                if(empty($temp_layout)){
+                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_title'] = $auc_title; 
+                    $_SESSION['save_end'] = $auc_end; 
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_tempCat'] = $temp_cat;
+                    $_SESSION['save_tempUt'] = $temp_ut;
+                    $_SESSION['save_tempDoc'] = $temp_doc;
+                    $tempLayoutError = true;
+                    $_SESSION['add_prod_errors'] += ["tempLayoutError"=>""];
+                }
+                if(empty($temp_doc)){
+                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_title'] = $auc_title; 
+                    $_SESSION['save_end'] = $auc_end; 
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_tempCat'] = $temp_cat;
+                    $_SESSION['save_tempUt'] = $temp_ut;
+                    $_SESSION['save_tempLayout'] = $temp_layout;
+                    $tempDocError = true;
+                    $_SESSION['add_prod_errors'] += ["tempDocError"=>""];
+                }
+                if(!is_uploaded_file($_FILES['template_zip']['tmp_name'])){
+                    $_SESSION['save_price'] = $auc_price; 
+                    $_SESSION['save_title'] = $auc_title; 
+                    $_SESSION['save_end'] = $auc_end; 
+                    $_SESSION['save_desc'] = $auc_desc;
+                    $_SESSION['save_tempCat'] = $temp_cat;
+                    $_SESSION['save_tempUt'] = $temp_ut;
+                    $_SESSION['save_tempLayout'] = $temp_layout;
+                    $_SESSION['save_tempDoc'] = $temp_doc;
+                    $tempZipError = true;
+                    $_SESSION['add_prod_errors'] += ["tempZipError"=>""];
                 }
 
+                $temp_name = $_FILES['template_zip']['name'];
+                if(is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
+                    $template_zip = $_FILES['template_zip'];
+                    $picname = "template_" . $unique_id; //emri i produktit: lea_1 pshdie
+                    $imageFileType = strtolower(pathinfo($template_zip["name"], PATHINFO_EXTENSION));
+                    //die(var_dump($imageFileType));
+                    $basename_temp = $picname . "." . $imageFileType;
+                    $check = filesize($template_zip["tmp_name"]); 
+        
+                    if ($check == false) {
+                        $_SESSION['save_price'] = $auc_price; 
+                        $_SESSION['save_title'] = $auc_title; 
+                        $_SESSION['save_end'] = $auc_end; 
+                        $_SESSION['save_desc'] = $auc_desc;
+                        $_SESSION['save_tempCat'] = $temp_cat;
+                        $_SESSION['save_tempUt'] = $temp_ut;
+                        $_SESSION['save_tempLayout'] = $temp_layout;
+                        $_SESSION['save_tempDoc'] = $temp_doc;
+                        $tempZipError = true;
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                    }
+                    if ($template_zip['size'] > 300000000) {
+                        $_SESSION['save_price'] = $auc_price; 
+                        $_SESSION['save_title'] = $auc_title; 
+                        $_SESSION['save_end'] = $auc_end; 
+                        $_SESSION['save_desc'] = $auc_desc;
+                        $_SESSION['save_tempCat'] = $temp_cat;
+                        $_SESSION['save_tempUt'] = $temp_ut;
+                        $_SESSION['save_tempLayout'] = $temp_layout;
+                        $_SESSION['save_tempDoc'] = $temp_doc;
+                        $tempZipError = true;
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                    }
+                    if ($imageFileType != "zip") {
+                        
+                        $_SESSION['save_price'] = $auc_price; 
+                        $_SESSION['save_title'] = $auc_title; 
+                        $_SESSION['save_end'] = $auc_end; 
+                        $_SESSION['save_desc'] = $auc_desc;
+                        $_SESSION['save_tempCat'] = $temp_cat;
+                        $_SESSION['save_tempUt'] = $temp_ut;
+                        $_SESSION['save_tempLayout'] = $temp_layout;
+                        $_SESSION['save_tempDoc'] = $temp_doc;
+                        $tempZipError = true;
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                    }
+                    $source_temp = $template_zip["tmp_name"];
+                }
+
+                if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error || $photo4Error || $photo5Error || $tempCatError || $tempUtError || $tempLayoutError || $tempDocError || $tempZipError){
+                    header("location:myauctions.php"); die();
+                }else{
+                    if (is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
+                        $target_dir_temp = "img/products/templates/$basename_temp";
+                        if(move_uploaded_file($source_temp, $target_dir_temp) === true){
+                            $trg = dirname(__FILE__) . "/img/products/templates/template_" . $unique_id.".zip"; 
+                            $r = openZip($trg); 
+                        }else{
+                            die("gabim");
+                        }
+                    }
+                    //get the name of the folder and the basename -> e 1-ra per preview e 2-ta per download
+                    $imgt = explode(".", $temp_name);
+                    $img_temp = $imgt[0] . "|" . $basename_temp;
+
+                    if (is_uploaded_file($_FILES['auc_photo1']['tmp_name'])) {
+                        $target_dir_1 = "img/products/templates/$basename_1";
+                        move_uploaded_file($source_1, $target_dir_1);
+                    }
+                    if(is_uploaded_file($_FILES['auc_photo2']['tmp_name'])) {
+                        $target_dir_2 = "img/products/templates/$basename_2";
+                        move_uploaded_file($source_2, $target_dir_2);
+                    }
+                    if (is_uploaded_file($_FILES['auc_photo3']['tmp_name'])) {
+                        $target_dir_3 = "img/products/templates/$basename_3";
+                        move_uploaded_file($source_3, $target_dir_3);
+                    } 
+                    if (is_uploaded_file($_FILES['auc_photo4']['tmp_name'])) {
+                        $target_dir_4 = "img/products/templates/$basename_4";
+                        move_uploaded_file($source_4, $target_dir_4);
+                    } 
+                    if (is_uploaded_file($_FILES['auc_photo5']['tmp_name'])) {
+                        $target_dir_5 = "img/products/templates/$basename_5";
+                        move_uploaded_file($source_5, $target_dir_5);
+                    } 
+                    $photo_1_base = $basename_1; $photo_2_base = "|" . $basename_2; $photo_3_base = "|" . $basename_3; $photo_4_base = "|" . $basename_4; $photo_5_base = "|" . $basename_5;
+
+                    $prod_img = "";
+                    if(empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base;
+                    }elseif(!empty($basename_4) && empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base;
+                    }elseif(empty($basename_4) && !empty($basename_5)){
+                        $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_5_base;
+                    }else { $prod_img = $photo_1_base . $photo_2_base . $photo_3_base . $photo_4_base . $photo_5_base;
+                    }
+
+                    //INSERT PRODUKTIN
+                    $insert_temp_prod = prep_stmt("INSERT INTO products(prod_unique_id, prod_img, prod_title, prod_price, prod_from, prod_to, prod_description,cat_id,user_id,prod_isApproved) VALUES(?,?,?,?,?,?,?,?,?,?)", array($unique_id,$prod_img,$auc_title, $auc_price, $start_time, $end_time,$auc_desc,$selected_cat_id,user_id(),$isApproved), "sssssssiii");
+
+                    $insert_temp_spec = prep_stmt("INSERT INTO prod_specifications(wt_template,wt_cat,wt_ut,wt_lo,wt_doc,prod_unique_id) VALUES(?,?,?,?,?,?)", array($img_temp,$temp_cat, $temp_ut, $temp_layout, $temp_doc, $unique_id), "ssssss");
+
+                    if($insert_temp_prod && $insert_temp_spec){
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                    }else {
+                        $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
+                    }
+                }
             }
         }else{
             die("keqqqq");
@@ -1763,31 +1933,31 @@
                                                     <label for="" class="float-right"  >Template (.zip)</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="file" name="template_zip" class="form-control">
+                                                    <input type="file" name="template_zip"class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempZipError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" >
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right"  >Kategoria e templates..</label> 
+                                                    <label for="" class="float-right">Kategoria e templates..</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates..">
+                                                <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempCatError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_tempCat'])){ echo "value='".$_SESSION['save_tempCat']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right"  >Teknologjitë e përdorura:</label> 
+                                                    <label for="" class="float-right">Teknologjitë e përdorura:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <input type="text" name="template_used_tech" class="form-control"   placeholder="Teknologjitë e përdorura..">
+                                                    <input type="text" name="template_used_tech" class="form-control" placeholder="Teknologjitë e përdorura.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempUtError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_tempUt'])){ echo "value='".$_SESSION['save_tempUt']."'"; } ?>>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-4 col-form-label">
-                                                    <label for="" class="float-right"  >Layouti:</label> 
+                                                    <label for="" class="float-right">Layouti:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="template_layout"  >
+                                                    <select class="form-control" name="template_layout" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempLayoutError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
                                                         <option value=""> Layotui.. </option>
-                                                        <option value="Responsivë"> Responsivë</option>
-                                                        <option value="Jo resposivë"> Jo resposivë</option>
+                                                        <option value="Responsivë" <?php if(isset($_SESSION['save_tempLayout'])){ if($_SESSION['save_tempLayout'] == "Responsivë"){ echo "selected"; } } ?>> Responsivë</option>
+                                                        <option value="Jo resposivë" <?php if(isset($_SESSION['save_tempLayout'])){ if($_SESSION['save_tempLayout'] == "Jo resposivë"){ echo "selected"; } } ?>> Jo resposivë</option>
                                                     </select>
                                                 </div>
                                                 <div class="divider"></div>
@@ -1795,13 +1965,15 @@
                                                     <label for="" class="float-right"  >Dokumentimi:</label> 
                                                 </div>
                                                 <div class="col-6">
-                                                    <select class="form-control" name="template_documented"  >
+                                                    <select class="form-control" name="template_documented" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempDocError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>">
                                                         <option value=""> Dokumentimi.. </option>
-                                                        <option value="I dokumentuar"> I dokumentuar</option>
-                                                        <option value="Jo i dokumentuar"> Jo i dokumentuar</option>
+                                                        <option value="I dokumentuar" <?php if(isset($_SESSION['save_tempDoc'])){ if($_SESSION['save_tempDoc'] == "I dokumentuar"){ echo "selected"; } } ?>> I dokumentuar</option>
+                                                        <option value="Jo i dokumentuar"  <?php if(isset($_SESSION['save_tempDoc'])){ if($_SESSION['save_tempDoc'] == "Jo i dokumentuar"){ echo "selected"; } } ?>> Jo i dokumentuar</option>
                                                     </select>
                                                 </div>
                                             </div>
+                                            <?php unset($_SESSION['add_prod_errors']['tempCatError']);unset($_SESSION['add_prod_errors']['tempUtError']);unset($_SESSION['add_prod_errors']['tempLayoutError']);unset($_SESSION['add_prod_errors']['tempDocError']);unset($_SESSION['add_prod_errors']['tempZipError']);?>
+                                            <?php unset($_SESSION['save_tempUt']);unset($_SESSION['save_tempDoc']);unset($_SESSION['save_tempLayout']);unset($_SESSION['save_tempCat']); ?>
                                         </div>
                                         <div class="col-12 pl-1" id="btn_spec" style="display:none;">
                                             <div class="text-center btn_center" style="margin-bottom:15px;">

@@ -8,7 +8,31 @@
         }else{
             die("keq");
         }
+        if(isset($_GET['down'])){
+            $filename = $_GET['down'];
+            //Check the file exists or not
+            if (file_exists("img/products/templates/" . $filename)) {
+                //Define header information
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header("Cache-Control: no-cache, must-revalidate");
+                header("Expires: 0");
+                header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+                header('Content-Length: '.filesize($filename));
+                header('Pragma: public');
 
+                //Clear system output buffer
+                flush();
+                header ("location:details.php?prod_details=".$select_product['prod_id']);
+                //Read the size of the file
+                readfile($filename);
+
+                //Terminate from the script
+                
+            } else {
+                die ("File does not exist.");
+            }
+        } 
         if(strtotime(date("Y-m-d h:i:s",strtotime($select_product['prod_from']))) > time()){
             header("location:index.php");
         }
@@ -69,6 +93,12 @@
                 $spec_7 = $sel_prod_spec['car_tra'];
                 $spec_8 = $sel_prod_spec['car_fu'];
                 $spec_9 = $sel_prod_spec['car_cub'];
+            }else if($cat_id == 7){
+                $spec_1 = $sel_prod_spec['wt_template'];
+                $spec_2 = $sel_prod_spec['wt_cat'];
+                $spec_3 = $sel_prod_spec['wt_ut'];
+                $spec_4 = $sel_prod_spec['wt_lo'];
+                $spec_5 = $sel_prod_spec['wt_doc'];
             }
             
         }
@@ -203,22 +233,27 @@
                                             <td><strong>Viti i prodhimit</strong></td>
                                             <td><?php echo $spec_4 ?></td>
                                         </tr>
-                                        <?php }  else if($car_id == 7){ ?>
+                                        <?php }  else if($cat_id == 7){ ?>
                                             <tr>
                                                 <td><strong>Kategoria</strong></td>
-                                                <td><?php echo $spec_1 ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Teknologjitë e përdorura</strong></td>
                                                 <td><?php echo $spec_2 ?></td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Layout-i</strong></td>
+                                                <td><strong>Teknologjitë e përdorura</strong></td>
                                                 <td><?php echo $spec_3 ?></td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Dukomentimi</strong></td>
+                                                <td><strong>Layout-i</strong></td>
                                                 <td><?php echo $spec_4 ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Dukumentimi</strong></td>
+                                                <td><?php echo $spec_5 ?></td>
+                                            </tr>
+                                            <tr>
+                                                <?php $prev_down = explode("|", $spec_1); ?>
+                                                <td><strong>Shiko template-n</strong></td>
+                                                <td><a class="btn_1" role="button" href="templates/<?php echo $prev_down[0]; ?>" style="padding:5px 35px" target="_blank"> SHIKO  </a></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
@@ -227,6 +262,15 @@
                             <!-- /table-responsive -->
                         </div>
                     </p>
+                    <?php if((strtotime($select_product['prod_to'])) <= time()){
+                            if($_SESSION['user']['username'] == $winner_username){
+                    ?>
+                    <p>
+                        <div clss="col-12"> 
+                            <a href="details.php?prod_details=<?php echo $select_product['prod_id'];?>&down=<?php echo $prev_down[1];?>" class="btn_1" style="display: block; margin: 0 auto;"> SHKARKO </a>
+                        </div>
+                    </p>
+                    <?php } }?>
                     
                     <div class="row">
                     <script type="text/javascript">
@@ -323,7 +367,7 @@
                                     <div class="col-lg-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" >
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled' style='font-weight:800; color:green;'"; }?>>
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>
@@ -332,7 +376,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 float-right" >
                                         <div class="btn_add_to_cart">
-                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>">
+                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
                                             <?php 
                                                 if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
                                                 }elseif($_SESSION['user']['status'] == CONFIRMED){
@@ -350,6 +394,7 @@
                                         var product_id = <?php echo  $prod_details; ?>;   
                                         var date_to = <?php echo strtotime($select_product['prod_to']); ?>;
                                         function countdownTo00() { 
+                                            var timer;
                                         //shiko count down, kur bie ne 00 bej disable inputin dhe butonin
                                             $.ajax({
                                                 url: "countDownDown.php",
@@ -373,6 +418,8 @@
                                                         $("#main_count_down").html("<div><h4 style='color:red; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt, rrjedhimisht produkti nuk është shitur! </i> ")
                                                     }
                                                     else if(response == "down_to_0"){
+                                                        clearTimeout(timer);
+                                                        console.log(response);
                                                         $('#get_price').css("color", "green");
                                                         $('#get_price').css("font-weight", "800");
                                                         $('#get_price').attr("disabled",true);
@@ -382,19 +429,18 @@
 
                                                         $("#count_down").html("<i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+ winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ");
                                                         $('#main_count_down').css("background-color", "#ddd");
-                                                        $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ")
+                                                        $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ");
+                                                        //window.setTimeout(function(){location.reload()},3000)
+                                                    }else{
+                                                        timer = setTimeout(countdownTo00, 1000);
                                                     }
-                                                    else{
-                                                        console.log("bbb")
-                                                    }
-                                                    setTimeout(countdownTo00, 1000);
                                                 },
                                                 error: function(xhr) {
                                                     console.log("ERROR!");
                                                 }
                                             });
                                         }
-                                        setTimeout(countdownTo00, 1000);
+                                       var time = setTimeout(countdownTo00, 1000);
                                     </script>
                             </div>
                         </div>
@@ -637,7 +683,24 @@
                                                         <td><strong>Kubikazha </strong></td>
                                                         <td><?php echo $spec_9;?></td>
                                                     </tr>  
-                                                <?php } ?>
+                                                <?php }else if($cat_id == 7){ ?>
+                                                    <tr>
+                                                        <td><strong>Kategoria</strong></td>
+                                                        <td><?php echo $spec_2;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Teknologjitë e përdorura</strong></td>
+                                                        <td><?php echo $spec_3;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Layout-i</strong></td>
+                                                        <td><?php echo $spec_4;?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Dokumentimi</strong></td>
+                                                        <td><?php echo $spec_5;?></td>
+                                                    </tr>
+                                                <?php }?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -663,7 +726,7 @@
         </div>
         <div class="owl-carousel owl-theme products_carousel">
             <?php
-                // $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC", 0, "i");   
+                // $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC", 1, "i");   
                 // while($sel_latest_prod = mysqli_fetch_array($select_latest))
                 // {
                 //         $latest_prod_img = explode("|", $sel_latest_prod['prod_img'], -1);
@@ -686,7 +749,7 @@
                 </div>
                 <!-- /grid_item -->
             </div>
-            <?php //} ?>
+            <?php// } ?>
             <!-- /item -->
         </div>
         <!-- /products_carousel -->

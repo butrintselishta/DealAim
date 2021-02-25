@@ -5,7 +5,7 @@
 		$cat_id = $_GET['sub_cat'];
 		//change isAPPROVED TO 1
 		$today = date("Y-m-d H:i:s");
-		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved = ? AND prod_from <= ?", array($cat_id,1,$today), "iis");
+		$select_all_prod = prep_stmt("SELECT * FROM products WHERE cat_id = ? AND prod_isApproved = ? AND prod_from <= ? AND prod_to >= ?", array($cat_id,1,$today, $today), "iiss");
 		// $select_all_prod_spec = prep_stmt("SELECT * FROM prod_specifications WHERE cat_id = ?", $cat_id,"i");
 
 		$cat_ttl = prep_stmt("SELECT cat_title FROM categories WHERE cat_id = ?", $cat_id, "i");
@@ -44,13 +44,13 @@
 				if(mysqli_num_rows($select_all_prod))
 				{
 					while($row_prod =mysqli_fetch_array($select_all_prod)){
-						$prod_pics = explode("|", $row_prod['prod_img']);
+						$prod_pics = explode("|", $row_prod['prod_img']);//die(var_dump($prod_pics));
 						$today = time();
 						$prod_sts = "";
 						
 						$sel_count_offers = prep_stmt("SELECT count(prod_id) FROM prod_offers WHERE offer_time >= now() - INTERVAL 24 HOUR and prod_id=?", $row_prod['prod_id'], 'i');
 						$count_offers = mysqli_fetch_array($sel_count_offers);
-						if($count_offers[0] >= 3 && (strtotime($row_prod['prod_to'])) >= $today){
+						if($count_offers[0] >= 5 && (strtotime($row_prod['prod_to'])) >= $today){
 							$prod_sts = 'hot';
 						}else if(($today - strtotime($row_prod['prod_from'])) < 86400){
 							$prod_sts = "new";
@@ -73,7 +73,7 @@
 						<figure>
 							<span class='ribbon <?php echo $prod_sts; ?>'> <?php if($prod_sts == 'hot'){ echo "E NXEHTË 🔥";}elseif($prod_sts == 'new'){ echo "E RE";}else if($prod_sts == 'off'){echo "NË PËRFUNDIM";}else if($prod_sts == 'closed'){echo "E MBYLLUR";} else{ if($prod_sts == 'opened'){echo "E HAPUR";}}?></span>
 							<a href="details.php?prod_details=<?php echo $row_prod['prod_id'];?>">
-								<img class="img-fluid lazy" src="img/products/<?php if($cat_id == 2){echo "laptops";}else if($cat_id==3){echo "phones";}else if($cat_id == 5){ echo "cars";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
+								<img class="img-fluid lazy" src="img/products/<?php if($cat_id == 2){echo "laptops";}else if($cat_id==3){echo "phones";}else if($cat_id == 5){ echo "cars";}else if($cat_id == 7){ echo "templates";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
 							</a>
 							<div data-countdown="<?php echo $row_prod['prod_to']; ?>" class="countdown"></div>
 						</figure>

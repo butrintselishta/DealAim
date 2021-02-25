@@ -109,7 +109,7 @@
         a.btn__1:disabled,
         .btn__1:disabled,
         .btn__1:hover:disabled{
-            background-color: #035af9;
+            background-color: #ddd;
             color: #ff0d0d !important
         }
         /* The actual popup */

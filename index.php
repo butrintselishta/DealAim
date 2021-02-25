@@ -1,5 +1,22 @@
 ﻿<?php 
 require "db.php";
+ 
+// function openZip($file_to_open) {
+//     global $target;
+     
+//     $zip = new ZipArchive();
+//     $x = $zip->open($file_to_open);
+//     if($x === true) {
+//         $zip->extractTo($target);
+//         $zip->close();
+         
+//         unlink($file_to_open);
+//     } else {
+//         die("There was a problem. Please try again!");
+//     }
+// }
+// $trg = "/img/products/templates/allia.rar";
+// openZip();
 if(isset($_SESSION['user_unconfirmed'])){
     header("location:signin.php");die();
 }

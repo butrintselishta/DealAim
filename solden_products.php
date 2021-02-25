@@ -1,7 +1,7 @@
 <?php 
     require_once "db.php";
 
-    $all_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from, prod_to,prod_description,username,cat_id,prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE prod_isApproved = ?", 3, 'i');
+    $all_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from, prod_to,prod_description,username,cat_title,prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? order by prod_id DESC", 3, 'i');
     
 ?>
 <?php require "header.php"; ?>
@@ -56,10 +56,11 @@
 						<figure>
                             <span class='ribbon closed'> E MBYLLUR </span>
 							<a href="details.php?prod_details=<?php echo $row_prod['prod_id']; ?>">
-                            <img class="img-fluid lazy" src="img/products/<?php if($row_prod['cat_id'] == 2){echo "laptops";}else if($row_prod['cat_id']==3){echo "phones";}else if($row_prod['cat_id'] == 5){ echo "cars";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
+                            <img class="img-fluid lazy" src="img/products/<?php if($row_prod['cat_title'] == "Laptop"){echo "laptops";}else if($row_prod['cat_title']=="Telefon"){echo "phones";}else if($row_prod['cat_title'] == "Vetura"){ echo "cars";}else if($row_prod['cat_title'] == "Template"){ echo "templates";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
 							</a>
 						</figure>
 						<a href="details.php?prod_details=<?php echo $row_prod['prod_id'];?>">
+							<small style="color:black;">Kategoria: </small><h3 style="color:darkslategray"><?php echo $row_prod['cat_title']; ?></h3><br/>
 							<h3><?php echo $row_prod['prod_title'] ;?></h3>
 						</a>
                         <div class="price_box" style="padding: .5rem 1.1rem .5rem 1.1rem;">
