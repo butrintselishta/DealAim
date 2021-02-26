@@ -364,7 +364,7 @@
                         </script>
                         <div class="col-lg-12 col-md-6">
                             <div class="price_main">
-                                    <div class="col-lg-6 col-md-6  float-left">
+                                    <div class="col-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
                                                 <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled' style='font-weight:800; color:green;'"; }?>>
@@ -374,8 +374,8 @@
                                             <p id="statusi" style="margin-top:0;"> </p> 
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 float-right" >
-                                        <div class="btn_add_to_cart">
+                                    <div class="col-6 col-md-6 float-right" >
+                                        <div class="btn_add_to_cart float-left">
                                             <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
                                             <?php 
                                                 if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 

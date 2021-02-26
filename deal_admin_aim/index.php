@@ -72,14 +72,14 @@ require_once '../db.php';
 							</div>
                          <?php } unset($_SESSION['data_changed']);?>
                         <h3 class="heading"><i class="fa fa-square"></i>Produkte në pritje!</h3>
-                        <div class="table-responsive">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
                         
                             <?php 
                                 $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_from FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 0, 'i');
                                 if(mysqli_num_rows($sel_prod) > 0){
                                     while($row_prod = mysqli_fetch_array($sel_prod)){
                             ?>
-                            <table class="table table-striped no-margin">
+                            <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -95,7 +95,7 @@ require_once '../db.php';
                                 <tbody>
                                     <tr>
                                         <td><?php echo $row_prod['prod_id']; ?></td>
-                                        <td><b><?php echo $row_prod['username']; ?></b></td>
+                                        <td><b style=' color:#f0ad4e;'><?php echo $row_prod['username']; ?></b></td>
                                         <td><?php echo $row_prod['cat_title']; ?></td>
                                         <td><?php echo $row_prod['prod_title']; ?></td>
                                         <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
@@ -120,8 +120,8 @@ require_once '../db.php';
                 <div class="col-md-12">
                     <div class="panel-content">
                         <h3 class="heading"><i class="fa fa-square"></i>Produktet të konfirmuara </h3>
-                        <div class="table-responsive">
-                            <table class="table table-striped no-margin">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                          <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" style="overflow:scroll;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -142,7 +142,7 @@ require_once '../db.php';
                                 ?>
                                     <tr>
                                         <td><?php echo $row_prod['prod_id']; ?></td>
-                                        <td><b><?php echo $row_prod['username']; ?></b></td>
+                                        <td><b style=' color:#f0ad4e;'><?php echo $row_prod['username']; ?></b></td>
                                         <td><?php echo $row_prod['cat_title']; ?></td>
                                         <td><?php echo $row_prod['prod_title']; ?></td>
                                         <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
@@ -386,6 +386,8 @@ require_once '../db.php';
 <script src="assets/vendor/chartist-plugin-legend-latest/chartist-plugin-legend.js"></script>
 <script src="assets/vendor/toastr/toastr.js"></script>
 <script src="assets/scripts/common.js"></script>
+<!-- MDBootstrap Datatables  -->
+
 <script>
     $(function() {
 

@@ -28,9 +28,17 @@
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="../img/favicon.ico">
+	<link rel="icon" type="image/png" sizes="96x96" href="../img/logo/logo_circle.ico">
 
     <style>
+	.table-wrapper-scroll-y {
+	max-height: 50rem;
+	overflow: auto;
+	display:block;
+	}
+	.table-striped {
+		background: #F3F5F6;
+	}
     .img-res{
         padding: 0 3px;
     }
@@ -68,8 +76,8 @@
 					<button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu"></i></button>
 				</div>
 				<!-- logo -->
-				<div class="navbar-brand" style="padding:8px 15px;">
-					<a href="index.html"><img src="../img/logo_black.svg"  class="img-responsive"></a>
+				<div class="navbar-brand" style="padding:8px 15px; max-width:15%;">
+					<a href="index.html"><img src="../img/logo/logo_dealaim_black.png"  class="img-responsive"></a>
 				</div>
 				<!-- end logo -->
 				<div class="navbar-right">

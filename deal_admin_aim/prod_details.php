@@ -64,6 +64,12 @@ require_once '../db.php';
                 $spec_7 = $spec_fetch['car_tra'];
                 $spec_8 = $spec_fetch['car_fu'];
                 $spec_9 = $spec_fetch['car_cub'];
+            }else if($prod_cat_title == "Template"){
+                $spec_1 = $spec_fetch['wt_template'];
+                $spec_2 = $spec_fetch['wt_cat'];
+                $spec_3 = $spec_fetch['wt_ut'];
+                $spec_4 = $spec_fetch['wt_lo'];
+                $spec_5 = $spec_fetch['wt_doc'];
             }
         }
         
@@ -75,7 +81,6 @@ require_once '../db.php';
             $prod_to_pos =  date("Y-m-d h:i:s", strtotime($_POST['prod_to']));  
             $prod_desc_pos = $_POST['prod_desc']; 
             $prod_isApproved_pos = $_POST['confirmation'];
-           
             $today = date("Y-m-d H:i:s");
             $prod_from_upd = ""; $prod_to_upd = "";
             if($prod_from_pos < $today){
@@ -105,8 +110,18 @@ require_once '../db.php';
                         $_SESSION['data_not_changed'] = "";
                         header("location:".$_SERVER['HTTP_REFERER']); die();
                     }else{
-                        $_SESSION['data_changed'] = $prod_isApproved_pos;
-                        header("location:index.php"); die();
+                        if($prod_isApproved_pos == 1){
+                            if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }else{
+                                $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                header("location:index.php"); die();
+                            }
+                        }else{
+                            $_SESSION['data_changed'] = $prod_isApproved_pos;
+                            header("location:index.php"); die();
+                        }
                     }
                 }
                 else{
@@ -116,8 +131,18 @@ require_once '../db.php';
                             $_SESSION['data_not_changed'] = "";
                             header("location:".$_SERVER['HTTP_REFERER']); die();
                         }else{
-                            $_SESSION['data_changed'] = $prod_isApproved_pos;
-                            header("location:index.php"); die();
+                            if($prod_isApproved_pos == 1){
+                                if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }else{
+                                    $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                    header("location:index.php"); die();
+                                }
+                            }else{
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }
                         }
                     }else{
                         if(!prep_stmt("UPDATE products SET prod_title=?, prod_price=?, prod_from = ?, prod_to = ?, prod_description = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_title_pos, $prod_price_pos, $prod_from_upd, $prod_to_upd,$prod_desc_pos, $prod_isApproved_pos, $unique_id), "sssssis")){
@@ -128,8 +153,18 @@ require_once '../db.php';
                                 $_SESSION['data_not_changed'] = "";
                                 header("location:".$_SERVER['HTTP_REFERER']); die();
                             }else{
-                                $_SESSION['data_changed'] = $prod_isApproved_pos;
-                                header("location:index.php"); die();
+                                if($prod_isApproved_pos == 1){
+                                    if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                        $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                        header("location:index.php"); die();
+                                    }else{
+                                        $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                        header("location:index.php"); die();
+                                    }
+                                }else{
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }
                             }
                         }
                     }
@@ -153,8 +188,18 @@ require_once '../db.php';
                         $_SESSION['data_not_changed'] = "";
                         header("location:".$_SERVER['HTTP_REFERER']); die();
                     }else{
-                        $_SESSION['data_changed'] = $prod_isApproved_pos;
-                        header("location:index.php"); die();
+                        if($prod_isApproved_pos == 1){
+                            if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }else{
+                                $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                header("location:index.php"); die();
+                            }
+                        }else{
+                            $_SESSION['data_changed'] = $prod_isApproved_pos;
+                            header("location:index.php"); die();
+                        }
                     }
                 }
                 else{
@@ -164,8 +209,18 @@ require_once '../db.php';
                             $_SESSION['data_not_changed'] = "";
                             header("location:".$_SERVER['HTTP_REFERER']); die();
                         }else{
-                            $_SESSION['data_changed'] = $prod_isApproved_pos;
-                            header("location:index.php"); die();
+                            if($prod_isApproved_pos == 1){
+                                if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }else{
+                                    $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                    header("location:index.php"); die();
+                                }
+                            }else{
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }
                         }
                     }else{
                         if(!prep_stmt("UPDATE products SET prod_title=?, prod_price=?, prod_from = ?, prod_to = ?, prod_description = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_title_pos, $prod_price_pos, $prod_from_upd, $prod_to_upd,$prod_desc_pos, $prod_isApproved_pos, $unique_id), "sssssis")){
@@ -176,8 +231,18 @@ require_once '../db.php';
                                 $_SESSION['data_not_changed'] = "";
                                 header("location:".$_SERVER['HTTP_REFERER']); die();
                             }else{
-                                $_SESSION['data_changed'] = $prod_isApproved_pos;
-                                header("location:index.php"); die();
+                                if($prod_isApproved_pos == 1){
+                                    if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                        $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                        header("location:index.php"); die();
+                                    }else{
+                                        $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                        header("location:index.php"); die();
+                                    }
+                                }else{
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }
                             }
                         }
                     }
@@ -203,10 +268,15 @@ require_once '../db.php';
                     }else{
                         if($prod_isApproved_pos == 1){
                             if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
-                                die("aass");
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
                             }else{
-                                die("sdsf");
+                                $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                header("location:index.php"); die();
                             }
+                        }else{
+                            $_SESSION['data_changed'] = $prod_isApproved_pos;
+                            header("location:index.php"); die();
                         }
                     }
                 }
@@ -218,11 +288,21 @@ require_once '../db.php';
                             $_SESSION['data_not_changed'] = "";
                             header("location:".$_SERVER['HTTP_REFERER']); die();
                         }else{
-                            $_SESSION['data_changed'] = $prod_isApproved_pos;
-                            header("location:index.php"); die();
+                            if($prod_isApproved_pos == 1){
+                                if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }else{
+                                    $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                    header("location:index.php"); die();
+                                }
+                            }else{
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }
                         }
-                    }else
-                    { 
+                    }
+                    else{ 
                         if(!prep_stmt("UPDATE products SET prod_title=?, prod_price=?, prod_from = ?, prod_to = ?, prod_description = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_title_pos, $prod_price_pos, $prod_from_upd, $prod_to_upd,$prod_desc_pos, $prod_isApproved_pos, $unique_id), "sssssis"))
                         {
                             $_SESSION['data_not_changed'] = "";
@@ -232,8 +312,92 @@ require_once '../db.php';
                                 $_SESSION['data_not_changed'] = "";
                                 header("location:".$_SERVER['HTTP_REFERER']); die();
                             }else{
+                                if($prod_isApproved_pos == 1){
+                                    if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                        $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                        header("location:index.php"); die();
+                                    }else{
+                                        $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                        header("location:index.php"); die();
+                                    }
+                                }else{
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if($prod_cat_title == "Template"){
+                $specific_2 = $_POST['wt_cat'];
+                $specific_3= $_POST['wt_ut'];
+                $specific_4 = $_POST['wt_lo'];
+                $specific_5 = $_POST['wt_doc'];
+
+                if($prod_title == $prod_title_pos && $prod_price == $prod_price_pos && $prod_desc == $prod_desc_pos && $spec_2 == $specific_2 && $spec_3 == $specific_3 && $spec_4 == $specific_4 && $spec_5 == $specific_5)
+                {
+                    if(!prep_stmt("UPDATE products SET prod_from = ?, prod_to = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_from_upd, $prod_to_upd, $prod_isApproved_pos, $unique_id), "ssis")){
+                        $_SESSION['data_not_changed'] = "";
+                        header("location:".$_SERVER['HTTP_REFERER']); die();
+                    }else{
+                        if($prod_isApproved_pos == 1){
+                            if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
                                 $_SESSION['data_changed'] = $prod_isApproved_pos;
                                 header("location:index.php"); die();
+                            }else{
+                                $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; header("location:index.php"); die();
+                            }
+                        }else{
+                            $_SESSION['data_changed'] = $prod_isApproved_pos;
+                            header("location:index.php"); die();
+                        }
+                    }
+                }
+                
+                else{
+                    if($spec_2 == $specific_2 && $spec_3 == $specific_3 && $spec_4 == $specific_4 && $spec_5 == $specific_5)
+                    {   
+                        if(!prep_stmt("UPDATE products SET prod_title=?, prod_price=?, prod_from = ?, prod_to = ?, prod_description = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_title_pos, $prod_price_pos, $prod_from_upd, $prod_to_upd,$prod_desc_pos, $prod_isApproved_pos, $unique_id), "sssssis")){
+                            $_SESSION['data_not_changed'] = "";
+                            header("location:".$_SERVER['HTTP_REFERER']); die();
+                        }else{
+                            if($prod_isApproved_pos == 1){
+                                if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }else{
+                                    $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                    header("location:index.php"); die();
+                                }
+                            }else{
+                                $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                header("location:index.php"); die();
+                            }
+                        }
+                    }
+                    else{ 
+                        if(!prep_stmt("UPDATE products SET prod_title=?, prod_price=?, prod_from = ?, prod_to = ?, prod_description = ?, prod_isApproved = ? WHERE prod_unique_id = ?", array($prod_title_pos, $prod_price_pos, $prod_from_upd, $prod_to_upd,$prod_desc_pos, $prod_isApproved_pos, $unique_id), "sssssis"))
+                        {
+                            $_SESSION['data_not_changed'] = "";
+                            header("location:".$_SERVER['HTTP_REFERER']); die();
+                        }else{
+                            if(!prep_stmt("UPDATE prod_specifications SET wt_cat=?,wt_ut=?,wt_lo=?,wt_doc=? WHERE prod_unique_id=?", array($specific_2, $specific_3, $specific_4, $specific_5, $unique_id), "sssss")){
+                                $_SESSION['data_not_changed'] = "";
+                                header("location:".$_SERVER['HTTP_REFERER']); die();
+                            }else{
+                                if($prod_isApproved_pos == 1){
+                                    if(!mysqli_query(db(), "CREATE EVENT prod_{$prod_id}_isSold ON SCHEDULE AT '$prod_to_upd' DO UPDATE products SET prod_isApproved=3 WHERE prod_id = $prod_id")){
+                                        $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                        header("location:index.php"); die();
+                                    }else{
+                                        $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim me krijimin e eventit, ju lutem kthehuni shiko në databazë! </p>"; 
+                                        header("location:index.php"); die();
+                                    }
+                                }else{
+                                    $_SESSION['data_changed'] = $prod_isApproved_pos;
+                                    header("location:index.php"); die();
+                                }
                             }
                         }
                     }
@@ -310,6 +474,10 @@ require_once '../db.php';
                             $category = "phones";
                         }else if($prod_cat_title == "Vetura"){
                             $category = "cars";
+                        }else if($prod_cat_title == "Template"){
+                            $category = "templates";
+                        }else {
+                            $category = "";
                         }
 
                         if(count($pics) == 3){
@@ -556,6 +724,41 @@ require_once '../db.php';
                             <input type="text" id="text-input1" class="form-control" name="car_cub" value="<?php echo $spec_9; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
+                    <?php } else if($prod_cat_title == "Template"){ 
+                                $temp_down_prew = explode("|", $spec_1);
+                                $temp_prew = $temp_down_prew[0];
+                                $temp_down = $temp_down_prew[1];    
+                    ?>
+                    <div class="col-md-12">
+                        <div class="form-group text-center" >
+                            <label for="text-input1">Shiko template-n</label><br/>
+                            <a class="btn-sm btn btn-warning" href="../templates/<?php echo $temp_prew; ?>" style="width:100%;">SHIKO </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Kategoria e template-s</label>
+                            <input type="text" id="text-input1" class="form-control" name="wt_cat" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Teknologjitë e përdorura</label>
+                            <input type="text" id="text-input1" class="form-control" name="wt_ut" value="<?php echo $spec_3; ?>" required data-parsley-minlength="1">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Responsiviteti </label>
+                            <input type="text" id="text-input1" class="form-control" name="wt_lo" value="<?php echo $spec_4; ?>" required data-parsley-minlength="1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Dokumentimi</label>
+                            <input type="text" id="text-input1" class="form-control" name="wt_doc" value="<?php echo $spec_5; ?>" required data-parsley-minlength="1">
+                        </div>
+                    </div> 
                     <?php } ?>
                     <div class="col-md-12">
                         <div class="form-group text-center">
