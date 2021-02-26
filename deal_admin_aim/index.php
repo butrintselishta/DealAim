@@ -1,6 +1,7 @@
 <?php 
 require_once '../db.php'; 
-    if(!isset($_SESSION['logged']) && $_SESSION['user']['status'] !== MODERATOR || $_SESSION['user']['status'] !== ADMIN){
+
+    if(!isset($_SESSION['logged']) && $_SESSION['user']['status'] !== MODERATOR && $_SESSION['user']['status'] !== ADMIN){
         header("location:../index.php");
     }
 
@@ -51,6 +52,10 @@ require_once '../db.php';
             <ul id="main-menu" class="metismenu">
 				<li class="active"><a href="index.php"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
                 <li class=""><a href="myprofile.php"><i class="lnr lnr-user"></i> <span>Profili im</span></a></li>
+                <?php if($_SESSION['user']['status'] == ADMIN) { ?>
+                    <li><a href="finances.php"><i class="lnr lnr-chart-bars"></i> <span>Financat</span></a></li>
+                    <li><a href="users.php"><i class="lnr lnr-users"></i> <span>Përdoruesit</span></a></li>
+                <?php } ?>
             </ul>
         </nav>
     </div>
@@ -73,12 +78,6 @@ require_once '../db.php';
                          <?php } unset($_SESSION['data_changed']);?>
                         <h3 class="heading"><i class="fa fa-square"></i>Produkte në pritje!</h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        
-                            <?php 
-                                $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_from FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 0, 'i');
-                                if(mysqli_num_rows($sel_prod) > 0){
-                                    while($row_prod = mysqli_fetch_array($sel_prod)){
-                            ?>
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                     <tr>
@@ -92,7 +91,12 @@ require_once '../db.php';
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody>  
+                                    <?php 
+                                        $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_from FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 0, 'i');
+                                        if(mysqli_num_rows($sel_prod) > 0){
+                                            while($row_prod = mysqli_fetch_array($sel_prod)){
+                                    ?>
                                     <tr>
                                         <td><?php echo $row_prod['prod_id']; ?></td>
                                         <td><b style=' color:#f0ad4e;'><?php echo $row_prod['username']; ?></b></td>
@@ -103,10 +107,10 @@ require_once '../db.php';
                                         <td><span class="label label-warning">Në pritje</span></td>
                                         <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
+                                    <?php } } ?>
                                 </tbody>
                             </table>
-                            <?php } }
-                                else { ?>
+                                <?php if(mysqli_num_rows($sel_prod) == 0){ ?>
                                    <div class="alert alert-info alert-dismissible" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <i class="fa fa-info-circle"></i> Për momentin nuk ka asnjë produkt në pritje.
@@ -121,6 +125,10 @@ require_once '../db.php';
                     <div class="panel-content">
                         <h3 class="heading"><i class="fa fa-square"></i>Produktet të konfirmuara </h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <form id="navbar-search" class="navbar-form search-form">
+                            <input value="" class="form-control" placeholder="Search here..." type="text">
+                            <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </form>
                           <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" style="overflow:scroll;">
                                 <thead>
                                     <tr>

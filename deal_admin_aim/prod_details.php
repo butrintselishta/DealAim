@@ -1047,6 +1047,31 @@ require_once '../db.php';
                             <input type="text" id="text-input1" class="form-control" name="car_cub" value="<?php echo $spec_9; ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
+                    <?php }else if($prod_cat_title == "Template"){ ?>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Kategoria</label>
+                            <input type="text" id="text-input1" class="form-control" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Teknologjitë e përdorura</label>
+                            <input type="text" id="text-input1" class="form-control"  value="<?php echo $spec_3; ?>" required data-parsley-minlength="1"readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Responsiviteti </label>
+                            <input type="text" id="text-input1" class="form-control" name="car_km" value="<?php echo $spec_4; ?>" required data-parsley-minlength="1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text-input1">Dokumentacioni</label>
+                            <input type="text" id="text-input1" class="form-control" value="<?php echo $spec_5; ?>" required data-parsley-minlength="1" readonly>
+                        </div>
+                    </div> 
                     <?php } ?>
                     <div class="col-md-12">
                         <div class="form-group text-center">

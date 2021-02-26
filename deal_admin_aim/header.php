@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="assets/vendor/parsleyjs/css/parsley.css">
     <link rel="stylesheet" href="assets/vendor/summernote/summernote.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap-markdown/bootstrap-markdown.min.css">
+	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist.min.css">
+	<link rel="stylesheet" href="assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
     <link rel="stylesheet" href="../css/jquery-ui.min.css" type="text/css">
     <link rel="stylesheet" href="../css/datepicker.css" type="text/css">
 	<!-- MAIN CSS -->
@@ -88,7 +90,7 @@
 					</form>
 					<!-- end search form -->
 					<!-- navbar menu -->
-					<div id="navbar-menu">
+					<!-- <div id="navbar-menu">
 						<ul class="nav navbar-nav">
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
@@ -214,7 +216,7 @@
 								</ul>
 							</li>
 						</ul>
-					</div>
+					</div> -->
 					<!-- end navbar menu -->
 				</div>
 			</div>
