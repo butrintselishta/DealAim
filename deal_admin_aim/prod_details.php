@@ -732,13 +732,13 @@ require_once '../db.php';
                     <div class="col-md-12">
                         <div class="form-group text-center" >
                             <label for="text-input1">Shiko template-n</label><br/>
-                            <a class="btn-sm btn btn-warning" href="../templates/<?php echo $temp_prew; ?>" style="width:100%;">SHIKO </a>
+                            <a class="btn-sm btn btn-warning" target="_blank"href="../templates/<?php echo $temp_prew; ?>" style="width:100%;">SHIKO </a>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input1">Kategoria e template-s</label>
-                            <input type="text" id="text-input1" class="form-control" name="wt_cat" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1" readonly>
+                            <input type="text" id="text-input1" class="form-control" name="wt_cat" value="<?php echo $spec_2; ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -756,7 +756,7 @@ require_once '../db.php';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input1">Dokumentimi</label>
-                            <input type="text" id="text-input1" class="form-control" name="wt_doc" value="<?php echo $spec_5; ?>" required data-parsley-minlength="1">
+                            <input type="text" id="text-input1" class="form-control" name="wt_doc" value="<?php echo $spec_5; ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div> 
                     <?php } ?>

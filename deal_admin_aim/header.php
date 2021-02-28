@@ -65,6 +65,10 @@
         text-align:center;
         margin-bottom:6px;
     }       
+	#navbar-search1 {
+		margin-left: 20px;
+   		margin-right: 20px;
+	}
     </style>
 </head>
 
