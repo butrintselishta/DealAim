@@ -28,25 +28,144 @@
 		$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
 	}
 
-    if(isset($_GET['change_status'])){ 
-        $status = $_GET['change_status'];
-        $us_id = $_GET['us_id'];die(var_dump($status));
-        $user_name = $_GET['usname'];
-        $st = "";
-        if($status == 1){ 
-            $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#d9534f'> I KONFIRMUAR </b></p>";
-        }elseif($status == 100){
-            $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#481df5'> MODERATOR </b></p>";
-        }elseif($status == 101){
-            $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#4d1d7d'> ADMINISTRATOR </b></p>";
-        }elseif($status == 50){
-            $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Llogaria e $user_name është bllokuar! </p>";
+
+    // if(isset($_GET['change_status'])){ 
+    //     $status = $_GET['change_status'];
+    //     $us_id = $_GET['us_id'];die(var_dump($status));
+    //     $user_name = $_GET['usname'];
+    //     $st = "";
+    //     if($status == 1){ 
+    //         $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#d9534f'> I KONFIRMUAR </b></p>";
+    //     }elseif($status == 100){
+    //         $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#481df5'> MODERATOR </b></p>";
+    //     }elseif($status == 101){
+    //         $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi i". $user_name ." është ndryshuar në <b style='#4d1d7d'> ADMINISTRATOR </b></p>";
+    //     }elseif($status == 50){
+    //         $st = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Llogaria e $user_name është bllokuar! </p>";
+    //     }
+    //     if(!prep_stmt("UPDATE users SET status=? WHERE user_id = ?", array($status, $us_id), 'ii')){
+    //         $_SESSION['prep_stmt_error'] = ""; header("location:users.php"); die();
+    //     }else{
+    //         $_SESSION['user_data_changed'] = $st; 
+    //         header("location:users.php"); die(); 
+    //     }
+    // }
+    
+    //change user_data
+    if(isset($_POST['change_user'])){
+        $user_id = $_POST['user_id'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $fname = $_POST['fname'];
+        $lname=$_POST['lname'];
+        $email = $_POST['email'];
+        $tel_nr = $_POST['tel_nr'];
+        $adr = $_POST['address'];
+        $city = $_POST['city'];
+        $post = $_POST['postal_code'];
+        $sts = $_POST['status_ch'];
+        
+        $all_data = prep_stmt("SELECT * FROM users WHERE user_id =?", $user_id, "i");
+        if(mysqli_num_rows($all_data) > 0){
+                $row_data = mysqli_fetch_array($all_data);
         }
-        if(!prep_stmt("UPDATE users SET status=? WHERE user_id = ?", array($status, $us_id), 'ii')){
-            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM1! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:users.php"); die();
-        }else{
-            $_SESSION['user_data_changed'] =  $st; 
-            header("location:users.php"); die(); 
+        if(empty($password) && $fname == $row_data['first_name'] && $lname==$row_data['last_name'] && $email == $row_data['email'] && $tel_nr == $row_data['tel_nr'] && $adr == $row_data['address'] && $city == $row_data['city'] && $post == $row_data['postal_code'] && empty($sts)){
+            $_SESSION['no_changes']="Ju nuk keni bërë asnjë përditsim për përdoruesin: <b style='color:#f0ad4e; font-weight:800; font-size:2rem;'>$username </b>";
+            header("location:users.php");die();
+        }
+        else{
+            $pass_hash = password_hash($password, PASSWORD_ARGON2I);
+            $user_balance = 0;
+            $acc_balance = "";
+            if($sts == 50 && $row_data['user_balance'] != NULL){
+                $sel_bal = prep_stmt("SELECT * FROM bank_acc WHERE user_id = ?", $user_id, "i");
+                if(mysqli_num_rows($sel_bal) > 0){
+                    $sel_balance = mysqli_fetch_array($sel_bal);
+                }
+                $acc_balance = $row_data['user_balance'] + $sel_balance['acc_balance'];
+                $user_balance = NULL;
+            }
+        //   /  die(var_dump($user_balance));
+            $pid = NULL; $terms= NULL;
+            if(!empty($sts) && empty($password)){
+                if($sts == 50 && $row_data['user_balance'] != NULL){
+                    if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=?,pid_number=?,terms_and_conditions=?,status=?, user_balance=? WHERE user_id=?", array($fname,$lname,$email,$tel_nr,$city,$post,$adr,$pid,$terms,$sts,$user_balance,$user_id), "sssssisssisi")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id=?", array($acc_balance, $user_id), "si")){
+                            $_SESSION['data_changed_declined']="";
+                            header("location:users.php?user=".$username."#profile");die();
+                        }else{
+                            $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses. <a style='color:#fff; font-weight:800;font-size:1.8rem;'> Statusi i tij u përditsua në </a>". ($sts == 1 ? " <b style='color:#d9534f; font-size:2rem;'> I KONFIRMUAR </b>" : ($sts == 2 ? "<b style='color:#F0AC1A; font-size:2rem;'> BLERËS!</b>" :  ($sts == 50 ? "<b style='color:#a31615; font-size:2rem;'>I Ç'REGJISTRUAR</b><b style='color:#a31615'>,ky përdorues më nuk do të ketë qasje ne web aplikacion! </b>" : ($sts == 100 ? "<b style='color:#2a1f54; font-size:2rem;'> !</b>" : ($sts == 101 ? "<b style='color:#4d1d7d; font-size:2rem;'> ADMINISTRATOR!</b>" : "")))))."";
+                            header("location:users.php");die();
+                        }
+                    }
+                }else{
+                    if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=?,status=? WHERE user_id=?", array($fname,$lname,$email,$tel_nr,$city,$post,$adr,$sts,$user_id), "sssssisii")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses. <a style='color:#fff; font-weight:800;font-size:1.8rem;'> Statusi i tij u përditsua në </a>". ($sts == 1 ? " <b style='color:#d9534f; font-size:2rem;'> I KONFIRMUAR! </b>" : ($sts == 2 ? "<b style='color:#F0AC1A; font-size:2rem;'> BLERËS!</b>" : ($sts == 50 ? "<b style='color:#a31615; font-size:2rem;'>I Ç'REGJISTRUAR</b><b style='color:#a31615'>,ky përdorues më nuk do të ketë qasje ne web aplikacion! </b>" : ($sts == 100 ? "<b style='color:#2a1f54; font-size:2rem;'> MODERATOR!</b>" : ($sts == 101 ? "<b style='color:#4d1d7d; font-size:2rem;'> ADMINISTRATOR!</b>" : "")))))."";
+                        header("location:users.php");die();
+                        }
+                }
+            }else if(empty($sts) && !empty($password)){
+                if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=? WHERE user_id=?", array($pass_hash,$fname,$lname,$email,$tel_nr,$city,$post,$adr,$user_id), "ssssssisi")){
+                    $_SESSION['data_changed_declined']="";
+                    header("location:users.php?user=".$username."#profile");die();
+                }else{
+                    $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e'>$username </b> u përditësuan me sukses!";
+                    header("location:users.php");die();
+                }
+            }else if(!empty($sts) && !empty($password)){
+                if($sts == 50 && $row_data['user_balance'] != NULL){
+                    if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=?,pid_number=?,terms_and_conditions=?,status=?,user_balance=? WHERE user_id=?", array($pass_hash,$fname,$lname,$email,$tel_nr,$city,$post,$adr,$pid,$terms,$sts,$user_balance,$user_id), "ssssssisssisi")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id=?", array($acc_balance, $user_id), "si")){
+                            $_SESSION['data_changed_declined']="";
+                            header("location:users.php?user=".$username."#profile");die();
+                        }else{
+                            $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses. <a style='color:#fff; font-weight:800;font-size:1.8rem;'> Statusi i tij u përditsua në </a>". ($sts == 1 ? " <b style='color:#d9534f; font-size:2rem;'> I KONFIRMUAR! </b>" : ($sts == 2 ? "<b style='color:#F0AC1A; font-size:2rem;'> BLERËS!</b>" : ($sts == 50 ? "<b style='color:#a31615; font-size:2rem;'>I Ç'REGJISTRUAR</b><b style='color:#a31615'>,ky përdorues më nuk do të ketë qasje ne web aplikacion! </b>" : ($sts == 100 ? "<b style='color:#2a1f54; font-size:2rem;'> MODERATOR!</b>" : ($sts == 101 ? "<b style='color:#4d1d7d; font-size:2rem;'> ADMINISTRATOR!</b>" : "")))))."";
+                            header("location:users.php");die();
+                        }
+                    }
+                }else{
+                    if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=?,status=? WHERE user_id=?", array($pass_hash,$fname,$lname,$email,$tel_nr,$city,$post,$adr,$sts,$user_id), "ssssssisii")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses. <a style='color:#fff; font-weight:800;font-size:1.8rem;'> Statusi i tij u përditsua në </a>". ($sts == 1 ? " <b style='color:#d9534f; font-size:2rem;'> I KONFIRMUAR! </b>" : ($sts == 2 ? "<b style='color:#F0AC1A; font-size:2rem;'> BLERËS!</b>" : ($sts == 50 ? "<b style='color:#a31615; font-size:2rem;'>I Ç'REGJISTRUAR</b><b style='color:#a31615'>,ky përdorues më nuk do të ketë qasje ne web aplikacion! </b>" : ($sts == 100 ? "<b style='color:#2a1f54; font-size:2rem;'> MODERATOR!</b>" : ($sts == 101 ? "<b style='color:#4d1d7d; font-size:2rem;'> ADMINISTRATOR!</b>" : "")))))."";
+                        header("location:users.php");die();
+                    }
+                }
+            }
+            else{
+                if($sts == 50 && $row_data['user_balance'] != NULL){
+                    if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=?,pid_number=?,terms_and_conditions=?,status=?, user_balance=? WHERE user_id=?", array($fname,$lname,$email,$tel_nr,$city,$post,$adr,$pid,$terms,$sts,$user_balance,$user_id), "sssssisssisi")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id=?", array($acc_balance, $user_id), "si")){
+                            $_SESSION['data_changed_declined']="";
+                            header("location:users.php?user=".$username."#profile");die();
+                        }else{
+                            $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses. <a style='color:#fff; font-weight:800;font-size:1.8rem;'> Statusi i tij u përditsua në </a>". ($sts == 1 ? " <b style='color:#d9534f; font-size:2rem;'> I KONFIRMUAR! </b>" : ($sts == 2 ? "<b style='color:#F0AC1A; font-size:2rem;'> BLERËS!</b>" : ($sts == 50 ? "<b style='color:#a31615; font-size:2rem;'>I Ç'REGJISTRUAR</b><b style='color:#a31615'>,ky përdorues më nuk do të ketë qasje ne web aplikacion! </b>" : ($sts == 100 ? "<b style='color:#2a1f54; font-size:2rem;'> MODERATOR!</b>" : ($sts == 101 ? "<b style='color:#4d1d7d; font-size:2rem;'> ADMINISTRATOR!</b>" : "")))))."";
+                            header("location:users.php");die();
+                        }
+                    }
+                }else{
+                    if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,city=?,postal_code=?,address=? WHERE user_id=?", array($fname,$lname,$email,$tel_nr,$city,$post,$adr,$user_id), "sssssisi")){
+                        $_SESSION['data_changed_declined']="";
+                        header("location:users.php?user=".$username."#profile");die();
+                    }else{
+                        $_SESSION['data_changed_success']="Të dhënat e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u përditësuan me sukses!";
+                        header("location:users.php");die();
+                    }
+                }
+            }
         }
     }
 ?>
@@ -92,12 +211,24 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel-content">
-                        <?php if(isset($_SESSION['data_changed'])){ ?>
-                            <div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<i class="fa fa-check-circle"></i> Konfirmimi i produktit u krye me sukses. <?php if($_SESSION['data_changed'] == 1) { echo "<b style='text-transform:uppercase;'>Produkti doli në ankand! </b>";}else if($_SESSION['data_changed'] == 2){ echo "<b style='text-transform:uppercase;color:#9c1e08;'>Produkti nuk u lejua të dal në ankand! </b>";} ?>
-							</div>
-                         <?php } unset($_SESSION['data_changed']);?>
+                    <?php if(isset($_SESSION['no_changes'])){ ?>
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-info-circle"></i> <?php echo $_SESSION['no_changes'];?>
+                        </div>
+                    <?php } unset($_SESSION['no_changes']); ?>
+                    <?php if(isset($_SESSION['data_changed_declined'])){ ?>
+                        <div class='alert alert-danger alert-dismissible' role='alert'>
+                            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                            <i class='fa fa-times-circle'></i> Diçka shkoi gabim, ju lutem provoni më vonë!
+                        </div>
+                    <?php } unset($_SESSION['data_changed_declined']); ?>
+                    <?php if(isset($_SESSION['data_changed_success'])){ ?>
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-check-circle"></i> <?php echo $_SESSION['data_changed_success']; ?>
+                        </div>
+                    <?php } unset($_SESSION['data_changed_success']); ?>
                         <h3 class="heading"><i class="fa fa-square"></i>Të gjithë përdoruesit</h3>
                         <?php 
                             $sel_all_users = "";
@@ -115,6 +246,8 @@
                                     $sel_all_users = prep_stmt("SELECT * FROM users WHERE status = ?",1,'i');
                                 }elseif($usr == 'not_confirmed'){
                                     $sel_all_users = prep_stmt("SELECT * FROM users WHERE status = ?",0,'i');
+                                }elseif($usr == 'banned'){
+                                    $sel_all_users = prep_stmt("SELECT * FROM users WHERE status = ?",50,'i');
                                 }elseif($usr == "all"){
                                     $sel_all_users = prep_stmt("SELECT * FROM users order by status desc",null,null);
                                 }
@@ -125,19 +258,20 @@
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
                             <div class="float-left">
                                 <?php 
-                                    if(isset($_SESSION['prep_stmt_error'])){
-                                        echo "<div class='gabim'>";
-                                        echo $_SESSION['prep_stmt_error'];
-                                        echo "</div>";
-                                    }
-                                    if(isset($_SESSION['user_data_changed'])){
-                                        echo "<div class='sukses'>";
-                                        echo $_SESSION['user_data_changed'];
-                                        echo "</div>";
-                                    }
-                                    unset($_SESSION['prep_stmt_error']);
-                                    unset($_SESSION['user_data_changed']);
-                                ?>
+                                    if(isset($_SESSION['prep_stmt_error'])){ ?>
+                                        <div class='alert alert-danger alert-dismissible' role='alert'>
+                                            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                            <i class='fa fa-times-circle'></i> Diçka shkoi gabim, ju lutem provoni më vonë!
+                                        </div>
+                                    <?php } ?>
+                                    <?php if(isset($_SESSION['user_data_changed'])){ ?>
+                                        <div class="alert alert-success alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <i class="fa fa-check-circle"></i> <?php echo $_SESSION['user_data_changed']; ?>
+                                        </div>
+                                    <?php } ?>
+                                   <?php unset($_SESSION['prep_stmt_error']);
+                                    unset($_SESSION['user_data_changed']);?>
                             </div>
                             <form method='get' action='users.php' id="navbar-search1" class="navbar-form search-form" style="float:right;">
                                 <select class="form-control" id="search_users" name="user_status">
@@ -148,14 +282,13 @@
                                     <option value="buyer" <?php if(isset($_GET['user_status']) && $_GET['user_status'] == 'buyer'){echo "selected";} ?>>Blerës</option>
                                     <option value="confirmed" <?php if(isset($_GET['user_status']) && $_GET['user_status'] == 'confirmed'){echo "selected";} ?>>I Konfirmuar</option>
                                     <option value="not_confirmed" <?php if(isset($_GET['user_status']) && $_GET['user_status'] == 'not_confirmed'){echo "selected";} ?>>Jo i konfirmuar</option>
+                                    <option value="banned" <?php if(isset($_GET['user_status']) && $_GET['user_status'] == 'banned'){echo "selected";} ?>>I ç'regjistruar</option>
                                 </select>
                                 <button type="button" name='search_user' class="btn btn-default"><i class="fa fa-search"></i></button>
                             </form>
                             <script>
                                     document.getElementById("search_users").onchange = function () {
                                         var searchUsers = document.getElementById("search_users");
-                                        console.log(searchUsers.value);
-                                            console.log(searchUsers.value);
                                             document.getElementById("navbar-search1").submit();
                                     }
                             </script>
@@ -167,7 +300,6 @@
                                         <th>Emri dhe Mbiemri </th>
                                         <th>Nr.Tel </th>
                                         <th>Statusi</th>
-                                        <th>Ndrysho statusin</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -182,8 +314,8 @@
                                         <td><b style=' color:#f0ad4e;'><?php echo $row_users['username']; ?></b></td>
                                         <td><?php echo $row_users['first_name'] . " " . $row_users['last_name']; ?></td>
                                         <td><?php echo $row_users['tel_nr']; ?></td>
-                                        <td><?php if($row_users['status'] == 0){ echo "<span class='label' style='color:white; background-color:#a31615;'>JO I KONFIRMUAR</span>";}elseif($row_users['status'] == 1){echo "<span class='label' style='color:white; background-color:#d9534f;'>I KONFIRMUAR</span>";}elseif($row_users['status'] == 2){ echo "<span class='label' style='color:white; background-color:#F0AC1A;'>BLERËS</span>";}elseif($row_users['status'] == 3){echo "<span class='label' style='color:white; background-color:#5ABC35;'>SHITËS<span>";}elseif($row_users['status'] == 100){echo "<span class='label' style='color:white; background-color:#481df5;'>MODERATOR</span>";}elseif($row_users['status'] == 101){echo "<span class='label' style='color:white; background-color:#4d1d7d;'>ADMINISTRATOR</span>";} ?></td>
-                                        <td>
+                                        <td><?php if($row_users['status'] == 0){ echo "<span class='label' style='color:white; background-color:#a31615;'>JO I KONFIRMUAR</span>";}elseif($row_users['status'] == 1){echo "<span class='label' style='color:white; background-color:#d9534f;'>I KONFIRMUAR</span>";}elseif($row_users['status'] == 2){ echo "<span class='label' style='color:white; background-color:#F0AC1A;'>BLERËS</span>";}elseif($row_users['status'] == 3){echo "<span class='label' style='color:white; background-color:#5ABC35;'>SHITËS<span>";}elseif($row_users['status'] == 50){echo "<span class='label' style='color:white; background-color:red;'>I Ç'REGJISTRUAR<span>";}elseif($row_users['status'] == 100){echo "<span class='label' style='color:white; background-color:#481df5;'>MODERATOR</span>";}elseif($row_users['status'] == 101){echo "<span class='label' style='color:white; background-color:#4d1d7d;'>ADMINISTRATOR</span>";} ?></td>
+                                        <!-- <td>
                                             <form method='get' id="status_changed_to" action='users.php'>
                                                 <select class="form-control" id="change_status_<?php echo $row_users['user_id']; ?>" name="change_status" onchange="show_value('change_status_<?=$row_users['user_id']?>')">
                                                     <option value="" style="color:#d9534f; font-weight:bold">Zgjedhe statusin</option>
@@ -198,7 +330,7 @@
                                                     <input type="hidden" name='usname' value="<?php echo $row_users['username']; ?>">
                                                 </select>
                                             </form>
-                                        </td>
+                                        </td> -->
                                         <td><a class="btn btn-info btn-sm" href="users.php?user=<?php echo $row_users['username'];?>#profile"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
                                     <?php } } ?>
@@ -231,6 +363,11 @@
                         if(mysqli_num_rows($user_profile) > 0){
                             $row_user_profile = mysqli_fetch_array($user_profile);
                         }
+
+                        $sel_bal = prep_stmt("SELECT * FROM bank_acc WHERE user_id = ?", $row_user_profile['user_id'], "i");
+                        if(mysqli_num_rows($sel_bal) > 0){
+                            $sel_balance = mysqli_fetch_array($sel_bal);
+                        }
                     ?>
                     <div class="panel-content text-center">
                         <h3 class="heading">Të dhënat e përdoruesit: <b style="color:#f0ad4e"><?php echo $row_user_profile['username'];?></b></h3>
@@ -238,7 +375,6 @@
                     <div class="tab-content content-profile" id="profile">
                         <!-- MY PROFILE -->
                         <div class="tab-pane fade in active" id="myprofile">
-                        
                             <div class="profile-section" style="margin:0;">
                                     <div class="media">
                                         <div class="media" style="width:20%; margin:auto;">
@@ -247,7 +383,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-content text-center">
-                                    <h3 class="heading"></h3>
+                                    <h3 class="heading"><?php if($row_user_profile['user_balance'] !== NULL){echo "Bilanci: <b style='color:darkgreen; font-size:larger;'>".number_format($row_user_profile['user_balance'],2)."€ </b>";}   ?></h3>
                                 </div>
                             <form id="advanced-form" data-parsley-validate novalidate method="post" action="">
                                 <div class="col-md-6">
@@ -259,84 +395,90 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Fjalëkalimi</label>
-                                        <input type="text" id="text-input1" value="" class="form-control" required data-parsley-minlength="1">
+                                        <input type="text" name="password" id="text-input1" value="" class="form-control" data-parsley-minlength="8">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Emri</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['first_name']; ?>" class="form-control" required data-parsley-minlength="1" >
+                                        <input type="text" id="text-input1" name="fname" value="<?php echo $row_user_profile['first_name']; ?>" class="form-control" required data-parsley-minlength="1" >
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Mbiemri</label>
-                                        <input type="text" id="text-input1"  value="<?php echo $row_user_profile['last_name']; ?>" class="form-control" required data-parsley-minlength="1">
+                                        <input type="text" id="text-input1" name="lname" value="<?php echo $row_user_profile['last_name']; ?>" class="form-control" required data-parsley-minlength="1">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Email</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['email']; ?>"class="form-control" required data-parsley-minlength="1">
+                                        <input type="text" id="text-input1" name="email" value="<?php echo $row_user_profile['email']; ?>"class="form-control" required data-parsley-minlength="1" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Numri telefonit</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['tel_nr']; ?>" class="form-control" required data-parsley-minlength="1">
+                                        <input type="text" id="text-input1" name="tel_nr" value="<?php echo $row_user_profile['tel_nr']; ?>" class="form-control" required data-parsley-minlength="1">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Datëlindja</label>
-                                        <input type="text" id="text-input1" value="<?php echo date("d-M-Y", strtotime($row_user_profile['birthday'])); ?>" class="form-control" required data-parsley-minlength="1">
+                                        <input type="text" id="text-input1" name="bday" value="<?php echo date("d-M-Y", strtotime($row_user_profile['birthday'])); ?>" class="form-control" required data-parsley-minlength="1" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Adresa</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['address']; ?>" class="form-control" required data-parsley-minlength="1" >
+                                        <input type="text" id="text-input1" name="address" value="<?php echo $row_user_profile['address']; ?>" class="form-control" required data-parsley-minlength="1" >
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Qyteti</label>
-                                        <input type="text" id="text-input1"value="<?php echo $row_user_profile['city']; ?>" class="form-control" required data-parsley-minlength="1" >
+                                        <input type="text" id="text-input1" name="city" value="<?php echo $row_user_profile['city']; ?>" class="form-control" required data-parsley-minlength="1" >
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="text-input1">Kodi Postar</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['postal_code']; ?>" class="form-control" required data-parsley-minlength="1" >
+                                        <input type="text" id="text-input1" name="postal_code" value="<?php echo $row_user_profile['postal_code']; ?>" class="form-control" required data-parsley-minlength="3" >
                                     </div>
                                 </div>
                                 <?php if($row_user_profile['status'] == 3){ ?>
                                 <div class="col-md-12">
                                     <div class="form-group" style="text-align-last:center;">
                                         <label for="text-input1">ID Identifikuese</label>
-                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['pid_number']; ?>" class="form-control" required data-parsley-minlength="1" >
+                                        <input type="text" id="text-input1" value="<?php echo $row_user_profile['pid_number']; ?>" class="form-control" required data-parsley-minlength="1" readonly>
                                     </div>
                                 </div>
                                 <?php } ?>
                                 <div class="col-md-12">
                                     <div class="form-group" style="text-align-last:center;">
                                         <label for="text-input1">Statusi</label>
-                                        <select class="form-control">
+                                        <select class="form-control" name="status_ch">
                                             <option value="">Ndrysho statusin</option>
-                                            <?php if($row_user_profile['status'] == 0){?><option value="1" style="color:#d9534f; font-weight:bold">I konfirmuar</option><option value="100"  style="color:#481df5;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php } ?>
                                             <?php if($row_user_profile['status'] == 0){?><option value="1" style="color:#d9534f; font-weight:bold">I konfirmuar</option><option value="100"  style="color:#481df5;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php } ?>
                                             <?php if($row_user_profile['status'] == 1){ ?><option value="100"  style="color:#481df5;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option><?php } ?>
                                             <?php if($row_user_profile['status'] == 2){ ?>
                                             <option value="100"  style="color:#481df5;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php }?>
                                             <?php if($row_user_profile['status'] == 3){ ?><option value="100"  style="color:#481df5;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php } ?>
+                                            <?php if($row_user_profile['status'] == 50){ ?><option value="1" style="color:#481df5;font-weight:bold">I konfirmuar</option><?php if(mysqli_num_rows($sel_bal) > 0){ ?><option value="2" style="color:#F0AC1A;font-weight:bold">Blerës</option><?php } ?><option value="100" style="color:red;font-weight:bold">Moderator</option><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option> <?php } ?>
                                             <?php if($row_user_profile['status'] == 100){ ?><option value="101" style="color:#4d1d7d;font-weight:bold">Administrator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php } ?> 
-                                            <?php if($row_user_profile['status'] == 101){ ?><option value="101" style="color:#481df5;font-weight:bold">Moderator</option><option value="50" style="color:red;font-weight:bold">BAN</option> <?php } ?>
+                                            <?php if($row_user_profile['status'] == 101){ ?><option value="100" style="color:#481df5;font-weight:bold">Moderator</option><option value="50" style="color:red;font-weight:bold" >BAN</option> <?php } ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
+                                    <div class="form-group" style="text-align-last:center;">
+                                        <input type="hidden" name="user_id" id="text-input1" value="<?php echo $row_user_profile['user_id']; ?>" class="form-control" required data-parsley-minlength="1" readonly>
+                                        <input type="hidden" name="username" id="text-input1" value="<?php echo $row_user_profile['username']; ?>" class="form-control" required data-parsley-minlength="1" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                     <div class="text-center btn_center" style="margin-bottom:20px;">
-                                        <button type="submit" name="confirm"  value="Vazhdo" class="btn btn-primary ">Konfirmo</button>
+                                        <button type="submit" name="change_user"  value="Vazhdo" class="btn btn-primary ">Konfirmo</button>
                                     </div>
                                 </div>
                         </form>
@@ -360,7 +502,6 @@
 </div>
 <!-- END WRAPPER -->
 <!-- Javascript -->
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="assets/vendor/jquery/jquery.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/vendor/metisMenu/metisMenu.js"></script>
@@ -379,10 +520,10 @@
 <script src="assets/vendor/markdown/markdown.js"></script>
 <script src="assets/vendor/to-markdown/to-markdown.js"></script>
 <script src="assets/vendor/bootstrap-markdown/bootstrap-markdown.js"></script>
-<script src="../js/datepicker/jquery-3.3.1.min.js"></script>
+<!-- <script src="../js/datepicker/jquery-3.3.1.min.js"></script>
 <script src="../js/datepicker/jquery-ui.min.js"></script>
 <script src="../js/datepicker/jquery.slicknav.js"></script>
-<script src="../js/datepicker/main.js"></script>	
+<script src="../js/datepicker/main.js"></script>	 -->
 <script>
     $(function() {
         // photo upload

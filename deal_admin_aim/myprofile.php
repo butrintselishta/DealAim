@@ -22,7 +22,7 @@ require_once '../db.php';
 		$pid = $row_adm['pid_number'];
 	}
 	else{
-		$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+		$_SESSION['prep_stmt_error'] = ""; header("location:index.php"); die();
 	}
 
 
@@ -62,7 +62,7 @@ require_once '../db.php';
         }
 
 		if($user_usname == $username && empty($user_pass) && $user_fname == $fname && $user_lname==$lname &&	$user_email==$email && $user_tel == $tel && $user_bday == date("Y-m-d",strtotime($bday)) && $user_city == $city && $user_postal == $post_code && $user_address == $address && !is_uploaded_file($_FILES['profile_pic']['tmp_name'])){
-            $_SESSION['no_changes_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> NUK KA NDRYSHIM! </h4><p style='color:#E62E2D;'> Ju nuk keni ndryshuar as një nga të dhënat </p>"; header("location:myprofile.php"); die();
+            $_SESSION['no_changes_error'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Ju nuk keni ndryshuar as një nga të dhënat </a>"; header("location:myprofile.php"); die();
 		}else{
             
             $passwordError = false; $fnameError = false; $lnameError = false; $emailError = false; $phoneError = false; $cityError=false; $postnrError = false; $addressError = false; $bdayError = false; $pidError = false;
@@ -107,15 +107,17 @@ require_once '../db.php';
                 if(empty($user_pass) && empty($basename)){
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "ssssssisii")){
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM1! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                            $_SESSION['prep_stmt_error'] = ""; 
+                            header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=".$row_adm['user_id'], array($user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address), "ssssssis")){
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM1! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                            $_SESSION['prep_stmt_error'] = ""; 
+                            header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }
@@ -123,36 +125,40 @@ require_once '../db.php';
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "sssssssisii")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die();  
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM2! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                                $_SESSION['prep_stmt_error'] = ""; 
+                                header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address, $row_adm['user_id']), "sssssssisi")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die();  
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM3! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                                $_SESSION['prep_stmt_error'] = ""; 
+                                header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }elseif(!empty($user_pass) && empty($basename)){
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($password_hash, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "sssssssisii")){
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM4! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                            $_SESSION['prep_stmt_error'] = ""; 
+                            header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else {
                         if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($password_hash, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$row_adm['user_id']), "sssssssisi")){
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM5! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                            $_SESSION['prep_stmt_error'] = ""; 
+                            header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }
@@ -160,22 +166,24 @@ require_once '../db.php';
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET password=?,profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($password_hash,$basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "ssssssssisii")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die();  
+                                $_SESSION['user_data_changed'] ="<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM6! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                                $_SESSION['prep_stmt_error'] = ""; 
+                                header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET password=?,profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($password_hash,$basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$row_adm['user_id']), "ssssssssisi")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die();  
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM7! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:myprofile.php"); die();
+                                $_SESSION['prep_stmt_error'] = ""; 
+                                header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] ="<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die();  
                         }
                     }
                 }
@@ -234,25 +242,27 @@ require_once '../db.php';
                 <!-- MY PROFILE -->
                 <div class="tab-pane fade in active" id="myprofile">
 				<?php
-					if(isset($_SESSION['prep_stmt_error'])){
-						echo "<div class='gabim'>";
-						echo $_SESSION['prep_stmt_error'];
-						echo "</div>";
-					}
-					if(isset($_SESSION['no_changes_error'])){
-						echo "<div class='gabim'>";
-						echo $_SESSION['no_changes_error'];
-						echo "</div>";
-					}
-					if(isset($_SESSION['user_data_changed'])){
-						echo "<div class='sukses'>";
-						echo $_SESSION['user_data_changed'];
-						echo "</div>";
-					}
-					unset($_SESSION['prep_stmt_error']);	
+					if(isset($_SESSION['prep_stmt_error'])){ ?>
+                        <div class='alert alert-danger alert-dismissible' role='alert'>
+                            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                            <i class='fa fa-times-circle'></i> Diçka shkoi gabim, ju lutem provoni më vonë!
+                        </div>
+					<?php } ?>
+					<?php if(isset($_SESSION['no_changes_error'])){ ?>
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-info-circle"></i> <?php echo $_SESSION['no_changes_error'];?>
+                        </div>
+					<?php } ?>
+					<?php if(isset($_SESSION['user_data_changed'])){?>
+						<div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-check-circle"></i> <?php echo $_SESSION['user_data_changed']; ?>
+                        </div>
+					<?php }?>
+					<?php unset($_SESSION['prep_stmt_error']);	
 					unset($_SESSION['no_changes_error']);
-					unset($_SESSION['user_data_changed']);
-					?>
+					unset($_SESSION['user_data_changed']);?>
 					<form method="post" action="" enctype="multipart/form-data">
 						<div class="profile-section">
 							<h2 class="profile-heading">Foto Profilit</h2>

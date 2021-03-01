@@ -175,6 +175,10 @@
 						$_SESSION['unconfirmed'] = UNCONFIRMED;
 						header("location:signin.php"); die();
 					}
+					elseif($row['status'] === BANNED){
+						$_SESSION['banned'] = BANNED;
+						header("location:signin.php"); die();
+					}
 					elseif($row['status'] === CONFIRMED){
 						$_SESSION['logged'] = true;
 						$_SESSION['user'] += ["username"=>"{$user_signin}"];
@@ -345,6 +349,28 @@
 							</div>
 						<h2>Jeni një hap larg</h2>
 						<p>Ju lutem konfirmojeni llogarinë tuaj në linkun qe ju kemi dërguar në email!</p>
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+		<?php } } 
+		elseif(isset($_SESSION['banned'])){
+			if($_SESSION['banned'] === BANNED){ ?>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-8">
+						<div id="confirm">
+							<div class="icon icon--order-success svg add_bottom_15">
+								<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+									<g fill="none" stroke="red" stroke-width="2">
+										<circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
+										<path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
+									</g>
+								</svg>
+							</div>
+						<h2 style="color:red;">Llogaria juaj është deaktivizuar!</h2>
+						<p style="color:red;">Ju nuk i'u keni përmbajtur <a href="#" style="font-weight:800;"> TERMEVE DHE KUSHTEVE </a> të web aplikacionit, për çdo paqartësi na kontaktoni!</p>
 						</div>
 					</div>
 				</div>
@@ -853,7 +879,7 @@
 		<script src="js/datepicker/jquery-ui.min.js"></script>
 		<script src="js/datepicker/jquery.slicknav.js"></script>
 		<script src="js/datepicker/main.js"></script>	
-	<?php } } unset($_SESSION['unconfirmed']);?>
+	<?php } } unset($_SESSION['unconfirmed']);unset($_SESSION['banned']);?>
 </main>
 	<!--/main-->
 <?php unset($_SESSION['signup_errors']); 

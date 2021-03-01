@@ -111,8 +111,8 @@ require_once '../db.php';
                                 </tbody>
                             </table>
                                 <?php if(mysqli_num_rows($sel_prod) == 0){ ?>
-                                   <div class="alert alert-info alert-dismissible" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                   <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:-20px;">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                         <i class="fa fa-info-circle"></i> Për momentin nuk ka asnjë produkt në pritje.
                                     </div>
                                 <?php } ?>
@@ -120,14 +120,23 @@ require_once '../db.php';
                     </div>
                 </div>
             </div>
+            <?php 
+                $sel_prod = "";
+                if(isset($_GET['product_s'])){
+                    $prod = $_GET['product_s']; 
+                    $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE (prod_title LIKE '%$prod%' OR prod_id LIKE '%$prod%' OR prod_price LIKE '%$prod%' OR cat_title LIKE '%$prod%') AND (prod_isApproved != ?)", 0, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                }else{
+                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved != ?  ORDER BY prod_id DESC", 0 , 'i');
+                }
+            ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel-content">
                         <h3 class="heading"><i class="fa fa-square"></i>Produktet të konfirmuara </h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        <form id="navbar-search" class="navbar-form search-form">
-                            <input value="" class="form-control" placeholder="Search here..." type="text">
-                            <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        <form method='get' action='index.php' id="navbar-search" class="navbar-form search-form">
+                            <input value="" class="form-control" name="product_s" placeholder="Search here..." type="text">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </form>
                           <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" style="overflow:scroll;">
                                 <thead>
@@ -144,7 +153,7 @@ require_once '../db.php';
                                 </thead>
                                 <tbody>
                                 <?php 
-                                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? or prod_isApproved = ? ORDER BY prod_id DESC", array(1,2) , 'ii');
+                                    // $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? or prod_isApproved = ? ORDER BY prod_id DESC", array(1,2) , 'ii');
                                     if(mysqli_num_rows($sel_prod) > 0){
                                         while($row_prod = mysqli_fetch_array($sel_prod)){
                                 ?>
@@ -154,7 +163,7 @@ require_once '../db.php';
                                         <td><?php echo $row_prod['cat_title']; ?></td>
                                         <td><?php echo $row_prod['prod_title']; ?></td>
                                         <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
-                                        <td><span class="label label-<?php if($row_prod['prod_isApproved'] == 1){echo "success";} elseif($row_prod['prod_isApproved'] == 2){echo "danger";} ?>"><?php if($row_prod['prod_isApproved'] == 1){echo "I pranuar";} elseif($row_prod['prod_isApproved'] == 2){echo "Jo i pranuar";} ?></span></td>
+                                        <td><span class="label label-<?php if($row_prod['prod_isApproved'] == 1){echo "success";} elseif($row_prod['prod_isApproved'] == 2){echo "danger";}elseif($row_prod['prod_isApproved'] == 3){echo "primary";} ?>"><?php if($row_prod['prod_isApproved'] == 1){echo "I pranuar";} elseif($row_prod['prod_isApproved'] == 2){echo "Jo i pranuar";}elseif($row_prod['prod_isApproved'] == 3){echo "I shitur";} ?></span></td>
                                         <td><b><?php echo $username; ?></b></td>
                                         <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
