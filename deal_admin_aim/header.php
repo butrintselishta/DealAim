@@ -88,8 +88,8 @@
 				<!-- end logo -->
 				<div class="navbar-right">
 					<!-- search form -->
-					<form id="navbar-search" class="navbar-form search-form">
-						<input value="" class="form-control" placeholder="Search here..." type="text">
+					<form id="navbar-search1" class="navbar-form search-form">
+						<input value="" class="form-control" placeholder=" here..." type="text">
 						<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
 					</form>
 					<!-- end search form -->

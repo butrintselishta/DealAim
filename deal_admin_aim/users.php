@@ -287,10 +287,10 @@
                                 <button type="button" name='search_user' class="btn btn-default"><i class="fa fa-search"></i></button>
                             </form>
                             <script>
-                                    document.getElementById("search_users").onchange = function () {
-                                        var searchUsers = document.getElementById("search_users");
-                                            document.getElementById("navbar-search1").submit();
-                                    }
+                                document.getElementById("search_users").onchange = function () {
+                                    var searchUsers = document.getElementById("search_users");
+                                        document.getElementById("navbar-search1").submit();
+                                }
                             </script>
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>

@@ -26,6 +26,28 @@ require_once '../db.php';
 		$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
 	}
 
+    $select_all = prep_stmt("SELECT * FROM income_ratio");
+    $dataIncome = array();
+    $dataDate = array();
+    for($i = 1; $i <= mysqli_num_rows($select_all); $i++){
+        $row = mysqli_fetch_array($select_all);
+        //$data = date("d-M", strtotime($row['date_time']));
+        $dataIncome[] = $row['profit'];
+        $dataDate[] = date("d-M", strtotime($row['date_time']));
+    }
+    $profits = "";
+    $dateIncome = "";
+    foreach($dataIncome as $price) {
+        $profits .= $price.",";
+    }
+    foreach($dataDate as $date){
+        $dateIncome .= $date . ",";
+    }
+    $profits = rtrim($profits, ",");
+    $dateIncome =rtrim($dateIncome,",");//die($dateIncome);
+
+
+
 ?>
 <?php require "header.php"; ?>
 <!-- LEFT SIDEBAR -->
@@ -124,20 +146,38 @@ require_once '../db.php';
                 $sel_prod = "";
                 if(isset($_GET['product_s'])){
                     $prod = $_GET['product_s']; 
-                    $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE (prod_title LIKE '%$prod%' OR prod_id LIKE '%$prod%' OR prod_price LIKE '%$prod%' OR cat_title LIKE '%$prod%') AND (prod_isApproved != ?)", 0, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
-                }else{
-                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved != ?  ORDER BY prod_id DESC", 0 , 'i');
+                    $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE (prod_title LIKE '%$prod%' OR prod_id LIKE '%$prod%' OR prod_price LIKE '%$prod%' OR cat_title LIKE '%$prod%' OR username LIKE '%$prod%') AND (prod_isApproved = ? OR prod_isApproved = ?)", array(1,2), "ii");
+                }elseif(isset($_GET['product_confirmation'])){
+                    $prod = $_GET['product_confirmation']; 
+                    if($prod == "confirmed"){
+                        $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 1, "i");
+                    }else if($prod == "not_confirmed"){
+                        $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 2, "i");
+                    }else if($prod == "all"){
+                        $sel_prod = prep_stmt("SELECT  prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? OR prod_isApproved = ?", array(1,2), "ii");
+                    }
+                }
+                else{
+                    $sel_prod = prep_stmt("SELECT prod_id, username, cat_title,prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ? OR prod_isApproved = ?  ORDER BY prod_id DESC", array(1,2) , 'ii');
                 }
             ?>
-            <div class="row">
+            <div class="row" id="confirmed_prod">
                 <div class="col-md-12">
                     <div class="panel-content">
                         <h3 class="heading"><i class="fa fa-square"></i>Produktet të konfirmuara </h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        <form method='get' action='index.php' id="navbar-search" class="navbar-form search-form">
-                            <input value="" class="form-control" name="product_s" placeholder="Search here..." type="text">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                        </form>
+                            <form method='get' action='index.php#confirmed_prod' id="navbar-search" class="navbar-form search-form">
+                                <input value="" class="form-control" name="product_s" placeholder="Kërko këtu..." type="text">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </form>
+                            <form method='get' action='index.php#confirmed_prod' id="navbar-search2" class="navbar-form search-form" style="float:right;">
+                                <select class="form-control" id="product_confirmation" name="product_confirmation" >
+                                    <option value="all"> Rendit sipas llojit të konfirmimit... </option>
+                                    <option value="confirmed" <?php if(isset($_GET['product_confirmation']) && $_GET['product_confirmation'] == 'confirmed'){echo "selected";} ?>> I pranuar </option>
+                                    <option value="not_confirmed" <?php if(isset($_GET['product_confirmation']) && $_GET['product_confirmation'] == 'not_confirmed'){echo "selected";} ?>> Jo i pranuar </option>
+                                </select>
+                                <button type="submit" class="btn btn-default"></button>
+                            </form>
                           <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" style="overflow:scroll;">
                                 <thead>
                                     <tr>
@@ -163,11 +203,113 @@ require_once '../db.php';
                                         <td><?php echo $row_prod['cat_title']; ?></td>
                                         <td><?php echo $row_prod['prod_title']; ?></td>
                                         <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
-                                        <td><span class="label label-<?php if($row_prod['prod_isApproved'] == 1){echo "success";} elseif($row_prod['prod_isApproved'] == 2){echo "danger";}elseif($row_prod['prod_isApproved'] == 3){echo "primary";} ?>"><?php if($row_prod['prod_isApproved'] == 1){echo "I pranuar";} elseif($row_prod['prod_isApproved'] == 2){echo "Jo i pranuar";}elseif($row_prod['prod_isApproved'] == 3){echo "I shitur";} ?></span></td>
+                                        <td><span class="label label-<?php if($row_prod['prod_isApproved'] == 1){echo "success";} elseif($row_prod['prod_isApproved'] == 2){echo "danger";} ?>"><?php if($row_prod['prod_isApproved'] == 1){echo "I pranuar";} elseif($row_prod['prod_isApproved'] == 2){echo "Jo i pranuar";}?></span></td>
                                         <td><b><?php echo $username; ?></b></td>
                                         <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
                                 <?php } } ?>
+                                <script>
+                                        document.getElementById("product_confirmation").onchange = function () {
+                                            var searchUsers = document.getElementById("product_confirmation");
+                                                document.getElementById("navbar-search2").submit();
+                                        }
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php if(mysqli_num_rows($sel_prod) == 0){ ?>
+                            <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:-20px;">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<i class="fa fa-info-circle"></i> <?php if(isset($_GET['product_s'])){ echo "Nuk ka produkte që ngjasojnë me atë që kërkoni: <b style='color:darkred; font-size:1.8rem;'>". $_GET['product_s'] ."!</b>";}elseif(isset($_GET['product_confirmation'])){ if($_GET['product_confirmation'] == "confirmed"){ echo "Nuk ka produkte <b style='color:#5cb85c; font-size:1.8rem;'>TË PRANUARA!</b>";}elseif($_GET['product_confirmation'] == "not_confirmed"){echo "Nuk ka produkte <b style='color:#d9534f; font-size:1.8rem;'>TË PA PRANUARA!</b>";}else { echo "Nuk ka produkte të konfirmuara!";}}else{ echo "Nuk ka produkte të konfirmuara!";} ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+            ?>
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="panel-content" id="solden">
+                        <h3 class="heading"><i class="fa fa-square"></i>Ankandet e mbyllura</h3>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <form method='get' action='index.php#solden' id="navbar-search1" class="navbar-form search-form" style="float:right;">
+                            <select class="form-control" id="solden_procucts" name="solden_products" >
+                                <option value=""> Rendit sipas çmimit... </option>
+                                <option value="smallest"> Më i vogli </option>
+                                <option value="highest"> Më i madhi </option>
+                            </select>
+                            <button type="submit" class="btn btn-default"></button>
+                        </form>
+                          <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%"  style="overflow:scroll;">
+                                <thead>
+                                    <tr>
+                                        <th>Titulli ankandit</th>
+                                        <th>Shitësi </th>
+                                        <th>Blerësi </th>
+                                        <th>Çmimi</th>
+                                        <th>Kategoria </th>
+                                        <th>Statusi</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php          
+                                $solden_products = "";
+                                if(isset($_GET['solden_products'])){
+                                    $sold_prod = $_GET['solden_products']; 
+                                    if($sold_prod == "smallest"){
+                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title,prod_price prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE  prod_isApproved = ? ORDER BY prod_price ASC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                                    }elseif($sold_prod == "highest"){
+                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?  ORDER BY prod_price DESC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                                    }else {
+                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+                                    }
+                                    if(mysqli_num_rows($solden_products) > 0){
+                                    while($row_sold = mysqli_fetch_array($solden_products)){
+                                        $seller = $row_sold['username'];
+                                        $category = $row_sold['cat_title'];
+                                            $sel_winn = prep_stmt("SELECT offer.offer_id,usr.username, offer.offer_price, prod.prod_title,prod.cat_id FROM prod_offers AS offer LEFT OUTER JOIN users usr ON offer.user_id = usr.user_id LEFT OUTER JOIN products prod ON offer.prod_id = prod.prod_id WHERE offer.prod_id = ? order by offer.offer_id DESC LIMIT 1", $row_sold['prod_id'], "i");
+                                        if(mysqli_num_rows($sel_winn) > 0){
+                                            while($row_sold_prod = mysqli_fetch_array($sel_winn)){
+                                ?>
+                                    <tr style="font-weight:800;">
+                                        <td><?php echo $row_sold_prod['prod_title']; ?></td>
+                                        <td><a style='color:#f0ad4e; font-weight:900; font-size:larger;'><?php echo $seller; ?></td>
+                                        <td><a style='color:#5cb85c; font-weight:900; font-size:larger;'><?php echo $row_sold_prod['username']; ?></a></td>
+                                        <td><?php echo number_format($row_sold_prod['offer_price'],2) . " €"; ?></td>
+                                        <td><?php echo $category; ?></td>
+                                         <td><span class="label label-success">I MBYLLUR</span></td>
+                                      
+                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                    </tr>
+                                <?php } } } } } else{
+                                    $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+                                    if(mysqli_num_rows($solden_products) > 0){
+                                        while($row_sold = mysqli_fetch_array($solden_products)){
+                                            $seller = $row_sold['username'];
+                                            $category = $row_sold['cat_title'];
+                                            $sel_winn = prep_stmt("SELECT offer.offer_id,usr.username, offer.offer_price, prod.prod_title,prod.cat_id FROM prod_offers AS offer LEFT OUTER JOIN users usr ON offer.user_id = usr.user_id LEFT OUTER JOIN products prod ON offer.prod_id = prod.prod_id WHERE offer.prod_id = ? order by offer.offer_id DESC LIMIT 1", $row_sold['prod_id'], "i");
+                                            if(mysqli_num_rows($sel_winn) > 0){
+                                                while($row_sold_prod = mysqli_fetch_array($sel_winn)){
+                                    ?>
+                                        <tr style="font-weight:800;">
+                                            <td><?php echo $row_sold_prod['prod_title']; ?></td>
+                                            <td><a style='color:#f0ad4e; font-weight:900; font-size:larger;'><?php echo $seller; ?></td>
+                                            <td><a style='color:#5cb85c; font-weight:900; font-size:larger;'><?php echo $row_sold_prod['username']; ?></a></td>
+                                            <td><?php echo number_format($row_sold_prod['offer_price'],2) . " €"; ?></td>
+                                            <td><?php echo $category; ?></td>
+                                             <td><span class="label label-success">I MBYLLUR</span></td>
+                                          
+                                            <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                        </tr>
+                                    <?php } } } } }?>
+                                    <script>
+                                        document.getElementById("solden_procucts").onchange = function () {
+                                            var searchUsers = document.getElementById("solden_procucts");
+                                                document.getElementById("navbar-search1").submit();
+                                        }
+                                    </script>
                                 </tbody>
                             </table>
                         </div>
@@ -175,16 +317,19 @@ require_once '../db.php';
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <!-- TRAFFIC SOURCES -->
-                    <div class="panel-content">
-                        <h2 class="heading"><i class="fa fa-square"></i> Traffic Sources</h2>
-                        <div id="demo-pie-chart" class="ct-chart"></div>
+                    <div class="col-md-6">
+                        <div class="panel-content">
+                            <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Line Chart</h2>
+                            <div id="demo-line-chart" class="ct-chart"></div>
+                        </div>
                     </div>
-                    <!-- END TRAFFIC SOURCES -->
-                </div>
-                <div class="col-md-4">
-                    <!-- REFERRALS -->
+                    <div class="col-md-6">
+                        <div class="panel-content">
+                            <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Bar Chart</h2>
+                            <div id="demo-bar-chart" class="ct-chart"></div>
+                        </div>
+                    </div>
+                <!-- <div class="col-md-4">
                     <div class="panel-content">
                         <h2 class="heading"><i class="fa fa-square"></i> Referrals</h2>
                         <ul class="list-unstyled list-referrals">
@@ -214,11 +359,9 @@ require_once '../db.php';
                             </li>
                         </ul>
                     </div>
-                    <!-- END REFERRALS -->
                 </div>
                 <div class="col-md-4">
                     <div class="panel-content">
-                        <!-- BROWSERS -->
                         <h2 class="heading"><i class="fa fa-square"></i> Browsers</h2>
                         <div class="table-responsive">
                             <table class="table no-margin">
@@ -268,9 +411,8 @@ require_once '../db.php';
                                 </tbody>
                             </table>
                         </div>
-                        <!-- END BROWSERS -->
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- END WEBSITE ANALYTICS -->
@@ -407,6 +549,45 @@ require_once '../db.php';
 
 <script>
     $(function() {
+        var options;
+        var data = {
+            labels: ["mon", "tues", "wed"],
+            series: [
+                [<?php echo $profits; ?>],
+            ]
+        };
+
+        // line chart
+        options = {
+            height: "300px",
+            showPoint: true,
+            axisX: {
+                showGrid: false
+            },
+            lineSmooth: false,
+            plugins: [
+                Chartist.plugins.tooltip({
+                    appendToBody: true
+                }),
+            ]
+        };
+
+        new Chartist.Line('#demo-line-chart', data, options);
+
+         // bar chart
+         options = {
+                height: "300px",
+                axisX: {
+                    showGrid: false
+                },
+                plugins: [
+                    Chartist.plugins.tooltip({
+                        appendToBody: true
+                    }),
+                ]
+            };
+
+            new Chartist.Bar('#demo-bar-chart', data, options);
 
         // sparkline charts
         var sparklineNumberChart = function() {
@@ -461,7 +642,7 @@ require_once '../db.php';
         var data = {
             labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             series: [
-                [200, 380, 350, 480, 410, 450, 550],
+                [100, 380, 350, 480, 410, 450, 550],
             ]
         };
 
