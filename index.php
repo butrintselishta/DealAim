@@ -1,22 +1,6 @@
 ﻿<?php 
 require "db.php";
- 
-// function openZip($file_to_open) {
-//     global $target;
-     
-//     $zip = new ZipArchive();
-//     $x = $zip->open($file_to_open);
-//     if($x === true) {
-//         $zip->extractTo($target);
-//         $zip->close();
-         
-//         unlink($file_to_open);
-//     } else {
-//         die("There was a problem. Please try again!");
-//     }
-// }
-// $trg = "/img/products/templates/allia.rar";
-// openZip();
+
 if(isset($_SESSION['user_unconfirmed'])){
     header("location:signin.php");die();
 }
@@ -122,150 +106,146 @@ if(isset($_SESSION['user_unconfirmed'])){
     <!--/carousel-->
 
     <!--/banners_grid -->
-
     <div class="container margin_60_35">
+        <?php 
+        $hot_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE products.prod_isApproved = ? AND prod_from <= now() AND prod_to >= now()", 1, 'i');
+        $cnt = 0;
+        $div_array = array();
+        if(mysqli_num_rows($hot_prod) > 0)
+        { 
+            $prod_hot_id = ""; $prod_hot_title = ""; $prod_hot_img = ""; $prod_hot_price="";$prod_hot_to="";  $hot_seller_user = ""; $hot_cat_id = "";
+            while($row_hot_prod = mysqli_fetch_array($hot_prod)){
+                $prod_hot_img = explode("|", $row_hot_prod['prod_img']);
+                $sel_cnt_off = prep_stmt("SELECT count(prod_id) FROM prod_offers WHERE (offer_time >= now() - INTERVAL 24 HOUR) AND prod_id=?", $row_hot_prod['prod_id'], 'i');
+                $cnt_off = mysqli_fetch_array($sel_cnt_off); 
+                if($cnt_off[0] >= 5){ 
+                    $cnt++;
+                    $div_array[] .= "
+                    <div class='col-6 col-md-4 col-xl-3'>
+                        <div class='grid_item'>
+                            <figure>
+                                <a href='details.php?prod_details=".$row_hot_prod['prod_id']."'>
+                                    <span class='ribbon hot'>E NXEHTË 🔥</span>
+                                    <img class='img-fluid lazy' src='img/products/".($row_hot_prod['cat_id'] == 2 ? "laptops" : ($row_hot_prod['cat_id'] == 3 ? "phones" : ($row_hot_prod['cat_id'] == 5 ? "cars" : ($row_hot_prod['cat_id'] == 7 ? "templates" : ""))))."/". $prod_hot_img[0] ."'  alt=''>
+                                    <img class='img-fluid lazy' src='img/products/".($row_hot_prod['cat_id'] == 2 ? "laptops" : ($row_hot_prod['cat_id'] == 3 ? "phones" : ($row_hot_prod['cat_id'] == 5 ? "cars" : ($row_hot_prod['cat_id'] == 7 ? "templates" : ""))))."/". $prod_hot_img[0] ."'  alt=''>
+                                </a>
+                                <div data-countdown='". $row_hot_prod['prod_to']."' class='countdown'></div>
+                            </figure>
+                            <a href='details.php?prod_details=".$row_hot_prod['prod_id'] ."'>
+                                <h3>". $row_hot_prod['prod_title']."</h3>
+                            </a>
+                            <div class='price_box' style='padding: .5rem 1.1rem .5rem 1.1rem;'>
+                                    
+                                    <span class='seller' style='color:#d9534f; font-weight:500;'>Shitësi: <a style='font-weight:750;'> $hot_seller_user</a></span><br/>
+                            </div>
+                            <div class='price_box'>
+                                <span>Çmimi aktual është:</span>
+                                <span class='new_price' style='font-weight:800; font-size:1rem;'>". $row_hot_prod['prod_price'] . "€</span>
+                            </div>
+                        </div>
+                    </div>" ;
+                }
+            }
+        }
+        ?>
+        <?php if($cnt > 0){ ?>
         <div class="main_title">
-            <h2>TË NXEHTA</h2>
+            <h2 style="color:#EE9D1E;">TË NXEHTA 🔥</h2>
             <span>Produktet</span>
-            <p>Më poshtë gjenden disa nga produktet që kan më shumë se 5 oferta në 24 orët e fundit!</p>
+            <p>Më poshtë gjenden disa nga produktet që kan më shumë se <b style="color:#63CF0F;"> 5 </b> oferta në <b style="color:#63CF0F;"> 24 orët</b> e fundit!</p>
         </div>
         <div class="row small-gutters">
-            <div class="col-6 col-md-4 col-xl-3">
-                <div class="grid_item">
-                    <figure>
-                        <span class="ribbon off">Në përfundim</span>
-                        <a href="product-detail-1.html">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/1.jpg" alt="">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/1_b.jpg" alt="">
-                        </a>
-                        <div data-countdown="2021/01/06" class="countdown"></div>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Armor Air x Fear</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$48.00</span>
-                        <span class="old_price">$60.00</span>
-                    </div>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /col -->
-            <div class="col-6 col-md-4 col-xl-3">
-                <div class="grid_item">
-                    <span class="ribbon off">Në përfundim</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/2.jpg" alt="">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/2_b.jpg" alt="">
-                        </a>
-                        <div data-countdown="2020/03/15" class="countdown"></div>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Armor Okwahn II</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$90.00</span>
-                        <span class="old_price">$170.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /col -->
-            <div class="col-6 col-md-4 col-xl-3">
-                <div class="grid_item">
-                    <span class="ribbon off">-50%</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/3.jpg" alt="">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/3_b.jpg" alt="">
-                        </a>
-                        <div data-countdown="2020/03/15" class="countdown"></div>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Armor Air Wildwood ACG</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$75.00</span>
-                        <span class="old_price">$155.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /col -->
-            <div class="col-6 col-md-4 col-xl-3">
-                <div class="grid_item">
-                    <span class="ribbon hot">Hot</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/8.jpg" alt="">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/8_b.jpg" alt="">
-                        </a>
-                    </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Armor Air Max 720</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$120.00</span>
-                    </div>
-                    <ul>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a></li>
-                        <li><a href="#0" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
+            <?php 
+                foreach($div_array as $prod){
+                    echo $prod;
+                }
+            ?>
             <!-- /col -->
         </div>
+        <?php } else { 
+             $sel_rand_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE products.prod_isApproved = ? AND prod_from <= now() AND prod_to >= now() ORDER BY rand(prod_id) LIMIT 8", 1, "i"); 
+             if(mysqli_num_rows($sel_rand_prod) > 0){ 
+        ?>
+        <!-- NESE NUK KA PRODUKTE TE NXEHTA SHFAQI DISA PRODUKTE RANDOM -->
+        <div class="main_title">
+            <h2 style="color:#9933cc;">DISA NGA PRODUKTET AKTIVE Në ANKAND</h2>
+            <span>Produktet</span>
+            <p>Më poshtë gjenden disa nga produktet të përzgjedhura rastësishtë që janë aktive në ankand!</p>
+        </div>
+        <div class="row small-gutters">
+            <?php 
+            while($row_rand = mysqli_fetch_array($sel_rand_prod)){
+                $prod_rand_img = explode("|", $row_rand['prod_img']);
+                $rand_seller = getWinnSell($row_rand['username']);
+            ?>
+            <div class="col-6 col-md-4 col-xl-3">
+                <div class="grid_item">
+                    <figure>
+                        <a href="details.php?prod_details=<?php echo $row_rand['prod_id'] ?>">
+                            <span class="ribbon new">E RE</span>
+                            <img class="img-fluid lazy" src="img/products/<?php if($row_rand['cat_id'] == 2){ echo "laptops"; }elseif($row_rand['cat_id'] == 3){echo "phones";} elseif($row_rand['cat_id'] == 5){echo "cars";} elseif($row_rand['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_rand_img[0]; ?>"  alt="">
+                            <img class="img-fluid lazy" src="img/products/<?php if($row_rand['cat_id'] == 2){ echo "laptops"; }elseif($row_rand['cat_id'] == 3){echo "phones";} elseif($row_rand['cat_id'] == 5){echo "cars";} elseif($row_rand['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_rand_img[0]; ?>"  alt="">
+                        </a>
+                        <div data-countdown="<?php echo $row_rand['prod_to'] ?>" class="countdown"></div>
+                    </figure>
+                    <a href="details.php?prod_details=<?php echo $row_rand['prod_id'] ?>">
+                        <h3><?php echo $row_rand['prod_title']; ?></h3>
+                    </a>
+                    <div class="price_box" style="padding: .5rem 1.1rem .5rem 1.1rem;">
+                            <!-- <span>Çmimi aktual është:</span> -->
+                            <span class="seller" style="color:#d9534f; font-weight:500;">Shitësi: <a style="font-weight:750;"><?php  echo $rand_seller;?></a></span><br/>
+                    </div>
+                    <div class="price_box">
+                        <!-- <span>Çmimi aktual është:</span> -->
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_rand['prod_price'] . " €"; ?></span>
+                    </div>
+                </div>
+                <!-- /grid_item -->
+            </div>
+            <?php } ?>
+        </div>
+        <?php } } ?>
         <!-- /row -->
     </div>
     <!-- /container -->
-
      <!-- SELECTING AND SHOWING THE PRODUCTS THAT ARE PUT IN THIS LAST 24 HOURS IN AUCTION -->
     <?php
-        $new_prod = prep_stmt("SELECT * FROM PRODUCTS WHERE products.prod_from > DATE_SUB(NOW(), INTERVAL 1 DAY) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
+        $new_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE products.prod_from > DATE_SUB(NOW(), INTERVAL 1 DAY) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>
     <div class="container margin_60_35">
     <?php if(mysqli_num_rows($new_prod) > 0){ ?>
         <div class="main_title">
-            <h2>TË REJA</h2>
+            <h2 style="color:#62CD0E;">TË REJA </h2>
             <span>Produktet</span>
             <p>Më poshtë gjenden disa nga produktet që kan dalur në ankand në 24 orët e fundit!</p>
         </div>
         <div class="row small-gutters">
-        <?php  while($row_new_prod = mysqli_fetch_array($new_prod)){ ?>
+        <?php 
+            while($row_new_prod = mysqli_fetch_array($new_prod)){ 
+                    $prod_image = explode("|",$row_new_prod['prod_img']);
+                    $seller_usr = $row_new_prod['username'];
+                    $seller_user = getWinnSell($seller_usr);
+        ?>
             <div class="col-6 col-md-4 col-xl-3">
                 <div class="grid_item">
                     <figure>
-                        <span class="ribbon off">Në përfundim</span>
-                        <a href="product-detail-1.html">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg"alt="">
-                            <img class="img-fluid lazy" src="img/products/product_placeholder_square_medium.jpg" data-src="img/products/shoes/1_b.jpg" alt="">
+                        <a href="details.php?prod_details=<?php echo $row_new_prod['prod_id'] ?>">
+                            <span class="ribbon new">E RE</span>
+                            <img class="img-fluid lazy" src="img/products/<?php if($row_new_prod['cat_id'] == 2){ echo "laptops"; }elseif($row_new_prod['cat_id'] == 3){echo "phones";} elseif($row_new_prod['cat_id'] == 5){echo "cars";} elseif($row_new_prod['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_image[0]; ?>"  alt="">
+                            <img class="img-fluid lazy" src="img/products/<?php if($row_new_prod['cat_id'] == 2){ echo "laptops"; }elseif($row_new_prod['cat_id'] == 3){echo "phones";} elseif($row_new_prod['cat_id'] == 5){echo "cars";} elseif($row_new_prod['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_image[0]; ?>"  alt="">
                         </a>
-                        <div data-countdown="2021/01/06" class="countdown"></div>
+                        <div data-countdown="<?php echo $row_new_prod['prod_to'] ?>" class="countdown"></div>
                     </figure>
-                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
-                        <h3>Armor Air x Fear</h3>
+                    <a href="details.php?prod_details=<?php echo $row_new_prod['prod_id'] ?>">
+                        <h3><?php echo $row_new_prod['prod_title']; ?></h3>
                     </a>
+                    <div class="price_box" style="padding: .5rem 1.1rem .5rem 1.1rem;">
+							<!-- <span>Çmimi aktual është:</span> -->
+							<span class="seller" style="color:#d9534f; font-weight:500;">Shitësi: <a style="font-weight:750;"><?php  echo $seller_user;?></a></span><br/>
+                    </div>
                     <div class="price_box">
-                        <span class="new_price">$48.00</span>
-                        <span class="old_price">$60.00</span>
+                        <!-- <span>Çmimi aktual është:</span> -->
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_new_prod['prod_price'] . " €"; ?></span>
                     </div>
                 </div>
                 <!-- /grid_item -->
@@ -280,12 +260,12 @@ if(isset($_SESSION['user_unconfirmed'])){
 
     <!-- SELECTING AND SHOWING THE PRODUCTS THAT ARE IN THE LAST 24 HOURS IN AUCTION -->
     <?php
-        $closing_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE products.prod_to > DATE_SUB(NOW(), INTERVAL 1 DAY) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
+        $closing_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE (products.prod_to BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>
     <div class="container margin_60_35">
-        <?php if(mysqli_num_rows($closing_prod)) { ?>
+        <?php if(mysqli_num_rows($closing_prod) > 0) { ?>
         <div class="main_title">
-            <h2>NË PËRFUNDIM</h2>
+            <h2 style="color:#E7452E;">NË PËRFUNDIM ⏰</h2>
             <span>Produktet</span>
             <p>Më poshtë gjenden disa nga produktet që janë orët e fundit para mbylljes!</p>
         </div>
@@ -294,10 +274,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                 while($row_closing_prod = mysqli_fetch_array($closing_prod)){ 
                     $prod_img = explode("|", $row_closing_prod['prod_img']);
                     $seller_username = $row_closing_prod['username'];
-                    $seller_u = substr($seller_username, 0, 1);
-                    $username_n = substr($seller_username, -1);
-                    $usname_str = str_repeat("*", strlen($seller_username)-2);
-                    $seller = $seller_u . $usname_str . $username_n;
+                    $seller = getWinnSell($seller_username);
             ?>
             <div class="col-6 col-md-4 col-xl-3">
                 <div class="grid_item">
@@ -318,9 +295,9 @@ if(isset($_SESSION['user_unconfirmed'])){
 							<span class="seller" style="color:#d9534f; font-weight:500;">Shitësi: <a style="font-weight:750;"><?php  echo $seller;?></a></span><br/>
                     </div>
                     <div class="price_box">
-							<!-- <span>Çmimi aktual është:</span> -->
-							<span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_closing_prod['prod_price'] . " €"; ?></span>
-						</div>
+                        <!-- <span>Çmimi aktual është:</span> -->
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_closing_prod['prod_price'] . " €"; ?></span>
+                    </div>
                 </div>
                 <!-- /grid_item -->
             </div>

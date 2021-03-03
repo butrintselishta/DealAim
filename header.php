@@ -39,6 +39,16 @@
         }
         return $html;
     }
+
+    //get winner or seller with ***
+     
+function getWinnSell($usname){
+    $seller_u = substr($usname, 0, 1);
+    $username_n = substr($usname, -1);
+    $usname_str = str_repeat("*", strlen($usname)-2);
+    $win_sell = $seller_u . $usname_str . $username_n;
+    return $win_sell;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

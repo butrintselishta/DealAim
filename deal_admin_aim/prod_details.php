@@ -1,6 +1,6 @@
 <?php 
 require_once '../db.php'; 
-    if(!isset($_SESSION['logged']) && $_SESSION['user']['status'] !== MODERATOR || $_SESSION['user']['status'] !== ADMIN){
+    if(!isset($_SESSION['logged']) && $_SESSION['user']['status'] !== MODERATOR && $_SESSION['user']['status'] !== ADMIN){
         header("location:../index.php");
     }
     if(!isset($_GET['prod_det'])){
@@ -404,6 +404,28 @@ require_once '../db.php';
                 }
             }
         }
+
+        $winner_name = ""; $winner_us = "";
+        $cnt = 0;
+        if($prod_isApproved == 3){
+            $sel_prod_sold = prep_stmt("SELECT * FROM products WHERE prod_id=?", $prod_id, 'i');
+            if(mysqli_num_rows($sel_prod_sold) > 0){
+                while($row_prod = mysqli_fetch_array($sel_prod_sold)){
+                    $sel_winn = prep_stmt("SELECT count(offer.offer_id) as cnt,offer.offer_id,usr.username, offer.offer_price, prod.prod_title,prod.cat_id FROM prod_offers AS offer LEFT OUTER JOIN users usr ON offer.user_id = usr.user_id LEFT OUTER JOIN products prod ON offer.prod_id = prod.prod_id WHERE offer.prod_id = ? order by offer.offer_id DESC LIMIT 1", $row_prod['prod_id'], "i");
+                    if(mysqli_num_rows($sel_winn) > 0){
+                        while($row_sold_prod = mysqli_fetch_array($sel_winn)){
+                            if($row_sold_prod['cnt'] > 0){
+                                $winner_us = $row_sold_prod['username'];
+                                $cnt++;
+                                $winner_name = "<h3 class='heading'>Fituesi i ankandit është: <b style='color:#1bbb1b; font-size:2.5rem;'>". $row_sold_prod['username'] ."</b></h3>";
+                            }else{
+                                $winner_name = "<h3 class='heading' style='font-weight:800; color:red; font-size:2rem;'> Nuk ka pasur ofertues për këtë produkt!</h3>";
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 ?>
 <?php require "header.php"; ?>
@@ -451,6 +473,19 @@ require_once '../db.php';
         <div class="section-heading">
             <h1 class="page-title">Të dhënat për produktin: <b><?php echo $unique_id; ?></b></h1>
         </div>
+        <?php if($prod_isApproved == 3){ ?>
+        <div class="panel-content" >
+            <div class="table-wrapper-scroll-y my-custom-scrollbar text-center">
+                <?php echo $winner_name;?>
+            </div>
+        </div>
+        <?php }else{ ?>
+        <div class="panel-content" >
+            <div class="table-wrapper-scroll-y my-custom-scrollbar text-center">
+              <h3 class='heading'></h3>
+            </div>
+        </div>
+        <?php } ?>
         <?php if($prod_isApproved === 0){ ?>
         <div class="row">
             <div class="profile-section" style="padding: 0 12px;">
@@ -505,6 +540,7 @@ require_once '../db.php';
                         <small class="text-muted text-right"> Kërkesa u bë nga: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo $username; ?></small> </small>
                     </div>
                 </div>
+              
                 <div class="col-md-3 text-right">
                     <div class="panel-content" style="padding-top:0;">
                     <small class="text-muted text-right"> Kategoria: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo $prod_cat_title; ?></small> </small>
@@ -512,7 +548,7 @@ require_once '../db.php';
                 </div>
                 <div class="col-md-5 text-right">
                     <div class="panel-content" style="padding-top:0;">
-                    <small class="text-muted text-right"> Kërkesa u bë më: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo date("d-M-Y H:i:s A", strtotime($prod_from)); ?></small> </small>
+                    <small class="text-muted text-right"> Çmimi: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo number_format($prod_price,2); ?></small> </small>
                     </div>
                 </div>
                 <div class="col-md-12"> <hr> </div>
@@ -835,7 +871,7 @@ require_once '../db.php';
                 </div>
                 <div class="col-md-5 text-right">
                     <div class="panel-content" style="padding-top:0;">
-                    <small class="text-muted text-right"> Kërkesa u bë më: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo date("d-M-Y H:i:s A", strtotime($prod_from)); ?></small> </small>
+                        <small class="text-muted text-right"> Çmimi: <small class="text-primary text-right" style="font-size:18px; font-weight:800;"><?php echo number_format($prod_price,2) . " €"; ?></small> </small>
                     </div>
                 </div>
                 <div class="col-md-12"> <hr> </div>
@@ -1076,7 +1112,7 @@ require_once '../db.php';
                     <div class="col-md-12">
                         <div class="form-group text-center">
                             <label for="text-input1">Konfirmimi</label>
-                            <input type="text" id="text-input1" class="form-control" name="car_cub" <?php if($prod_isApproved == 1){echo "value='E PRANUAR' style='border-color:green; background:green; color:white; text-align:center;'";}else if($prod_isApproved == 2){echo "value='E REFUZUAR' style='border-color:red; background:red; color:white; text-align:center;'";} ?> required data-parsley-minlength="1" readonly>
+                            <input type="text" id="text-input1" class="form-control" name="car_cub" <?php if($prod_isApproved == 1){echo "value='E PRANUAR' style='border-color:green; background:green; color:white; text-align:center;'";}else if($prod_isApproved == 2){echo "value='E REFUZUAR' style='border-color:red; background:red; color:white; text-align:center;'";}else if($prod_isApproved == 3 && $cnt == 0){ echo "value='E MBYLLUR (pa ofertues)' style='border-color:#D9534F; background:#D9534F; color:white; text-align:center;'";}else if($prod_isApproved == 3 && $cnt > 0){ echo "value='E MBYLLUR ($winner_us)' style='border-color:#59BC1F; background:#59BC1F; color:white;font-size:large;font-weight:700; text-align:center;'";} ?> required data-parsley-minlength="1" readonly>
                             </select>
                         </div>
                     </div>

@@ -227,17 +227,31 @@ require_once '../db.php';
                 </div>
             </div>
             <?php
+            //SOLDEN PRODUCTS
+            $solden_products = "";
+            if(isset($_GET['solden_products'])){
+                $sold_prod = $_GET['solden_products'];
+                if($sold_prod == "smallest"){
+                    $solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title,prod_price prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE  prod_isApproved = ? ORDER BY prod_price ASC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                }elseif($sold_prod == "highest"){
+                    $solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?  ORDER BY prod_price DESC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                }else {
+                    $solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+                }
+            }else{
+                $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_price,prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+            }
             ?>
             <div class="row"  >
                 <div class="col-md-12">
                     <div class="panel-content" id="solden">
-                        <h3 class="heading"><i class="fa fa-square"></i>Ankandet e mbyllura</h3>
+                        <h3 class="heading"><i class="fa fa-square"></i>Ankandet e mbyllura <b style="color:#5CB85C">(TË SHITURA) </b></h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        <form method='get' action='index.php#solden' id="navbar-search1" class="navbar-form search-form" style="float:right;">
-                            <select class="form-control" id="solden_procucts" name="solden_products" >
-                                <option value=""> Rendit sipas çmimit... </option>
-                                <option value="smallest"> Më i vogli </option>
-                                <option value="highest"> Më i madhi </option>
+                        <form method='get' action='index.php#solden' id="navbar-search5" class="navbar-form search-form" style="float:right;">
+                            <select class="form-control" id="solden_products" name="solden_products" >
+                                <option value="" <?php if(isset($_GET['solden_products'])){ if($_GET['solden_products'] == ""){ echo "selected"; }} ?>> Rendit sipas çmimit... </option>
+                                <option value="smallest" <?php if(isset($_GET['solden_products'])){ if($_GET['solden_products'] == "smallest"){ echo "selected"; }} ?>> Më i vogli </option>
+                                <option value="highest" <?php if(isset($_GET['solden_products'])){ if($_GET['solden_products'] == "highest"){ echo "selected"; }} ?>> Më i madhi </option>
                             </select>
                             <button type="submit" class="btn btn-default"></button>
                         </form>
@@ -254,60 +268,102 @@ require_once '../db.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php          
-                                $solden_products = "";
-                                if(isset($_GET['solden_products'])){
-                                    $sold_prod = $_GET['solden_products']; 
-                                    if($sold_prod == "smallest"){
-                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title,prod_price prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE  prod_isApproved = ? ORDER BY prod_price ASC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
-                                    }elseif($sold_prod == "highest"){
-                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?  ORDER BY prod_price DESC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
-                                    }else {
-                                        $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
-                                    }
+                                <?php   
                                     if(mysqli_num_rows($solden_products) > 0){
                                     while($row_sold = mysqli_fetch_array($solden_products)){
                                         $seller = $row_sold['username'];
                                         $category = $row_sold['cat_title'];
                                             $sel_winn = prep_stmt("SELECT offer.offer_id,usr.username, offer.offer_price, prod.prod_title,prod.cat_id FROM prod_offers AS offer LEFT OUTER JOIN users usr ON offer.user_id = usr.user_id LEFT OUTER JOIN products prod ON offer.prod_id = prod.prod_id WHERE offer.prod_id = ? order by offer.offer_id DESC LIMIT 1", $row_sold['prod_id'], "i");
-                                        if(mysqli_num_rows($sel_winn) > 0){
+                                            if(mysqli_num_rows($sel_winn) > 0){
                                             while($row_sold_prod = mysqli_fetch_array($sel_winn)){
                                 ?>
                                     <tr style="font-weight:800;">
                                         <td><?php echo $row_sold_prod['prod_title']; ?></td>
                                         <td><a style='color:#f0ad4e; font-weight:900; font-size:larger;'><?php echo $seller; ?></td>
                                         <td><a style='color:#5cb85c; font-weight:900; font-size:larger;'><?php echo $row_sold_prod['username']; ?></a></td>
-                                        <td><?php echo number_format($row_sold_prod['offer_price'],2) . " €"; ?></td>
+                                        <td><?php echo number_format($row_sold['prod_price'],2) . " €"; ?></td>
                                         <td><?php echo $category; ?></td>
                                          <td><span class="label label-success">I MBYLLUR</span></td>
                                       
-                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_sold['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
                                     </tr>
-                                <?php } } } } } else{
-                                    $solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
-                                    if(mysqli_num_rows($solden_products) > 0){
-                                        while($row_sold = mysqli_fetch_array($solden_products)){
-                                            $seller = $row_sold['username'];
-                                            $category = $row_sold['cat_title'];
-                                            $sel_winn = prep_stmt("SELECT offer.offer_id,usr.username, offer.offer_price, prod.prod_title,prod.cat_id FROM prod_offers AS offer LEFT OUTER JOIN users usr ON offer.user_id = usr.user_id LEFT OUTER JOIN products prod ON offer.prod_id = prod.prod_id WHERE offer.prod_id = ? order by offer.offer_id DESC LIMIT 1", $row_sold['prod_id'], "i");
-                                            if(mysqli_num_rows($sel_winn) > 0){
-                                                while($row_sold_prod = mysqli_fetch_array($sel_winn)){
-                                    ?>
-                                        <tr style="font-weight:800;">
-                                            <td><?php echo $row_sold_prod['prod_title']; ?></td>
-                                            <td><a style='color:#f0ad4e; font-weight:900; font-size:larger;'><?php echo $seller; ?></td>
-                                            <td><a style='color:#5cb85c; font-weight:900; font-size:larger;'><?php echo $row_sold_prod['username']; ?></a></td>
-                                            <td><?php echo number_format($row_sold_prod['offer_price'],2) . " €"; ?></td>
-                                            <td><?php echo $category; ?></td>
-                                             <td><span class="label label-success">I MBYLLUR</span></td>
-                                          
-                                            <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
-                                        </tr>
-                                    <?php } } } } }?>
+                                <?php } } } }  ?>
                                     <script>
-                                        document.getElementById("solden_procucts").onchange = function () {
-                                            var searchUsers = document.getElementById("solden_procucts");
-                                                document.getElementById("navbar-search1").submit();
+                                        document.getElementById("solden_products").onchange = function () {
+                                            var searchUsers = document.getElementById("solden_products");
+                                                document.getElementById("navbar-search5").submit();
+                                        }
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            //NOT SOLDEN PRODUCTS
+            $not_solden_products = "";
+            if(isset($_GET['not_solden_procucts'])){
+                $not_sold_prod = $_GET['not_solden_procucts'];
+                if($not_sold_prod == "smallest"){
+                    $not_solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE  prod_isApproved = ? ORDER BY prod_price ASC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                }elseif($not_sold_prod == "highest"){
+                    $not_solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?  ORDER BY prod_price DESC", 3, "i");//die(var_dump(mysqli_fetch_array($sel_prod_det)));
+                }else {
+                    $not_solden_products = prep_stmt("SELECT username,cat_title,prod_id,prod_price, prod_title, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+                }
+            }else{
+                $not_solden_products = prep_stmt("SELECT username,cat_title,prod_id, prod_title,prod_price, prod_isApproved FROM products LEFT OUTER JOIN users on products.user_id = users.user_id LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_isApproved = ?", 3, "i");
+            }
+            ?>
+            <div class="row"  >
+                <div class="col-md-12">
+                    <div class="panel-content" id="notsolden">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <h3 class="heading"><i class="fa fa-square"></i>Ankandet e mbyllura <b style="color:#D9534F">(JO TË SHITURA) </b></h3>
+                        <form method='get' action='index.php#notsolden' id="navbar-search6" class="navbar-form search-form" style="float:right;">
+                            <select class="form-control" id="not_solden_procucts" name="not_solden_procucts" >
+                                <option value="" <?php if(isset($_GET['not_solden_procucts'])){ if($_GET['not_solden_procucts'] == ""){ echo "selected"; }} ?>> Rendit sipas çmimit... </option>
+                                <option value="smallest" <?php if(isset($_GET['not_solden_procucts'])){ if($_GET['not_solden_procucts'] == "smallest"){ echo "selected"; }} ?>> Më i vogli </option>
+                                <option value="highest" <?php if(isset($_GET['not_solden_procucts'])){ if($_GET['not_solden_procucts'] == "highest"){ echo "selected"; }} ?>> Më i madhi </option>
+                            </select>
+                            <button type="submit" class="btn btn-default"></button>
+                        </form>
+                          <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%"  style="overflow:scroll;">
+                                <thead>
+                                    <tr>
+                                        <th>Titulli ankandit</th>
+                                        <th>Shitësi </th>
+                                        <th>Çmimi</th>
+                                        <th>Kategoria </th>
+                                        <th>Statusi</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php   
+                                    if(mysqli_num_rows($not_solden_products) > 0){
+                                    while($row_not_sold = mysqli_fetch_array($not_solden_products)){
+                                        $seller = $row_not_sold['username'];
+                                        $category = $row_not_sold['cat_title'];
+                                        $sel_count = prep_stmt("SELECT count(offer_id) FROM prod_offers WHERE prod_id = ?", $row_not_sold['prod_id'], "i");
+                                        $row_not_sold_prod = mysqli_fetch_array($sel_count);
+                                        if($row_not_sold_prod[0] == 0){
+                                ?>
+                                    <tr style="font-weight:800;">
+                                        <td><?php echo $row_not_sold['prod_title']; ?></td>
+                                        <td><a style='color:#f0ad4e; font-weight:900; font-size:larger;'><?php echo $seller; ?></td>
+                                        <td><?php echo number_format($row_not_sold['prod_price'],2) . " €"; ?></td>
+                                        <td><?php echo $category; ?></td>
+                                         <td><span class="label label-danger">I MBYLLUR</span></td>
+                                      
+                                        <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_not_sold['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                    </tr>
+                                <?php } } } ?>
+                                    <script>
+                                        document.getElementById("not_solden_procucts").onchange = function () {
+                                            var searchUsers = document.getElementById("not_solden_procucts");
+                                                document.getElementById("navbar-search6").submit();
                                         }
                                     </script>
                                 </tbody>
