@@ -337,43 +337,64 @@
 			</div>
 		</div>
 		<?php 
-			$sel_prof_lweek = prep_stmt("SELECT * FROM income_ratio WHERE date_time > (DATE(NOW()) - INTERVAL 7 DAY) order by date_time ASC", null, null);
+			// $sel_prof_lweek = prep_stmt("SELECT * FROM income_ratio WHERE date_time > (DATE(NOW()) - INTERVAL 7 DAY) order by date_time ASC", null, null);
 
-			$last_week = date("d-M", strtotime("-7 days"));
-			$week_days = array();
-			$cnti = 0;
-			for($i = 0; $i < 8; $i++){
-				$week_days[] .= "'$last_week'";
-				$last_week = date('d-M', strtotime("+1 day", strtotime($last_week)));
-			}
-			$last_7days = "";
-			foreach($week_days as $day){
-				$last_7days .= $day . ",";
-			}
-			$last_7days = rtrim($last_7days, ",");//die($last_7days);
+			// $last_week = date("d-M", strtotime("-7 days"));
+			// $week_days = array();
+			// $cnti = 0;
+			// for($i = 0; $i < 8; $i++){
+			// 	$week_days[] .= "'$last_week'";
+			// 	$last_week = date('d-M', strtotime("+1 day", strtotime($last_week)));
+			// }
+			// $last_7days = "";
+			// foreach($week_days as $day){
+			// 	$last_7days .= $day . ",";
+			// }
+			// $last_7days = rtrim($last_7days, ",");//die($last_7days);
 
-			$db_date = array();
-			if(mysqli_num_rows($sel_prof_lweek) > 0){
-				while($row = mysqli_fetch_array($sel_prof_lweek)){
-					$data = date("d-M", strtotime($row['date_time']));
-					$db_date[] = array("data" => $data, "profit" => $row['profit']);
-				}
+			// $db_date = array();
+			// if(mysqli_num_rows($sel_prof_lweek) > 0){
+			// 	while($row = mysqli_fetch_array($sel_prof_lweek)){
+			// 		$data = date("d-M", strtotime($row['date_time']));
+			// 		$db_date[] = array("data" => $data, "profit" => $row['profit']);
+			// 	}
+			// }
+			$select_all = prep_stmt("SELECT DATE(date_time) as date_1, SUM(profit) as profit_1
+			FROM income_ratio 
+			WHERE date_time > (DATE(NOW()) - INTERVAL 1 MONTH) 
+			GROUP BY DATE(date_time)
+			order by date_time ASC", null, null);
+			$dataIncome = array();
+			$dataDate = array();
+			for($i = 1; $i <= mysqli_num_rows($select_all); $i++){
+				$row = mysqli_fetch_array($select_all);
+				$dataIncome[] = $row['profit_1'];
+				$dataDate[] = date("d-M", strtotime($row['date_1']));
 			}
-			die(var_dump($db_date));
+			$profits = "";
+			$dateIncome = "";
+			foreach($dataIncome as $price) {
+				$profits .= number_format($price,2).",";
+			}
+			foreach($dataDate as $date){
+				$dateIncome .= "'$date'" . ",";
+			}
+			$profits = rtrim($profits, ",");
+			$dateIncome =rtrim($dateIncome,",");//die($profits);
 
 
 		?>
         <div class="section-heading">
-            <h1 class="page-title">Chartist</h1>
+            <h1 class="page-title">GRAFIKAT</h1>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="panel-content">
-                    <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Line Chart</h2>
+                    <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Grafiku i të ardhurave për 30 ditët e fundit</h2>
                     <div id="demo-line-chart" class="ct-chart"></div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="panel-content">
                     <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Bar Chart</h2>
                     <div id="demo-bar-chart" class="ct-chart"></div>
@@ -469,9 +490,9 @@
 		var options;
 
 		var data = {
-			labels: [<?php echo $last_7days ?>],
+			labels: [<?php echo $dateIncome ?>],
 			series: [
-				[200, 380, 350, 320, 410, 450, 570,234],
+				[<?php echo $profits ?>],
 			]
 		};
 
@@ -680,13 +701,13 @@
 			display_text: 'none'
 		});
 
-		// line chart
-		var data = {
-		labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		series: [
-			[200, 380, 350, 480, 410, 450, 550],
-		]
-		};
+		// // line chart
+		// var data = {
+		// labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		// series: [
+		// 	[200, 380, 350, 480, 410, 450, 550],
+		// ]
+		// };
 
 		var options = {
 		height: "200px",
