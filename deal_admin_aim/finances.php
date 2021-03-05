@@ -282,6 +282,42 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel-content">
+						<h3 class="heading"><i class="fa fa-square"></i> Performanca e të ardhurave</h3>
+						<div class="row">
+							<div class="col-md-6">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>&nbsp;</th>
+											<th>Java kaluar</th>
+											<th>Këtë javë</th>
+											<th>Dallimi (%)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th>Të ardhurat</th>
+											<td><?php echo number_format($lastWeekProfit,2) ?></td>
+											<td><span class="text-info"><?php echo number_format($thisWeekProfit,2) ?></span></td>
+											<?php if($lastWeekProfit > $thisWeekProfit){ ?>
+											<td><span class="text-danger"><?php echo $weekProfitPerc ?></span></td>
+											<?php }elseif($lastWeekProfit < $thisWeekProfit) ?>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="col-md-6">
+								<div id="chart-sales-performance">Loading ...</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="row">
 				<div class="col-md-8">
 					<!-- TARIFF TYPE -->
@@ -337,6 +373,7 @@
 			</div>
 		</div>
 		<?php 
+			
 			// $sel_prof_lweek = prep_stmt("SELECT * FROM income_ratio WHERE date_time > (DATE(NOW()) - INTERVAL 7 DAY) order by date_time ASC", null, null);
 
 			// $last_week = date("d-M", strtotime("-7 days"));
@@ -512,6 +549,47 @@
 		};
 
 		new Chartist.Line('#demo-line-chart', data, options);
+
+		
+		// sales performance chart
+		var sparklineSalesPerformance = function() {
+
+		var lastWeekData = [142, 164, 298, 384, 232, 269, 211];
+		var currentWeekData = [352, 267, 373, 222, 533, 111, 60];
+
+		$('#chart-sales-performance').sparkline(lastWeekData, {
+			fillColor: 'rgba(90, 90, 90, 0.1)',
+			lineColor: '#5A5A5A',
+			width: '' + $('#chart-sales-performance').innerWidth() + '',
+			height: '100px',
+			lineWidth: '2',
+			spotColor: false,
+			minSpotColor: false,
+			maxSpotColor: false,
+			chartRangeMin: 0,
+			chartRangeMax: 1000
+		});
+
+		$('#chart-sales-performance').sparkline(currentWeekData, {
+			composite: true,
+			fillColor: 'rgba(60, 137, 218, 0.1)',
+			lineColor: '#3C89DA',
+			lineWidth: '2',
+			spotColor: false,
+			minSpotColor: false,
+			maxSpotColor: false,
+			chartRangeMin: 0,
+			chartRangeMax: 1000
+		});
+		}
+
+		sparklineSalesPerformance();
+
+		var sparkResize;
+		$(window).on('resize', function() {
+		clearTimeout(sparkResize);
+		sparkResize = setTimeout(sparklineSalesPerformance, 200);
+		});
 
 
 		// bar chart
@@ -753,45 +831,7 @@
 
 
 		// sales performance chart
-		var sparklineSalesPerformance = function() {
-
-		var lastWeekData = [142, 164, 298, 384, 232, 269, 211];
-		var currentWeekData = [352, 267, 373, 222, 533, 111, 60];
-
-		$('#chart-sales-performance').sparkline(lastWeekData, {
-			fillColor: 'rgba(90, 90, 90, 0.1)',
-			lineColor: '#5A5A5A',
-			width: '' + $('#chart-sales-performance').innerWidth() + '',
-			height: '100px',
-			lineWidth: '2',
-			spotColor: false,
-			minSpotColor: false,
-			maxSpotColor: false,
-			chartRangeMin: 0,
-			chartRangeMax: 1000
-		});
-
-		$('#chart-sales-performance').sparkline(currentWeekData, {
-			composite: true,
-			fillColor: 'rgba(60, 137, 218, 0.1)',
-			lineColor: '#3C89DA',
-			lineWidth: '2',
-			spotColor: false,
-			minSpotColor: false,
-			maxSpotColor: false,
-			chartRangeMin: 0,
-			chartRangeMax: 1000
-		});
-		}
-
-		sparklineSalesPerformance();
-
-		var sparkResize;
-		$(window).on('resize', function() {
-		clearTimeout(sparkResize);
-		sparkResize = setTimeout(sparklineSalesPerformance, 200);
-		});
-
+		
 
 		// top products
 		var dataStackedBar = {
