@@ -339,8 +339,7 @@ function getWinnSell($usname){
                                                     target="_parent">Si funksionon?</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
-                                                    target="_parent">Kontakti</a>
+                                                <a href="contact.php" target="_parent">Kontakti</a>
                                             </li>
                                             <?php
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
