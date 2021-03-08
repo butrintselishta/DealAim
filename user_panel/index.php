@@ -708,7 +708,7 @@
                                                     target="_parent">Si funksionon?</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="../contact.php"
                                                     target="_parent">Kontakti</a>
                                             </li>
                                             <?php

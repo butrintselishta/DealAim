@@ -463,6 +463,10 @@ require_once '../db.php';
             <ul id="main-menu" class="metismenu">
 				<li class="active"><a href="index.php"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
                 <li class=""><a href="myprofile.php"><i class="lnr lnr-user"></i> <span>Profili im</span></a></li>
+                <?php if($_SESSION['user']['status'] == ADMIN) { ?>
+                    <li><a href="finances.php"><i class="lnr lnr-chart-bars"></i> <span>Financat</span></a></li>
+                    <li><a href="users.php"><i class="lnr lnr-users"></i> <span>Përdoruesit</span></a></li>
+                <?php } ?>
             </ul>
         </nav>
     </div>
