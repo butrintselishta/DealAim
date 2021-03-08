@@ -232,7 +232,7 @@
                         <h3 class="heading"><i class="fa fa-square"></i>Të gjithë përdoruesit</h3>
                         <?php 
                             $sel_all_users = "";
-                            if(isset($_GET['user_status'])){
+                            if(isset($_GET['user_status'])){ die("asdf");
                                 $usr = $_GET['user_status'];
                                 if($usr == 'admin'){
                                     $sel_all_users = prep_stmt("SELECT * FROM users WHERE status = ?",101,'i');
@@ -273,7 +273,7 @@
                                    <?php unset($_SESSION['prep_stmt_error']);
                                     unset($_SESSION['user_data_changed']);?>
                             </div>
-                            <form method='get' action='users.php' id="navbar-search1" class="navbar-form search-form" style="float:right;">
+                            <form method='get' action='users.php' id="navbar-search2" class="navbar-form search-form" style="float:right;">
                                 <select class="form-control" id="search_users" name="user_status">
                                     <option value="all">Kërko sipas statusit të përdoruesit...</option>
                                     <option value="admin" <?php if(isset($_GET['user_status']) && $_GET['user_status'] == 'admin'){echo "selected";} ?>>Administrator</option>
@@ -289,7 +289,7 @@
                             <script>
                                 document.getElementById("search_users").onchange = function () {
                                     var searchUsers = document.getElementById("search_users");
-                                        document.getElementById("navbar-search1").submit();
+                                    document.getElementById("navbar-search2").submit();
                                 }
                             </script>
                             <table class="table table-bordered table-striped mb-0">

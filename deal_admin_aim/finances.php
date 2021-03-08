@@ -283,7 +283,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<div class="panel-content">
 						<h3 class="heading"><i class="fa fa-square"></i> Performanca e të ardhurave</h3>
@@ -304,8 +304,12 @@
 											<td><?php echo number_format($lastWeekProfit,2) ?></td>
 											<td><span class="text-info"><?php echo number_format($thisWeekProfit,2) ?></span></td>
 											<?php if($lastWeekProfit > $thisWeekProfit){ ?>
-											<td><span class="text-danger"><?php echo $weekProfitPerc ?></span></td>
-											<?php }elseif($lastWeekProfit < $thisWeekProfit) ?>
+												<td><span class="text-danger"><?php echo $weekProfitPerc ?></span></td>
+											<?php }elseif($lastWeekProfit < $thisWeekProfit){ ?>
+												<td><span class="text-success"><?php echo $weekProfitPerc ?></span></td>
+											<?php } else{ ?>
+												<td><span class="text-success"><?php echo $weekProfitPerc ?></span></td>
+											<?php } ?>
 										</tr>
 									</tbody>
 								</table>
@@ -316,7 +320,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="row">
 				<div class="col-md-8">
@@ -344,7 +348,7 @@
 
 					?>
 					<div class="panel-content">
-						<h2 class="heading"><i class="fa fa-square"></i> Lloji i tarifes</h2>
+						<h2 class="heading"><i class="fa fa-square"></i> Llojet e tarifes</h2>
 						<div id="demo-pie-chart" class="ct-chart"></div>
 					</div>
 					<!-- END TRAFFIC SOURCES -->
@@ -371,74 +375,184 @@
 					<!-- END REFERRALS -->
 				</div>
 			</div>
+		</div>	
+		<!-- GET THE PROFIT FROM THIS WEEK -->
+        <div class="section-heading clearfix">
+			<h2 class="section-title"><i class="fa fa-area-chart"></i> GRAFIKËT </h2>
+			<div class="action-buttons right">
+				<a href="finances_details.php" class="btn btn-default btn_det"><i class="fa fa-file-text-o"></i> Shiko në detaje</a>
+			</div>
 		</div>
-		<?php 
+		<div class="row">
+			<?php 
+				$this_week_pro = "";
+				$this_today = date("l d-M"); ;
+				if(strpos($this_today, "Monday") !== FALSE)
+				{ 
+					$this_week_pro = prep_stmt("SELECT sum(profit) as prof, DATE(date_time) as dt 
+					FROM income_ratio 
+					WHERE DATE(date_time) BETWEEN DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY) - INTERVAL 1 WEEK and CURDATE() - INTERVAL 1 DAY
+					GROUP BY DATE(date_time)");
+					$this_today = date("l d-M", strtotime("last monday"));
+					// $this_weekDays = date("l",strtotime("this week Monday")); 
+				}else{
+					$this_week_pro = prep_stmt("SELECT sum(profit) as prof, DATE(date_time) as dt 
+					FROM income_ratio 
+					WHERE DATE(date_time) BETWEEN DATE_ADD(CURDATE(), INTERVAL - WEEKDAY(CURDATE()) DAY) and CURDATE()
+					GROUP BY DATE(date_time)");
+					$this_today = date("l d-M", strtotime("last monday"));
+				}
+				$this_today = date("Y-m-d", strtotime($this_today));
+				$tdy = date("Y-m-d");
+				$date_diff = abs(strtotime(date("Y/m/d", strtotime($this_today))) - strtotime(date("Y/m/d", strtotime($tdy))));
+				$numberDays = intval($date_diff/86400);
+
+				$week_days_pro = array();
+				for($i =0; $i < $numberDays; $i++){
+					$week_days_pro[] .= date('l d-M', strtotime($this_today));
+					$this_today = date('l d-M', strtotime("+1 day", strtotime($this_today)));
+				}
+
+				$week_prof_db = array();
+				if(mysqli_num_rows($this_week_pro) > 0){
+					while($row = mysqli_fetch_array($this_week_pro)){
+						$data = date("l d-M", strtotime($row['dt']));
+						$week_prof_db[] = array("data" => $data, "profit" => number_format($row['prof'],2));
+					}
+				}
+
+				$array_alldays = array();
+				$j = 0;
+				for($i = 0; $i < count($week_days_pro); $i++){
+					if(array_search($week_days_pro[$i],array_column($week_prof_db,"data")) === FALSE){
+						$array_alldays[] = array("data" => $week_days_pro[$i],"profit" => 0);
+					}else{
+						$array_alldays[] = array("data" => $week_prof_db[$j]["data"], "profit" => $week_prof_db[$j]["profit"]);
+						$j++;
+					}
+				}
+
+				$this_w_profit = "";
+				$this_w_days = "";
+				for($i = 0; $i < count($array_alldays); $i++){
+					$this_w_days .= "'".date("d-M", strtotime($array_alldays[$i]["data"])) . "',";
+					$this_w_profit .= $array_alldays[$i]['profit'] . ",";
+				}
+				$this_w_days = rtrim($this_w_days,",");
+				$this_w_profit = rtrim($this_w_profit, ",");
+		
+			?>
+			<div class="panel-content">
+				<div class="row margin-bottom-15">
+					<div class="col-md-12 float-left ">
+						<h2 class="heading margin-bottom-50"><i class="fa fa fa-line-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b>(LINE CHART)</b></h2>
+					</div>
+					<div class="col-md-12 col-sm-9 left">
+						<div id="demo-line-chart2" class="ct-chart"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="panel-content">
+				<div class="row margin-bottom-15">
+					<div class="col-md-12 float-left ">
+							<h2 class="heading margin-bottom-50"><i class="fa fa fa-bar-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b> (BAR CHART) </b></h2>
+						</div>
+					<div class="col-md-12 col-sm-9 left">
+						<div id="demo-bar-chart2" class="ct-chart"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 			
-			// $sel_prof_lweek = prep_stmt("SELECT * FROM income_ratio WHERE date_time > (DATE(NOW()) - INTERVAL 7 DAY) order by date_time ASC", null, null);
-
-			// $last_week = date("d-M", strtotime("-7 days"));
-			// $week_days = array();
-			// $cnti = 0;
-			// for($i = 0; $i < 8; $i++){
-			// 	$week_days[] .= "'$last_week'";
-			// 	$last_week = date('d-M', strtotime("+1 day", strtotime($last_week)));
-			// }
-			// $last_7days = "";
-			// foreach($week_days as $day){
-			// 	$last_7days .= $day . ",";
-			// }
-			// $last_7days = rtrim($last_7days, ",");//die($last_7days);
-
-			// $db_date = array();
-			// if(mysqli_num_rows($sel_prof_lweek) > 0){
-			// 	while($row = mysqli_fetch_array($sel_prof_lweek)){
-			// 		$data = date("d-M", strtotime($row['date_time']));
-			// 		$db_date[] = array("data" => $data, "profit" => $row['profit']);
-			// 	}
-			// }
-			$select_all = prep_stmt("SELECT DATE(date_time) as date_1, SUM(profit) as profit_1
-			FROM income_ratio 
-			WHERE date_time > (DATE(NOW()) - INTERVAL 1 MONTH) 
-			GROUP BY DATE(date_time)
-			order by date_time ASC", null, null);
-			$dataIncome = array();
-			$dataDate = array();
-			for($i = 1; $i <= mysqli_num_rows($select_all); $i++){
-				$row = mysqli_fetch_array($select_all);
-				$dataIncome[] = $row['profit_1'];
-				$dataDate[] = date("d-M", strtotime($row['date_1']));
-			}
-			$profits = "";
-			$dateIncome = "";
-			foreach($dataIncome as $price) {
-				$profits .= number_format($price,2).",";
-			}
-			foreach($dataDate as $date){
-				$dateIncome .= "'$date'" . ",";
-			}
-			$profits = rtrim($profits, ",");
-			$dateIncome =rtrim($dateIncome,",");//die($profits);
-
-
-		?>
-        <div class="section-heading">
-            <h1 class="page-title">GRAFIKAT</h1>
-        </div>
+		<div class="col-md-12"> <hr style="border-top:1px solid #8c8c8c;"> </div>
+		<!-- GET THE PROFIT FROM THE LAST 30 DAYS -->
         <div class="row">
+			<?php 
+				$sel_prof_lweek = prep_stmt("SELECT sum(profit) as profit_t,date(date_time) as date_t FROM income_ratio WHERE date_time > (DATE(NOW()) - INTERVAL 1 MONTH) GROUP BY date(date_time) order by date_time ASC", null, null);
+
+				$last_month = date("d-M", strtotime("-1 MONTH"));
+				$month_days = array();
+				$cnti = 0;
+				for($i = 1; $i < 30; $i++){
+					$month_days[] .= "$last_month";
+					$last_month = date('d-M', strtotime("+1 day", strtotime($last_month)));
+				}//die(var_dump($month_days));
+
+				$db_date = array();
+				if(mysqli_num_rows($sel_prof_lweek) > 0){
+					while($row = mysqli_fetch_array($sel_prof_lweek)){
+						$data = date("d-M", strtotime($row['date_t']));
+						$db_date[] = array("data" => $data, "profit" => number_format($row['profit_t'],2));
+					}
+				}
+				$arr_ex = array();
+				$j = 0;
+				for($i = 0; $i < count($month_days); $i++){
+					if(array_search($month_days[$i],array_column($db_date,"data")) === FALSE){
+						$arr_ex[] = array("data" => $month_days[$i],"profit" => 0);
+					}else{
+						$arr_ex[] = array("data" => $db_date[$j]["data"], "profit" => $db_date[$j]["profit"]);
+						$j++;
+					}
+				}
+				$date_p = "";
+				$profit_p = "";
+				for($i = 0; $i < count($arr_ex); $i++){
+					$date_p .= "'".$arr_ex[$i]["data"] . "',";
+					$profit_p .= $arr_ex[$i]['profit'] . ",";
+				}
+				$date_p = rtrim($date_p,",");
+				$profit_p = rtrim($profit_p, ",");
+
+				$select_all = prep_stmt("SELECT DATE(date_time) as date_1, SUM(profit) as profit_1
+				FROM income_ratio 
+				WHERE date_time > (DATE(NOW()) - INTERVAL 1 MONTH) 
+				GROUP BY DATE(date_time)
+				order by date_time ASC", null, null);
+				$dataIncome = array();
+				$dataDate = array();
+				for($i = 1; $i <= mysqli_num_rows($select_all); $i++){
+					$row = mysqli_fetch_array($select_all);
+					$dataIncome[] = $row['profit_1'];
+					$dataDate[] = date("d-M", strtotime($row['date_1']));
+				}
+				$profits = "";
+				$dateIncome = "";
+				foreach($dataIncome as $price) {
+					$profits .= number_format($price,2).",";
+				}
+				foreach($dataDate as $date){
+					$dateIncome .= "'$date'" . ",";
+				}
+				$profits = rtrim($profits, ",");
+				$dateIncome =rtrim($dateIncome,",");//die($profits);
+
+
+			?>
             <div class="col-md-12">
                 <div class="panel-content">
-                    <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Grafiku i të ardhurave për 30 ditët e fundit</h2>
-                    <div id="demo-line-chart" class="ct-chart"></div>
+					<div class="col-md-6 float-left ">
+                    	<h2 class="heading margin-bottom-50"><i class="fa fa fa-line-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për 30 ditët e fundit <b> (LINE CHART) </b></h2>
+					</div>
+					<div class="col-md-6 float-right text-right ">
+					</div>
+                    <div id="demo-line-chart1" class="ct-chart"></div>
                 </div>
             </div>
-            <div class="col-md-12">
+        </div>
+		<div class="row">
+			<div class="col-md-12">
                 <div class="panel-content">
-                    <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Bar Chart</h2>
+					<div class="col-md-6 float-left ">
+                    	<h2 class="heading margin-bottom-50"><i class="fa fa fa-line-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për 30 ditët e fundit <b> (BAR CHART) </b></h2>
+					</div>
                     <div id="demo-bar-chart" class="ct-chart"></div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-6">
                 <div class="panel-content">
                     <h2 class="heading margin-bottom-50"><i class="fa fa-square"></i> Area Chart</h2>
@@ -479,7 +593,7 @@
                     <div id="demo-horizontalbar-chart" class="ct-chart"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 <!-- END MAIN CONTENT -->
@@ -525,11 +639,10 @@
 <script>
 	$(function() {
 		var options;
-
 		var data = {
-			labels: [<?php echo $dateIncome ?>],
+			labels: [<?php echo $date_p ?>],
 			series: [
-				[<?php echo $profits ?>],
+				[<?php echo $profit_p ?>],
 			]
 		};
 
@@ -548,7 +661,7 @@
 			]
 		};
 
-		new Chartist.Line('#demo-line-chart', data, options);
+		new Chartist.Line('#demo-line-chart1', data, options);
 
 		
 		// sales performance chart
@@ -779,13 +892,13 @@
 			display_text: 'none'
 		});
 
-		// // line chart
-		// var data = {
-		// labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		// series: [
-		// 	[200, 380, 350, 480, 410, 450, 550],
-		// ]
-		// };
+		// line chart
+		var data = {
+		labels: [<?php echo $this_w_days ?>],
+		series: [
+			[<?php echo $this_w_profit ?>],
+		]
+		};
 
 		var options = {
 		height: "200px",
@@ -807,7 +920,7 @@
 			}),
 			Chartist.plugins.ctAxisTitle({
 				axisX: {
-					axisTitle: 'Day',
+					axisTitle: 'Data',
 					axisClass: 'ct-axis-title',
 					offset: {
 						x: 0,
@@ -816,7 +929,7 @@
 					textAnchor: 'middle'
 				},
 				axisY: {
-					axisTitle: 'Reach',
+					axisTitle: 'Shuma',
 					axisClass: 'ct-axis-title',
 					offset: {
 						x: 0,
@@ -827,11 +940,23 @@
 		]
 		};
 
-		new Chartist.Line('#demo-line-chart', data, options);
+		new Chartist.Line('#demo-line-chart2', data, options);
 
 
 		// sales performance chart
-		
+		options = {
+			height: "300px",
+			axisX: {
+				showGrid: false
+			},
+			plugins: [
+				Chartist.plugins.tooltip({
+					appendToBody: true
+				}),
+			]
+		};
+
+		new Chartist.Bar('#demo-bar-chart2', data, options);
 
 		// top products
 		var dataStackedBar = {

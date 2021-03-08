@@ -106,7 +106,7 @@
     
     <?php 
         $sel_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
-        $winner = ""; $winner_price = "";
+        $winner = ""; $winner_price = ""; $winner_username = "";
         if(mysqli_num_rows($sel_winner) > 0){
             while($row_win = mysqli_fetch_array($sel_winner)){
                 $winner_username = $row_win['username'];
@@ -263,14 +263,15 @@
                         </div>
                     </p>
                     <?php if((strtotime($select_product['prod_to'])) <= time()){
-                            if($_SESSION['user']['username'] == $winner_username){
+                            if(isset($_SESSION['logged'])){
+                                if($_SESSION['user']['username'] == $winner_username){
                     ?>
                     <p>
                         <div clss="col-12"> 
                             <a href="details.php?prod_details=<?php echo $select_product['prod_id'];?>&down=<?php echo $prev_down[1];?>" class="btn_1" style="display: block; margin: 0 auto;"> SHKARKO </a>
                         </div>
                     </p>
-                    <?php } }?>
+                    <?php } } }?>
                     
                     <div class="row">
                     <script type="text/javascript">

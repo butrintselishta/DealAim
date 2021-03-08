@@ -69,6 +69,14 @@
 		margin-left: 20px;
    		margin-right: 20px;
 	}
+	.btn_det{
+		background-color: #5A5A5A;
+		color: #fff;
+	}
+	.btn_det:hover{
+		background-color: #cecece;
+		color: #5A5A5A;
+	}
     </style>
 </head>
 
