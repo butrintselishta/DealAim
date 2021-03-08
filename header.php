@@ -254,6 +254,12 @@ function getWinnSell($usname){
         .hide {
             display: none;
         }
+        .auc_function {
+            background-color: #f4f4f4;
+        }
+        .quest_auc{
+            font-size:1rem;
+        }
     </style>
     <!-- BASE CSS -->
     <link href="css/bootstrap.custom.min.css" rel="stylesheet">
@@ -322,15 +328,14 @@ function getWinnSell($usname){
                                                 <a href="index.php" target="_parent">Ballina</a>
                                             </li>
                                             <li>
-                                                <a href="solden_products.php"
-                                                    target="_parent">Të shitura</a>
+                                                <a href="closed.php"target="_parent">Të shitura</a>
                                             </li>
                                             <li>
                                                 <a href="../item/allaia-ecommerce-html-template/25781982.html"
                                                     target="_parent">Rreth Nesh</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="faq.php"
                                                     target="_parent">Si funksionon?</a>
                                             </li>
                                             <li>

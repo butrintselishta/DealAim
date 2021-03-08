@@ -1,5 +1,5 @@
 ﻿<?php 
-require "db.php";
+require_once "db.php";
 
 if(isset($_SESSION['user_unconfirmed'])){
     header("location:signin.php");die();

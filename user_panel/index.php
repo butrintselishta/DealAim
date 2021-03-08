@@ -696,7 +696,7 @@
                                                 <a href="../index.php" target="_parent">Ballina</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="../closed.php"
                                                     target="_parent">Të shitura</a>
                                             </li>
                                             <li>
@@ -704,7 +704,7 @@
                                                     target="_parent">Rreth Nesh</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="../faq.php"
                                                     target="_parent">Si funksionon?</a>
                                             </li>
                                             <li>
@@ -1763,11 +1763,11 @@
                 <h3 data-target="#collapse_1">Linqe</h3>
                 <div class="collapse dont-collapse-sm links" id="collapse_1">
                     <ul>
-                        <li><a href="about.html">Ballina</a></li>
-                        <li><a href="help.html">Të shitura</a></li>
-                        <li><a href="help.html">Rreth Nesh</a></li>
-                        <li><a href="account.html">Si funksionon?</a></li>
-                        <li><a href="blog.html">Kontakti</a></li>
+                        <li><a href="../index.php">Ballina</a></li>
+                        <li><a href="../closed.php">Të shitura</a></li>
+                        <li><a href="../about-us.php">Rreth Nesh</a></li>
+                        <li><a href="../faq.php">Si funksionon?</a></li>
+                        <li><a href="../contact.php">Kontakti</a></li>
                     </ul>
                 </div>
             </div>
