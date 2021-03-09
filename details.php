@@ -52,6 +52,7 @@
         $today = time();
         $get_num_offers = prep_stmt("SELECT offer_id FROM prod_offers WHERE prod_id=?", $prod_details,"i");
         $get_nr = mysqli_num_rows($get_num_offers);
+
     }
    
 	require "header.php";
@@ -793,5 +794,59 @@
     <!--/feat-->
 </main>
 <!-- /main -->
-
+<?php 
+    //
+    if(strtotime($select_product['prod_to']) <= $today){
+        $sel_prod_winner = prep_stmt("SELECT * FROM prod_offers WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
+        $prod_winner = mysqli_fetch_array($sel_prod_winner);//die(var_dump($prod_winner['is_sold'] === 0));
+        //die(var_dump($prod_winner['user_id']));
+        if(mysqli_num_rows($sel_prod_winner) > 0 && $prod_winner['is_sold'] === 0){
+            $sel_maxOffer_each_id = prep_stmt("SELECT offer_id,user_id, MAX(CAST(offer_price AS DECIMAL(8,2))) as off_price
+            FROM prod_offers
+            WHERE prod_id = ? AND user_id <> ?
+            GROUP BY user_id",array($prod_details, $prod_winner['user_id']),"ii");
+            $rows = mysqli_num_rows($sel_maxOffer_each_id);
+            if($rows > 0){
+                for($i = 0; $i < $rows; $i++){
+                    $row = mysqli_fetch_array($sel_maxOffer_each_id);
+                    //SELECTING USER BALANCE
+                    $user_data = prep_stmt("SELECT * FROM users WHERE user_id = ?", $row['user_id'], "i");
+                    $user_bal = mysqli_fetch_array($user_data);
+                    $user_balance = $user_bal['user_balance']; 
+                    //colelcting given price with user_balance
+                    $giving_back = $user_balance + $row['off_price'];
+                    //GETTING BACK THE MONEY TO THE LOSERS
+                    if(!prep_stmt("UPDATE users SET user_balance = ? WHERE user_id = ?", array($giving_back,$row['user_id']), "si")){
+                        die("dicka gabim1");
+                    }else{
+                        //DELETING all offers from the table after we got back their money to the LOSERS
+                        if(!prep_stmt("DELETE FROM prod_offers WHERE prod_id=? AND user_id = ?", array($prod_details, $row['user_id']), "ii")){
+                            die("dicka gabim2");
+                        }
+                    }
+                }
+            }
+            //GETTING SELLER'S DATA
+           $select_seller_data = prep_stmt("SELECT * FROM users WHERE user_id=?", $select_product['user_id'], "i");
+           $fetch_seller_data = mysqli_fetch_array($select_seller_data);
+           $seller_balance = $fetch_seller_data['user_balance'] + $prod_winner['offer_price'];
+           //die(var_dump($seller_balance));
+           //Giving the seller the money after the product is sold 
+           if(!prep_stmt("UPDATE users SET user_balance = ? WHERE user_id=?", array($seller_balance, $fetch_seller_data['user_id']), "si")){
+               die ("gabim3");
+           }else{
+                //deleting all other offers the winner has made from the table except last one 
+                $delete_winner_offers = prep_stmt("DELETE FROM prod_offers
+                WHERE offer_id <> (SELECT MAX(offer_id) FROM prod_offers)
+                AND prod_id=? AND user_id = ?", array($prod_details,$prod_winner['user_id']), "ii");
+                
+                //updating is_sold column to know that everything is good after the auction has ended
+                if(!prep_stmt("UPDATE prod_offers SET is_sold = ? WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", array(1,$prod_details), "ii")){
+                    die ("gabim5");
+                }
+                    //EVERYTHING ENDED PERFECTLY
+            }
+        }
+    }
+?>
 <?php require "footer.php";?>
