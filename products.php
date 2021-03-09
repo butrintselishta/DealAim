@@ -82,7 +82,7 @@
 						</a>
 						<div class="price_box">
 							<!-- <span>Çmimi aktual është:</span> -->
-							<span class="new_price"><?php echo $row_prod['prod_price'] . " €"; ?></span>
+							<span class="new_price"><?php echo number_format($row_prod['prod_price'],2) . " €"; ?></span>
 						</div>
 					</div>
 					<!-- /grid_item -->

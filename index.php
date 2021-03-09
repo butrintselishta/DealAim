@@ -140,7 +140,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                             </div>
                             <div class='price_box'>
                                 <span>Çmimi aktual është:</span>
-                                <span class='new_price' style='font-weight:800; font-size:1rem;'>". $row_hot_prod['prod_price'] . "€</span>
+                                <span class='new_price' style='font-weight:800; font-size:1rem;'>". number_format($row_hot_prod['prod_price'],2) . "€</span>
                             </div>
                         </div>
                     </div>" ;
@@ -197,7 +197,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                     </div>
                     <div class="price_box">
                         <!-- <span>Çmimi aktual është:</span> -->
-                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_rand['prod_price'] . " €"; ?></span>
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo number_format($row_rand['prod_price'],2) . " €"; ?></span>
                     </div>
                 </div>
                 <!-- /grid_item -->
@@ -245,7 +245,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                     </div>
                     <div class="price_box">
                         <!-- <span>Çmimi aktual është:</span> -->
-                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_new_prod['prod_price'] . " €"; ?></span>
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo number_format($row_new_prod['prod_price'],2) . " €"; ?></span>
                     </div>
                 </div>
                 <!-- /grid_item -->
@@ -296,7 +296,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                     </div>
                     <div class="price_box">
                         <!-- <span>Çmimi aktual është:</span> -->
-                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo $row_closing_prod['prod_price'] . " €"; ?></span>
+                        <span class="new_price" style="font-weight:800; font-size:1rem;"><?php echo number_format($row_closing_prod['prod_price'],2) . " €"; ?></span>
                     </div>
                 </div>
                 <!-- /grid_item -->

@@ -132,7 +132,7 @@
                 }else {
                     echo "
                     <div class='countdown_inner' style='background-color:#ddd;'>
-                        <div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner ."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".$winner_price ."€ </b> 
+                        <div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner ."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".number_format($winner_price,2) ."€ </b> 
                     </div>";
                 }
         ?>
@@ -420,8 +420,6 @@
                                                         $("#main_count_down").html("<div><h4 style='color:red; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:red'>Nuk ka pasur asnjë ofertues për këtë produkt, rrjedhimisht produkti nuk është shitur! </i> ")
                                                     }
                                                     else if(response == "down_to_0"){
-                                                        clearTimeout(timer);
-                                                        console.log(response);
                                                         $('#get_price').css("color", "green");
                                                         $('#get_price').css("font-weight", "800");
                                                         $('#get_price').attr("disabled",true);
@@ -433,9 +431,8 @@
                                                         $('#main_count_down').css("background-color", "#ddd");
                                                         $("#main_count_down").html("<div><h4 style='color:green; font-size:22px; font-weight:bold;'> ANKANDI ËSHTË MBYLLUR</h4> </div><i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>"+winner +"</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>"+ parseFloat(winner_price).toFixed(2) +"€ </b> ");
                                                         //window.setTimeout(function(){location.reload()},3000)
-                                                    }else{
-                                                        timer = setTimeout(countdownTo00, 1000);
                                                     }
+                                                    timer = setTimeout(countdownTo00, 1000);
                                                 },
                                                 error: function(xhr) {
                                                     console.log("ERROR!");
@@ -456,7 +453,7 @@
                                 ";
                               }else {
                                   echo "<div class='countdown_inner' style='background:#f3f3f3;color:red'>
-                                             <i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".$winner_price ."€ </b> 
+                                             <i style='color:green'>Fitues i ankandit është:&nbsp;</i> <b style='color:green; font-size:18px; font-weight:bold'>".$winner."</b> &nbsp; <i style='color:green'> me ofertën prej </i> &nbsp; <b style='color:green; font-size:18px; font-weight:bold'>".number_format($winner_price,2) ."€ </b> 
                                         </div>";
                               }
                     ?>
@@ -719,79 +716,49 @@
         <!-- /container -->
     </div>
     <!-- /tab_content_wrapper -->
-
+    <?php
+    $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC LIMIT 4", 1, "i"); 
+        if(mysqli_num_rows($select_latest) > 0){
+    ?>
     <div class="container margin_60_35">
         <div class="main_title">
-            <h2>Të fundit</h2>
+            <h2>Të ngjashme</h2>
             <span>Produktet</span>
-            <p>bllah bllah bllah bllah</p>
+            <p>Disa nga produktet e ngjashme që gjenden momentalisht në ankand!</p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
-            <?php
-                // $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC", 1, "i");   
-                // while($sel_latest_prod = mysqli_fetch_array($select_latest))
-                // {
-                //         $latest_prod_img = explode("|", $sel_latest_prod['prod_img'], -1);
+           <?php
+            while($sel_latest_prod = mysqli_fetch_array($select_latest))
+            { 
+                $latest_prod_img = explode("|", $sel_latest_prod['prod_img']);
+                $category = $sel_latest_prod['cat_id'];
+                // die(var_dump($latest_prod_img[0]));
             ?>
             <div class="item">
                 <div class="grid_item">
-                    <span class="ribbon new">New</span><!-- class="ribbon new , ribbon hot, ribbon off"-->
+                    <span class="ribbon new">E RE</span><!-- class="ribbon new , ribbon hot, ribbon off"-->
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/<?php if($cat_id == 2){ echo "laptops";}elseif($cat_id == 3){ echo "phones";} elseif($cat_id == 5){echo "cars";}else if($cat_id == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>" alt="">
+                            <img class="owl-lazy" src="img/products/<?php if($category == 2){ echo "laptops";}elseif($category == 3){ echo "phones";} elseif($category == 5){echo "cars";}else if($category == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>" alt="">
                         </a>
                     </figure>
                     <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
                     <a href="product-detail-1.html">
-                        <h3><?php echo $select_latest['prod_title']; ?></h3>
+                        <h3><?php echo $sel_latest_prod['prod_title']; ?></h3>
                     </a>
                     <div class="price_box">
-                        <span class="new_price"><?php echo $select_latest['prod_price']; ?></span>
+                        <span class="new_price"><?php echo number_format($sel_latest_prod['prod_price'],2); ?></span>
                     </div>
                 </div>
                 <!-- /grid_item -->
             </div>
-            <?php// } ?>
+            <?php  } ?>
             <!-- /item -->
         </div>
         <!-- /products_carousel -->
     </div>
     <!-- /container -->
-
-    <div class="feat">
-        <div class="container">
-            <ul>
-                <li>
-                    <div class="box">
-                        <i class="ti-gift"></i>
-                        <div class="justify-content-center">
-                            <h3>Free Shipping</h3>
-                            <p>For all oders over $99</p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="box">
-                        <i class="ti-wallet"></i>
-                        <div class="justify-content-center">
-                            <h3>Secure Payment</h3>
-                            <p>100% secure payment</p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="box">
-                        <i class="ti-headphone-alt"></i>
-                        <div class="justify-content-center">
-                            <h3>24/7 Support</h3>
-                            <p>Online top support</p>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!--/feat-->
+    <?php } ?>
 </main>
 <!-- /main -->
 <?php 
@@ -818,12 +785,8 @@
                     //GETTING BACK THE MONEY TO THE LOSERS
                     if(!prep_stmt("UPDATE users SET user_balance = ? WHERE user_id = ?", array($giving_back,$row['user_id']), "si")){
                         die("dicka gabim1");
-                    }else{
-                        //DELETING all offers from the table after we got back their money to the LOSERS
-                        if(!prep_stmt("DELETE FROM prod_offers WHERE prod_id=? AND user_id = ?", array($prod_details, $row['user_id']), "ii")){
-                            die("dicka gabim2");
-                        }
                     }
+                    //SUCCESS
                 }
             }
             //GETTING SELLER'S DATA
@@ -839,7 +802,7 @@
                 $delete_winner_offers = prep_stmt("DELETE FROM prod_offers
                 WHERE offer_id <> (SELECT MAX(offer_id) FROM prod_offers)
                 AND prod_id=? AND user_id = ?", array($prod_details,$prod_winner['user_id']), "ii");
-                
+
                 //updating is_sold column to know that everything is good after the auction has ended
                 if(!prep_stmt("UPDATE prod_offers SET is_sold = ? WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", array(1,$prod_details), "ii")){
                     die ("gabim5");

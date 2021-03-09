@@ -971,7 +971,7 @@
             else if($_POST['auc_category'] == "Vetura"){
                 $car_man = $_POST['car_man'];
                 $car_mod = $_POST['car_model'];
-                $car_km = $_POST['car_km'];
+                $car_km = $_POST['car_km'];//die(var_dump(filter_var($car_km, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)));
                 $car_yop = $_POST['car_year_of_production'];
                 $car_type = $_POST['car_type'];
                 $car_col = $_POST['car_color'];
@@ -1052,7 +1052,7 @@
                     $_SESSION['save_carCub'] = $car_cub;
                     $carKmError = true;
                     $_SESSION['add_prod_errors'] += ["carKmError"=>""];
-                }else if(!filter_var($car_km, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){
+                }else if(!filter_var($car_km, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){die("asdff");
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
                     $_SESSION['save_start'] = $auc_start;
@@ -1490,7 +1490,7 @@
             </div>
         </div>
         <div class="row justify-content-center" style="background:#fff; box-shadow:0px 0px 10px 0px rgb(0 0 0 / 10%);">
-            <div class="col-xl-12 col-lg-6 col-md-8">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-xs-12">
                 <div class="box_account">
                     <div class="form_container" style="box-shadow:none;">
                         <div class="private box" >
@@ -1605,41 +1605,44 @@
                                                 <label class="float-right"  >Përshkrimi </label> 
                                             </div>
                                             <div class="col-6" style="padding-bottom:5px;">
-                                            <textarea rows="4" id="auc_description" name="auc_description" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("descError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" ><?php if(isset($_SESSION['save_desc'])){ echo $_SESSION['save_desc']; } unset($_SESSION['save_desc']);?></textarea>
+                                                <textarea rows="4" id="auc_description" name="auc_description" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("descError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" ><?php if(isset($_SESSION['save_desc'])){ echo $_SESSION['save_desc']; } unset($_SESSION['save_desc']);?></textarea>
                                             </div>
                                             <div class="divider"></div>
-                                            <div class="col-4 col-form-label">
-                                                <label for="" class="float-right"  >Fotot </label> 
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="file" name="auc_photo1" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
-                                            </div>
-                                            <div class="divider"></div>
-                                            <div class="col-4 col-form-label">
-                                                <label for="" class="float-right"  ></label> 
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="file" name="auc_photo2" class="form-control"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
-                                            </div>
-                                            <div class="divider"></div>
-                                            <div class="col-4 col-form-label">
-                                                <label for="" class="float-right"  > </label> 
-                                            </div>
-                                            <div class="divider"></div>
-                                            <div class="col-6">
-                                                <input type="file"  name="auc_photo3"  class="form-control"style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
-                                            </div>
-                                            <div class="col-4 col-form-label">
-                                                <label for=""  class="float-right"  ></label> 
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="file" name="auc_photo4" class="form-control"  >
-                                            </div>
-                                            <div class="col-4 col-form-label">
-                                                <label for="" class="float-right"  > </label> 
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="file" name="auc_photo5"  class="form-control"  >
+                                            <div class="col-lg-12 col-md-12 col-xs-12">
+                                                <div class="col-4 col-form-label float-left">
+                                                    <br/>
+                                                    <label for="" class="float-right" >Fotot </label> 
+                                                </div>
+                                                <div class="col-8 float-right">
+                                                    <div class="col-12">
+                                                        <small class="float-left" style="color:#444444"> <b>VËREJTJE:</b> <strong>Të paktën 3 foto janë të detyrueshme për tu ngarkuar! </strong></small> 
+                                                    </div>
+                                                    <input type="file" name="auc_photo1" class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                </div>
+                                                <div class="col-4 col-form-label float-left">
+                                                    <label for="" class="float-right"  ></label> 
+                                                </div>
+                                                <div class="col-8 float-right">
+                                                    <input type="file" name="auc_photo2" class="form-control float-left"  style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                </div>
+                                                <div class="col-4 col-form-label float-left">
+                                                    <label for="" class="float-right"  > </label> 
+                                                </div>
+                                                <div class="col-8 float-right">
+                                                    <input type="file"  name="auc_photo3"  class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                </div>
+                                                <div class="col-4 col-form-label float-left">
+                                                    <label for=""  class="float-right"  ></label> 
+                                                </div>
+                                                <div class="col-8 float-right">
+                                                    <input type="file" name="auc_photo4" class="form-control float-left" style="width:76%; " >
+                                                </div>
+                                                <div class="col-4 col-form-label float-left">
+                                                    <label for="" class="float-right"  > </label> 
+                                                </div>
+                                                <div class="col-8 float-right">
+                                                    <input type="file" name="auc_photo5"  class="form-control float-left" style="width:76%; " >
+                                                </div> 
                                             </div>
                                         </div>
                                         <?php unset($_SESSION['add_prod_errors']['titleError']);unset($_SESSION['add_prod_errors']['priceError']);unset($_SESSION['add_prod_errors']['startError']); unset($_SESSION['add_prod_errors']['endError']);unset($_SESSION['add_prod_errors']['descError']);unset($_SESSION['add_prod_errors']['photo1Error']);unset($_SESSION['add_prod_errors']['photo2Error']);unset($_SESSION['add_prod_errors']['photo3Error']);?>
