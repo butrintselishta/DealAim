@@ -62,22 +62,22 @@ require_once '../db.php';
             <div class="dropdown">
             <a href="#" class="dropdown-toggle user-name" data-toggle="dropdown">Përshëndetje, <strong><?php echo $row_adm['first_name'] . " ". $row_adm['last_name']; ?></strong> <i class="fa fa-caret-down"></i></a>
                 <ul class="dropdown-menu dropdown-menu-right account">
-                    <li><a href="#">My Profile</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="#">Settings</a></li>
+                    <li><a href="myprofile.php"><i class="fa fa-user-circle"></i> Profili im</a></li>
+                    <li><a href="messages.php"><i class="fa fa-envelope" style="color:black;"></i> Mesazhet</a></li>
                     <li class="divider"></li>
-                    <li><a href="../logout.php">Logout</a></li>
+                    <li><a href="../logout.php">Çkyçu</a></li>
                 </ul>
             </div>
         </div>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
 				<li class="active"><a href="index.php"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
-                <li class=""><a href="myprofile.php"><i class="lnr lnr-user"></i> <span>Profili im</span></a></li>
+                <li class=""><a href="myprofile.php"><i class="fa fa-user-circle"></i> <span>Profili im</span></a></li>
                 <?php if($_SESSION['user']['status'] == ADMIN) { ?>
                     <li><a href="finances.php"><i class="lnr lnr-chart-bars"></i> <span>Financat</span></a></li>
                     <li><a href="users.php"><i class="lnr lnr-users"></i> <span>Përdoruesit</span></a></li>
                 <?php } ?>
+                <li class=""><a href="site_data.php"><i class="lnr lnr-database"></i> <span>Të dhënat</span></a></li>
             </ul>
         </nav>
     </div>

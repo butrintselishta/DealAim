@@ -345,15 +345,15 @@ function getWinnSell($usname){
                                                 if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){
                                                     if(isset($_SESSION['user']) && $_SESSION['user']['status'] == CONFIRMED){ 
                                                         echo "<li>";
-                                                        echo "<a href='user_panel/index.php?form_buyer'  class='shites'>Apliko për blerës</button>";
+                                                        echo "<a href='user_panel/index.php?form_buyer'  class='shites' style='text-shadow:-2px -2px 4px #000'>Apliko për blerës</button>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == BUYER){
                                                         echo "<li>";
-                                                        echo "<a href='user_panel/index.php?form_seller' class='shites'>Apliko për shitës</a>";
+                                                        echo "<a href='user_panel/index.php?form_seller' class='shites' style='text-shadow:-2px -2px 4px #000'>Apliko për shitës</a>";
                                                         echo "</li>";
                                                     }elseif(isset($_SESSION['user']) && $_SESSION['user']['status'] == SELLER){
                                                         echo "<li>";
-                                                        echo "<a href='myauctions.php' class='shites'>Shto një produkt</a>";
+                                                        echo "<a href='myauctions.php' class='shites' style='text-shadow:-2px -2px 4px #000'>Shto një produkt</a>";
                                                         echo "</li>";
                                                     }
                                                 }

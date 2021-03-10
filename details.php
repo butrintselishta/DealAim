@@ -717,7 +717,9 @@
     </div>
     <!-- /tab_content_wrapper -->
     <?php
-    $select_latest = prep_stmt("SELECT * FROM products WHERE prod_isApproved = ? ORDER BY prod_id DESC LIMIT 4", 1, "i"); 
+    $select_latest = prep_stmt("SELECT * FROM products 
+    WHERE prod_isApproved = ? AND prod_from <= NOW() AND prod_to > NOW()
+    ORDER BY prod_id DESC LIMIT 4", 1, "i"); 
         if(mysqli_num_rows($select_latest) > 0){
     ?>
     <div class="container margin_60_35">
@@ -765,7 +767,8 @@
     //
     if(strtotime($select_product['prod_to']) <= $today){
         $sel_prod_winner = prep_stmt("SELECT * FROM prod_offers WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", $prod_details,"i");
-        $prod_winner = mysqli_fetch_array($sel_prod_winner);//die(var_dump($prod_winner['is_sold'] === 0));
+        $prod_winner = mysqli_fetch_array($sel_prod_winner);//die(var_dump($prod_winner['offer_price']));
+
         //die(var_dump($prod_winner['user_id']));
         if(mysqli_num_rows($sel_prod_winner) > 0 && $prod_winner['is_sold'] === 0){
             $sel_maxOffer_each_id = prep_stmt("SELECT offer_id,user_id, MAX(CAST(offer_price AS DECIMAL(8,2))) as off_price
@@ -790,24 +793,57 @@
                 }
             }
             //GETTING SELLER'S DATA
-           $select_seller_data = prep_stmt("SELECT * FROM users WHERE user_id=?", $select_product['user_id'], "i");
-           $fetch_seller_data = mysqli_fetch_array($select_seller_data);
-           $seller_balance = $fetch_seller_data['user_balance'] + $prod_winner['offer_price'];
-           //die(var_dump($seller_balance));
-           //Giving the seller the money after the product is sold 
-           if(!prep_stmt("UPDATE users SET user_balance = ? WHERE user_id=?", array($seller_balance, $fetch_seller_data['user_id']), "si")){
-               die ("gabim3");
-           }else{
-                //deleting all other offers the winner has made from the table except last one 
-                $delete_winner_offers = prep_stmt("DELETE FROM prod_offers
-                WHERE offer_id <> (SELECT MAX(offer_id) FROM prod_offers)
-                AND prod_id=? AND user_id = ?", array($prod_details,$prod_winner['user_id']), "ii");
+            $select_seller_data = prep_stmt("SELECT * FROM users WHERE user_id=?", $select_product['user_id'], "i");
+            $fetch_seller_data = mysqli_fetch_array($select_seller_data);
 
+            $balance_us = prep_stmt("SELECT * FROM bank_acc WHERE user_id=?", $fetch_seller_data['user_id'],'i');
+            if(mysqli_num_rows($balance_us) > 0){
+                $balance_us_fetch = mysqli_fetch_array($balance_us);// die(var_dump($balance_us_fetch['acc_balance']));
+            }else{
+               die("Error!");
+            }
+            
+            //tariff TYPE -> SOLDEN PRODUCTS, GETTING THE 5.5% OF MONEY
+            $acc_company = "DealAIM Company"; 
+            $tarifftype = "Shitje e produktit";
+            $balance_company = prep_stmt("SELECT * FROM bank_acc WHERE acc_full_name = ?", $acc_company,'s');
+            $tariff_percentage = prep_stmt("SELECT tariff_percentage FROM tariffs WHERE tariff_type = ?", $tarifftype,'s');
+            if(mysqli_num_rows($balance_company) > 0 && mysqli_num_rows($tariff_percentage)){
+                $balance_company_fetch = mysqli_fetch_array($balance_company);
+                $tariff_percentage_fetch = mysqli_fetch_array($tariff_percentage); 
+                //die(var_dump($balance_company_fetch['acc_balance'] . " aaaa " , $tariff_percentage_fetch['tariff_percentage']));
+            }else{
+               die("Error!");
+            }
+            //getting the value-tariff to insert into our bank acc
+            $tariff_prc = floatval(str_replace("%","",$tariff_percentage_fetch['tariff_percentage']));
+            $tariff_profit = ($tariff_prc / 100) * $prod_winner['offer_price'];// die($tariff_profit);
+            $datetime = date("Y-m-d H:i:s");
+
+            $seller_balance = 0;
+            $tot_balance_company = 0;
+            
+            $seller_balance = $fetch_seller_data['user_balance'] + $prod_winner['offer_price'] - $tariff_profit;
+            $tot_balance_company = $balance_company_fetch['acc_balance'] + $tariff_profit;
+            //die(var_dump($seller_balance));
+            //Giving the seller the money after the product is sold 
+            if(!prep_stmt("UPDATE users SET user_balance = ? WHERE user_id=?", array($seller_balance, $fetch_seller_data['user_id']), "si")){
+                die ("gabim3");
+            }else{
                 //updating is_sold column to know that everything is good after the auction has ended
                 if(!prep_stmt("UPDATE prod_offers SET is_sold = ? WHERE prod_id=? ORDER BY offer_id DESC LIMIT 1", array(1,$prod_details), "ii")){
                     die ("gabim5");
+                }else{
+                    if(!prep_stmt("UPDATE bank_acc SET acc_balance = ? WHERE acc_full_name=?", array($tot_balance_company, $acc_company), "ds")){ 
+                        die("gabim6");
+                    }else{
+                        if(!prep_stmt("INSERT INTO income_ratio(acc_number,acc_company, tariff_type,profit,acc_company_balance,date_time) VALUES(?,?,?,?,?,?)", array($balance_us_fetch['acc_number'],$acc_company, $tarifftype, $tariff_profit,$tot_balance_company,$datetime), "ssssss")){ 
+                           die("Gabim7");
+                        }
+                        //EVERYTHING ENDED PERFECTLY
+                    }
                 }
-                    //EVERYTHING ENDED PERFECTLY
+                    
             }
         }
     }

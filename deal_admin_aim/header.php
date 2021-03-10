@@ -49,8 +49,42 @@
             width:100% !important;
             padding-bottom: 3px;
         }
+		
+		.fieldS{
+			margin:auto;
+			width:100%;
+		}
+		.label_field{
+			float:left;
+		}
+		.input_field{
+			width:100%;
+		}
+    } 
+	@media screen and (max-width: 992px) {
+        .fieldS{
+			margin:auto;
+			width:100%;
+		}
+		.label_field{
+			float:right;
+		}
+		.input_field{
+			width:100%;
+		}
     }
-
+	@media screen and (min-width: 992px) {
+        .fieldS{
+			margin:auto;
+			width:75%;
+		}
+		.label_field{
+			float:right;
+		}
+		.input_field{
+			width:100%;
+		}
+    }
     .sukses {
         width:100%;
         padding: 10px 10px 1px 10px;

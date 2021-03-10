@@ -68,8 +68,9 @@
         }
         else{
             $fullname = $fname . " " . $lname;
+            $today = date("Y-m-d H:i:s");
             if(!empty(user_id())){
-                if(!prep_stmt("INSERT INTO messages(full_name,email,phone,message,user_id) VALUES (?,?,?,?,?)", array($fullname, $email, $phone, $message, user_id()), "ssssi")){
+                if(!prep_stmt("INSERT INTO messages(full_name,email,phone,message,user_id,received_at) VALUES (?,?,?,?,?,?)", array($fullname, $email, $phone, $message, user_id(), $today), "ssssis")){
                     $_SESSION['error_message'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë.</p>";
                     header("location:contact.php");die();
                 }else{
@@ -77,7 +78,7 @@
                     header("location:contact.php");die();
                 }
             }else{
-                if(!prep_stmt("INSERT INTO messages(full_name,email,phone,message) VALUES (?,?,?,?)", array($fullname, $email, $phone, $message), "ssss")){
+                if(!prep_stmt("INSERT INTO messages(full_name,email,phone,message,received_at) VALUES (?,?,?,?,?)", array($fullname, $email, $phone, $message, $today), "sssss")){
                     $_SESSION['error_message'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Ndodhi një gabim, ju lutem kthehuni më vonë.</p>";
                     header("location:contact.php");die();
                 }else{

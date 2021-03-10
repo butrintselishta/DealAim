@@ -10,7 +10,9 @@ if(isset($_SESSION['user_unconfirmed'])){
     <div id="carousel-home">
         <div class="owl-carousel owl-theme">
         <?php 
-                $last_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id order by prod_id DESC LIMIT 1");
+                $last_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id 
+                WHERE prod_from <= NOW() AND prod_to > NOW()
+                order by prod_id DESC LIMIT 1");
                 if(mysqli_num_rows($last_prod) >0){
                     while($row_last = mysqli_fetch_array($last_prod)){
                         $prod_img = explode("|", $row_last['prod_img']);
@@ -53,7 +55,6 @@ if(isset($_SESSION['user_unconfirmed'])){
                                     <h2 class="owl-slide-animated owl-slide-title"> </h2>
                                     <p class="owl-slide-animated owl-slide-subtitle">
                                     </p>
-                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a></div>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +211,11 @@ if(isset($_SESSION['user_unconfirmed'])){
     <!-- /container -->
      <!-- SELECTING AND SHOWING THE PRODUCTS THAT ARE PUT IN THIS LAST 24 HOURS IN AUCTION -->
     <?php
-        $new_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE products.prod_from > DATE_SUB(NOW(), INTERVAL 1 DAY) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
+        $new_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id 
+        WHERE NOW() > products.prod_from
+        AND products.prod_from > DATE_SUB(NOW(), INTERVAL 1 DAY) 
+        AND prod_isApproved=?
+        ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>
     <div class="container margin_60_35">
     <?php if(mysqli_num_rows($new_prod) > 0){ ?>
@@ -260,7 +265,10 @@ if(isset($_SESSION['user_unconfirmed'])){
 
     <!-- SELECTING AND SHOWING THE PRODUCTS THAT ARE IN THE LAST 24 HOURS IN AUCTION -->
     <?php
-        $closing_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id WHERE (products.prod_to BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)) AND prod_isApproved=? ORDER BY prod_id DESC LIMIT 4", 1,"i");
+        $closing_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id 
+        WHERE (products.prod_to BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)) 
+        AND prod_isApproved=? 
+        ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>
     <div class="container margin_60_35">
         <?php if(mysqli_num_rows($closing_prod) > 0) { ?>
