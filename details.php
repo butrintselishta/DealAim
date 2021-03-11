@@ -6,7 +6,7 @@
         if(mysqli_num_rows($select_prod_data)>0){
             $select_product = mysqli_fetch_array($select_prod_data); 
         }else{
-            die("keq");
+            header("location:404.php");
         }
         if(isset($_GET['down'])){
             $filename = $_GET['down'];
@@ -716,10 +716,11 @@
         <!-- /container -->
     </div>
     <!-- /tab_content_wrapper -->
-    <?php
+    <?php 
     $select_latest = prep_stmt("SELECT * FROM products 
     WHERE prod_isApproved = ? AND prod_from <= NOW() AND prod_to > NOW()
-    ORDER BY prod_id DESC LIMIT 4", 1, "i"); 
+    AND prod_id <> ?
+    ORDER BY prod_id DESC LIMIT 4", array(1,$prod_details), "ii"); 
         if(mysqli_num_rows($select_latest) > 0){
     ?>
     <div class="container margin_60_35">
@@ -740,12 +741,12 @@
                 <div class="grid_item">
                     <span class="ribbon new">E RE</span><!-- class="ribbon new , ribbon hot, ribbon off"-->
                     <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="img/products/<?php if($category == 2){ echo "laptops";}elseif($category == 3){ echo "phones";} elseif($category == 5){echo "cars";}else if($category == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>" alt="">
+                        <a href="details.php?prod_details=<?php echo $sel_latest_prod['prod_id']; ?>">
+                            <img class="owl-lazy" src="img/products/<?php if($category == 2){ echo "laptops";}elseif($category == 3){ echo "phones";} elseif($category == 5){echo "cars";}else if($category == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>"  data-src="img/products/<?php if($category == 2){ echo "laptops";}elseif($category == 3){ echo "phones";} elseif($category == 5){echo "cars";}else if($category == 7){echo "templates";} ?>/<?php echo $latest_prod_img[0]; ?>" alt="">
                         </a>
                     </figure>
                     <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                    <a href="product-detail-1.html">
+                    <a href="details.php?prod_details=<?php echo $sel_latest_prod['prod_id']; ?>">
                         <h3><?php echo $sel_latest_prod['prod_title']; ?></h3>
                     </a>
                     <div class="price_box">

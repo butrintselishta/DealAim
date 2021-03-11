@@ -168,6 +168,45 @@
             }
         }
     }
+
+    if(isset($_GET['delete'])){
+        $usr_delete = $_GET['delete'];die("asdf");
+
+        $sel_dlt_user = prep_stmt("SELECT * FROM users WHERE user_id = ?", $usr_delete, "i");
+        if(mysqli_num_rows($sel_dlt_user) > 0){    
+            $fetch_dlt_user = mysqli_fetch_array($sel_dlt_user);
+        }
+
+        $sel_bal_bank = prep_stmt("SELECT * FROM bank_acc WHERE user_id = ?", $usr_delete, "i");
+        if(mysqli_num_rows($sel_bal_bank) > 0){
+            $fetch_bank = mysqli_fetch_array($sel_bal_bank);
+        }//die(var_dump($fetch_dlt_user['user_balance']));
+
+        if($fetch_dlt_user['user_balance'] !== NULL){
+            $full_bank_bal = $fetch_dlt_user['user_balance'] + $fetch_bank['acc_balance'];
+            //die($full_bank_bal);
+            if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id = ?", array($full_bank_bal, $usr_delete), "si")){
+                $_SESSION['data_changed_declined']="";
+                header("location:users.php?user=".$username."#profile");die();
+            }else{
+                if(!prep_stmt("DELETE FROM users WHERE user_id = ?",$usr_delete, "i")){
+                    $_SESSION['data_changed_declined']="";
+                    header("location:users.php?user=".$username."#profile");die();
+                }else{
+                    $_SESSION['data_changed_success']="Llogarija e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u fshijë me sukses!";
+                    header("location:users.php");die();
+                }
+            }
+        }else{
+            if(!prep_stmt("DELETE FROM users WHERE username = ?",$usr_delete, "s")){
+                $_SESSION['data_changed_declined']="";
+                header("location:users.php?user=".$username."#profile");die();
+            }else{
+                $_SESSION['data_changed_success']="Llogarija e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u fshijë me sukses!";
+                header("location:users.php");die();
+            }
+        }
+    }
 ?>
 <?php require "header.php"; ?>
 <div id="left-sidebar" class="sidebar">
@@ -232,7 +271,7 @@
                         <h3 class="heading"><i class="fa fa-square"></i>Të gjithë përdoruesit</h3>
                         <?php 
                             $sel_all_users = "";
-                            if(isset($_GET['user_status'])){ die("asdf");
+                            if(isset($_GET['user_status'])){ 
                                 $usr = $_GET['user_status'];
                                 if($usr == 'admin'){
                                     $sel_all_users = prep_stmt("SELECT * FROM users WHERE status = ?",101,'i');
@@ -292,7 +331,7 @@
                                     document.getElementById("navbar-search2").submit();
                                 }
                             </script>
-                            <table class="table table-bordered table-striped mb-0">
+                            <table class="table table-bordered table-striped mb-0" style="margin:0;"> 
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -300,6 +339,7 @@
                                         <th>Emri dhe Mbiemri </th>
                                         <th>Nr.Tel </th>
                                         <th>Statusi</th>
+                                        <th></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -332,8 +372,36 @@
                                             </form>
                                         </td> -->
                                         <td><a class="btn btn-info btn-sm" href="users.php?user=<?php echo $row_users['username'];?>#profile"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
+                                        <td><a href="users.php?delete=<?php echo $row_users['user_id']?>" class="btn btn-danger btn-sm example20" title="Delete"><span class="sr-only">Fshije</span> <i class="fa fa-trash-o"></i></a></td>
+                                        <script type="text/javascript">
+                                            $('.example20').on('click', function() {
+                                                $.confirm({
+                                                    title: 'Delete user?',
+                                                    content: 'This dialog will automatically trigger \'cancel\' in 6 seconds if you don\'t respond.',
+                                                    autoClose: 'cancelAction|8000',
+                                                    buttons: {
+                                                        deleteUser: {
+                                                            text: 'delete user',
+                                                            action: function() {
+                                                                $.alert('Deleted the user!');
+                                                            }
+                                                        },
+                                                        cancelAction: function() {
+                                                            $.alert('action is canceled');
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                     </tr>
-                                    <?php } } ?>
+                                    <?php } } else { ?>
+                                        </tbody>
+                                        </table>
+                                        <div class="alert alert-info alert-dismissible" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <i class="fa fa-info-circle"></i> Nuk ka përdorues me këtë status!
+                                        </div>
+                                    <?php } ?>
                                     <?php  
                                         $sel_count = prep_stmt("SELECT count(user_id) as totali FROM users",null,null); 
                                         $count_tot = mysqli_fetch_array($sel_count);
@@ -481,7 +549,7 @@
                                         <button type="submit" name="change_user"  value="Vazhdo" class="btn btn-primary ">Konfirmo</button>
                                     </div>
                                 </div>
-                        </form>
+                            </form>
                         </div>
                     </div>
                     <?php } ?>
@@ -502,7 +570,8 @@
 </div>
 <!-- END WRAPPER -->
 <!-- Javascript -->
-<script src="assets/vendor/jquery/jquery.min.js"></script>
+
+<!-- <script src="assets/vendor/jquery/jquery.min.js"></script> -->
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/vendor/metisMenu/metisMenu.js"></script>
 <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>

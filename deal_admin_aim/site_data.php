@@ -130,12 +130,14 @@ require_once '../db.php';
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/vendor/metisMenu/metisMenu.js"></script>
 <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/vendor/jquery-sparkline/js/jquery.sparkline.min.js"></script>
+<script src="assets/vendor/bootstrap-progressbar/js/bootstrap-progressbar.min.js"></script>
+<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+<script src="assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.min.js"></script>
+<script src="assets/vendor/chartist-plugin-axistitle/chartist-plugin-axistitle.min.js"></script>
+<script src="assets/vendor/chartist-plugin-legend-latest/chartist-plugin-legend.js"></script>
+<script src="assets/vendor/toastr/toastr.js"></script>
 <script src="assets/scripts/common.js"></script>
-<script src="../js/datepicker/jquery-3.3.1.min.js"></script>
-<script src="../js/datepicker/jquery-ui.min.js"></script>
-<script src="../js/datepicker/jquery.slicknav.js"></script>
-<script src="../js/datepicker/main.js"></script>	
 <script>
     $(function() {
         // photo upload

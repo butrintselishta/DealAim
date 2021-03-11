@@ -392,6 +392,14 @@
             }
         }
 	}
+    //getWinnerSeller
+    function getWinnSell($usname){
+        $seller_u = substr($usname, 0, 1);
+        $username_n = substr($usname, -1);
+        $usname_str = str_repeat("*", strlen($usname)-2);
+        $win_sell = $seller_u . $usname_str . $username_n;
+        return $win_sell;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1339,6 +1347,7 @@
                             </div>
                             <?php } ?>
                             <?php if($_SESSION['user']['status'] == SELLER){ ?>
+                                <!-- MY ACTIVE AUCTIONS -->
                                 <div class="tab-pane fade bank_balance" id="active_auc">
                                     <div class="divider" style="margin-bottom:50px;">
                                         <span
@@ -1346,68 +1355,191 @@
                                             </b></span>
                                     </div>
                                     <?php 
-                                        $sel_active_auc = prep_stmt("SELECT * FROM products WHERE user_id = ? AND prod_isApproved = ?", array(user_id(), 1), "ii");
+                                        $sel_active_auc = prep_stmt("SELECT * FROM products WHERE user_id = ? AND prod_isApproved = ? AND prod_from <= now() AND prod_to >= now()", array(user_id(), 1), "ii");
                                         if(mysqli_num_rows($sel_active_auc) > 0){
-                                            while($row_active_auc = mysqli_fetch_array($sel_active_auc)){
-                                                $act_auc_username = $_SESSION['user']['username'];
-                                                $act_auc_id = $row_active_auc['prod_id']; 
-                                                $act_auc_title = $row_active_auc['prod_title'];
-                                                $act_auc_to = $row_active_auc['prod_to']; 
                                     ?>
-                                    <table class="table table-dark" style="background: #212529;color:white;border: 0.5px solid #32383E;">
-                                        <thead>
-                                            <tr>
-                                            <th scope="col">Përdoruesi</th>
-                                            <th scope="col">Ttitulli i ankandit</th>
-                                            <th scope="col">Kur përfundon?</th>
-                                            <th scope="col">Çmimi aktual</th>
-                                            <th scope="col">Fituesi për momentin</th>
-                                            <th scope="col">Detajet</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><b><?php echo $act_auc_username;  ?></b></td>
-                                                <td><?php echo $act_auc_title ?></td>
-                                                <td><?php echo date("d-M-Y h:i A", strtotime($act_auc_to)); ?></td>
-                                                <td>???????</td>
-                                                <td style="color:green; font-weight:900;">???????</td>
-                                                <td><a href="../details.php?prod_details=<?php echo $act_auc_id ?>" style="color:white;">Detajet</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <?php } } else{ ?>
+                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                        <table class="table table-bordered table-striped mb-0">
+                                            <thead style="background: #212529;color:white;">
+                                                <tr>
+                                                <th scope="col">Përdoruesi</th>
+                                                <th scope="col">Ttitulli i ankandit</th>
+                                                <th scope="col">Kur përfundon?</th>
+                                                <th scope="col">Çmimi aktual</th>
+                                                <th scope="col">Fituesi për momentin</th>
+                                                <th scope="col">Detajet</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="background:#f4f4f4;border: 0.5px solid #32383E;">
+                                                <?php 
+                                                while($row_active_auc = mysqli_fetch_array($sel_active_auc)){
+                                                    $select_rn_winner = prep_stmt("SELECT username FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id = ? order by offer_id desc limit 1", $row_active_auc['prod_id'], "i");
+                                                    $rows_rn_winner = mysqli_num_rows($select_rn_winner);
+                                                    $rn_winner = "";
+                                                    if($rows_rn_winner > 0){
+                                                        $fetch_rn_winner = mysqli_fetch_array($select_rn_winner);
+                                                        $rn_winner = getWinnSell($fetch_rn_winner['username']);
+                                                    }
+                                                    
+                                                    $act_auc_username = $_SESSION['user']['username'];
+                                                    $act_auc_id = $row_active_auc['prod_id']; 
+                                                    $act_auc_title = $row_active_auc['prod_title'];
+                                                    $act_auc_price = $row_active_auc['prod_price'];
+                                                    $act_auc_to = $row_active_auc['prod_to']; 
+                                                ?>
+                                                <tr style="<?php if($rows_rn_winner > 0){echo "color:green;background-color:#D4EDDA;";}else { echo "color:red; background-color:#EFB3AB";} ?>">>
+                                                    <td><b><?php echo $act_auc_username;  ?></b></td>
+                                                    <td><?php echo $act_auc_title ?></td>
+                                                    <td><?php echo date("d-M-Y h:i A", strtotime($act_auc_to)); ?></td>
+                                                    <td style="color:green; font-weight:900;"><?php echo number_format($act_auc_price,2) . "€"; ?></td>
+                                                    
+                                                    <?php if(empty($rn_winner)){ ?>
+                                                        <td style="color:red; font-weight:900;background-color:#EFB3AB;">NUK KA OFERTUES</td>
+                                                    <?php } else {?>
+                                                        <td style="color:green; font-weight:900; background-color:#D4EDDA;"><?php echo $rn_winner ?></td>
+                                                    <?php } ?>
+
+                                                    <td><a href="../details.php?prod_details=<?php echo $act_auc_id ?>" class="btn btn-info btn-sm">Detajet</td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <?php } else{ ?>
                                         <div class="gabim" style="overflow-wrap:anywhere">
                                             <h4> NUK KA PRODUKTE </h4>
                                             <p> Ju nuk keni asnjë produkt aktiv në ankand! <br/> Në rast se doni të futni ndonjë produkt në ankand klikoni <a href="myauctions.php"> këtu </a>  </p>
                                         </div>
                                     <?php } ?>
                                 </div>
+
+                                <!-- SOLDEN PRODUCTS -->
+                                <?php 
+                                    $select_solden_prod = prep_stmt("SELECT * FROM products WHERE user_id = ? AND prod_isApproved = ? ORDER BY prod_id desc", array(user_id(), 3), "ii");
+                                ?>
                                 <div class="tab-pane fade" id="prod_sell">
                                     <div class="divider" style="margin-bottom:50px;">
                                         <span
                                             style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni shitur përmes ksaj llogarie!
                                             </b></span>
                                     </div>
+                                    <?php   
+                                        if(mysqli_num_rows($select_solden_prod) > 0){  
+                                    ?>
+                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                        <table class="table table-bordered table-striped mb-0">
+                                            <thead style="background: #212529;color:white;">
+                                                <tr>
+                                                <th scope="col">Përdoruesi</th>
+                                                <th scope="col">Titulli i ankandit</th>
+                                                <th scope="col">Kur ka përfunduar?</th>
+                                                <th scope="col">Me çfarë çmimi u ble?</th>
+                                                <th scope="col">Fituesi i ankandit</th>
+                                                <th scope="col">Detajet</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="background:#f4f4f4;border: 0.5px solid #32383E;">
+                                            <?php 
+                                                while($row_solden = mysqli_fetch_array($select_solden_prod)){
+                                                    $select_sold_winner = prep_stmt("SELECT username, offer_price FROM prod_offers LEFT OUTER JOIN users ON prod_offers.user_id = users.user_id WHERE prod_id=? AND is_sold = ?", array($row_solden['prod_id'],1), "ii");
+                                                    $sold_winner = "";$sold_offer_price = "";
+                                                    $rows_sold_winn = mysqli_num_rows($select_sold_winner);
+                                                    if($rows_sold_winn > 0){
+                                                        $row_sold_winn = mysqli_fetch_array($select_sold_winner);
+                                                        $sold_winner = getWinnSell($row_sold_winn['username']);
+                                                        $sold_offer_price = $row_sold_winn['offer_price'];
+                                                    }
+                                            ?>
+                                                <tr style="<?php if($rows_sold_winn > 0){echo "color:green;background-color:#D4EDDA;";}else { echo "color:red; background-color:#EFB3AB";} ?>">
+                                                    <td><b><?php echo $_SESSION['user']['username'];  ?></b></td>
+                                                    <td><?php echo $row_solden['prod_title']; ?></td>
+                                                    <td><?php echo date("d-M-Y h:i A", strtotime($row_solden['prod_to'])); ?></td>
+                                                    
+                                                    <?php if(empty($sold_offer_price)){ ?>
+                                                        <td style="font-weight:900;;"><?php echo number_format($row_solden['prod_price'],2) . "€"; ?></td>
+                                                    <?php } else { ?>
+                                                        <td style="font-weight:900;"><?php echo number_format($sold_offer_price,2) . "€"; ?></td>
+                                                    <?php } ?>
+
+                                                    <?php if(empty($sold_winner)){ ?>
+                                                        <td style="font-weight:900;">NUK KA PASUR OFERTUES</td>
+                                                    <?php } else {?>
+                                                        <td style="font-weight:900;"><?php echo $sold_winner ?></td>
+                                                    <?php } ?>
+
+                                                    <td><a href="../details.php?prod_details=<?php echo $row_solden['prod_id'] ?>" class="btn btn-info btn-sm">Detajet</td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <?php }else{ ?>
                                     <div class="grid_item" style="margin: 1em 0 1em 0;">
                                         <div class="gabim" style="overflow-wrap:anywhere">
                                             <h4> NUK KA PRODUKTE </h4>
                                             <p> Ju nuk keni shitur ende asnjë produkt!.<br/> Nëse dëshironi të vendosni produktin tuaj në ankand kliko <a href="myauctions.php"> këtu </a>  </p>
                                         </div>
                                     </div>
+                                    <?php }?>
                                 </div>
+
+                                <?php 
+                                     $select_bought_prod = prep_stmt("SELECT * FROM prod_offers 
+                                     WHERE user_id=? AND is_sold = ?", array(user_id(),1), "ii");
+                                ?>
                                 <div class="tab-pane fade" id="prod_buy">
                                     <div class="divider" style="margin-bottom:50px;">
                                         <span
                                             style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni blerë nga kjo llogari!
                                             </b></span>
                                     </div>
-                                    <div class="grid_item" style="margin: 1em 0 1em 0;">
-                                        <div class="gabim" style="overflow-wrap:anywhere">
-                                            <h4> NUK KA PRODUKTE </h4>
-                                            <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse </b>!  </p>
-                                        </div>
+                                    <?php 
+                                        if(mysqli_num_rows($select_bought_prod) > 0){
+                                    ?>
+                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                        <table class="table table-bordered table-striped mb-0">
+                                            <thead style="background: #212529;color:white;">
+                                                <tr>
+                                                <th scope="col">Shitësi</th>
+                                                <th scope="col">Titulli i ankandit</th>
+                                                <th scope="col">Kur ka përfunduar?</th>
+                                                <th scope="col">Çmimi përfundimtar</th>
+                                                <th scope="col">Fituesi i ankandit</th>
+                                                <th scope="col">Detajet</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="background:#f4f4f4;border: 0.5px solid #32383E;">
+                                                <?php 
+                                                while($row_bought = mysqli_fetch_array($select_bought_prod)){
+                                                    $select_prod_b = prep_stmt("SELECT prod_id,username,prod_title,prod_price,prod_to 
+                                                    FROM products
+                                                    LEFT OUTER JOIN users ON products.user_id = users.user_id 
+                                                    WHERE prod_id=?",$row_bought['prod_id'],"i");
+                                                    $fetch_prod_b = mysqli_fetch_array($select_prod_b);
+
+                                                    $bought_sell = getWinnSell($fetch_prod_b['username']);
+                                                ?>
+                                                <tr style="color:green;background-color:#D4EDDA;">
+                                                    <td><b><?php echo $bought_sell ;  ?></b></td>
+                                                    <td><?php echo $fetch_prod_b['prod_title']; ?></td>
+                                                    <td><?php echo date("d-M-Y h:i A", strtotime($fetch_prod_b['prod_to'])); ?></td>
+                                                    <td style="font-weight:900;"><?php echo number_format($row_bought['offer_price'],2) . "€"; ?></td>
+                                                    <td style="font-weight:900;"><?php echo $_SESSION['user']['username'] ?></td>
+
+                                                    <td><a href="../details.php?prod_details=<?php echo $fetch_prod_b['prod_id'] ?>" class="btn btn-info btn-sm">Detajet</td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
                                     </div>
+                                    <?php } else { ?>
+                                        <div class="grid_item" style="margin: 1em 0 1em 0;">
+                                            <div class="gabim" style="overflow-wrap:anywhere">
+                                                <h4> NUK KA PRODUKTE </h4>
+                                                <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse </b>!  </p>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             <?php } ?>
                         </div>

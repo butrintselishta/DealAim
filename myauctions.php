@@ -61,7 +61,7 @@
         $tempZipError = false; $tempCatError = false; $tempUtError = false; $tempLayoutError = false; $tempDocError = false;
         $_SESSION['add_prod_errors'] = array();
         //error MESAZHI
-        $error_msg = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+        $error_msg = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D; font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
 
         if(strlen($auc_title) < 6 || strlen($auc_title) > 100){
             $_SESSION['save_price'] = $auc_price;
@@ -962,7 +962,7 @@
                     $insert_phone_spec = prep_stmt("INSERT INTO prod_specifications(tel_man, tel_mod,tel_cond, tel_col, tel_im,tel_ram,tel_scn,tel_os, tel_op, prod_unique_id) VALUES(?,?,?,?,?,?,?,?,?,?)", array($phone_man, $phone_mod, $phone_con, $phone_col, $phone_int_mem_space, $phone_ram, $phone_sim, $phone_os, $phone_origin,$unique_id), "ssssssssss");
 
                     if($insert_phone_prod && $insert_phone_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -1266,7 +1266,7 @@
                     $insert_car_spec = prep_stmt("INSERT INTO prod_specifications(car_man, car_mod,car_km, car_py, car_type, car_col, car_tra, car_fu, car_cub, prod_unique_id) VALUES(?,?,?,?,?,?,?,?,?,?)", array($car_man, $car_mod, $car_km, $car_yop, $car_type, $car_col, $car_trans, $car_fuels, $car_cub,$unique_id), "ssssssssss");
 
                     if($insert_car_prod && $insert_car_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -1464,7 +1464,7 @@
                     $insert_temp_spec = prep_stmt("INSERT INTO prod_specifications(wt_template,wt_cat,wt_ut,wt_lo,wt_doc,prod_unique_id) VALUES(?,?,?,?,?,?)", array($img_temp,$temp_cat, $temp_ut, $temp_layout, $temp_doc, $unique_id), "ssssss");
 
                     if($insert_temp_prod && $insert_temp_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -1502,19 +1502,23 @@
                                 if(isset($_SESSION['add_prod_errors'])){
                                     if(array_key_exists("titleError", $_SESSION['add_prod_errors']) || array_key_exists("priceError", $_SESSION['add_prod_errors']) || array_key_exists("startError", $_SESSION['add_prod_errors']) || array_key_exists("endError", $_SESSION['add_prod_errors']) || array_key_exists("descError", $_SESSION['add_prod_errors']) || array_key_exists("photo1Error", $_SESSION['add_prod_errors']) || array_key_exists("photo2Error", $_SESSION['add_prod_errors']) || array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){
                                         echo "<div class='gabim'>";
-                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
                                         echo "</div>";
                                     }else if(array_key_exists("lapManError", $_SESSION['add_prod_errors']) || array_key_exists("lapConError", $_SESSION['add_prod_errors']) || array_key_exists("lapModError", $_SESSION['add_prod_errors']) || array_key_exists("lapDisError", $_SESSION['add_prod_errors']) || array_key_exists("lapColError", $_SESSION['add_prod_errors']) || array_key_exists("lapProcError", $_SESSION['add_prod_errors']) ||array_key_exists("lapProcError", $_SESSION['add_prod_errors']) || array_key_exists("lapRamError", $_SESSION['add_prod_errors']) || array_key_exists("lapIntMemError", $_SESSION['add_prod_errors']) || array_key_exists("lapIntMemSpaceError", $_SESSION['add_prod_errors']) || array_key_exists("lapGrapError", $_SESSION['add_prod_errors'])){
                                         echo "<div class='gabim'>";
-                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
                                         echo "</div>";
                                     }else if(array_key_exists("phoneManError", $_SESSION['add_prod_errors']) || array_key_exists("phoneConError", $_SESSION['add_prod_errors']) || array_key_exists("phoneModError", $_SESSION['add_prod_errors']) || array_key_exists("phoneColError", $_SESSION['add_prod_errors']) || array_key_exists("phoneOsError", $_SESSION['add_prod_errors']) ||array_key_exists("phoneRamError", $_SESSION['add_prod_errors']) || array_key_exists("lapRamError", $_SESSION['add_prod_errors']) || array_key_exists("phoneIntMemSpaceError", $_SESSION['add_prod_errors']) || array_key_exists("phoneSimError", $_SESSION['add_prod_errors']) || array_key_exists("phoneOriginError", $_SESSION['add_prod_errors'])){
                                         echo "<div class='gabim'>";
-                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
                                         echo "</div>";
                                     }else if(array_key_exists("carManError", $_SESSION['add_prod_errors']) || array_key_exists("carModError", $_SESSION['add_prod_errors']) || array_key_exists("carKmError", $_SESSION['add_prod_errors']) || array_key_exists("carYopError", $_SESSION['add_prod_errors']) || array_key_exists("carTypeError", $_SESSION['add_prod_errors']) ||array_key_exists("carColError", $_SESSION['add_prod_errors']) || array_key_exists("carTransError", $_SESSION['add_prod_errors']) || array_key_exists("carFuelsError", $_SESSION['add_prod_errors']) || array_key_exists("carCubError", $_SESSION['add_prod_errors'])){
                                         echo "<div class='gabim'>";
-                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
+                                        echo "</div>";
+                                    }else if(array_key_exists("tempCatError", $_SESSION['add_prod_errors']) || array_key_exists("tempUtError", $_SESSION['add_prod_errors']) || array_key_exists("tempLayoutError", $_SESSION['add_prod_errors']) || array_key_exists("tempDocError", $_SESSION['add_prod_errors']) || array_key_exists("tempZipError", $_SESSION['add_prod_errors'])){
+                                        echo "<div class='gabim'>";
+                                        echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
                                         echo "</div>";
                                     }
                                 }
@@ -1527,12 +1531,10 @@
                                     echo $_SESSION['insertion_error'];
                                     echo "</div>";
                                 }
-                                // else{
-                                //     echo "<div class='warning'>";
-                                //     echo "<h4 style='color:black; font-weight:bold; text-align:center;'> Kujdesë! </h4><ul style='color:#E62E2D;'><li> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur.</li></ul>";
-                                //     echo "</div>";
-                                // }
-                                unset($_SESSION['insertion_success']);unset($_SESSION['insertion_error']);
+                                ?>
+                                <?php 
+                                unset($_SESSION['insertion_success']);
+                                unset($_SESSION['insertion_error']); 
                                 ?>
                                 <div class="row no-gutters">
                                     <form  method="post" action="" enctype="multipart/form-data">
@@ -1611,7 +1613,7 @@
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label float-left">
-                                                    <label for="" class="float-right" >Foto 1 <b style='color:red'>*</b>: </label> 
+                                                    <label for="" class="float-right" >Foto 1 (.jpg, .png) <b style='color:red'>*</b>: </label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file" name="auc_photo1" class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
@@ -1620,7 +1622,7 @@
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label float-left">
-                                                    <label for="" class="float-right"  >Foto 2 <b style='color:red'>*</b>:</label> 
+                                                    <label for="" class="float-right"  >Foto 2 (.jpg, .png) <b style='color:red'>*</b>:</label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file" name="auc_photo2" class="form-control float-left"  style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
@@ -1629,7 +1631,7 @@
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label float-left">
-                                                    <label for="" class="float-right">Foto 3 <b style='color:red'>*</b>: </label> 
+                                                    <label for="" class="float-right">Foto 3 (.jpg, .png) <b style='color:red'>*</b>: </label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file"  name="auc_photo3"  class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
@@ -1638,7 +1640,7 @@
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label float-left">
-                                                    <label for=""  class="float-right">Foto 4: &nbsp;</label> 
+                                                    <label for=""  class="float-right">Foto 4 (.jpg, .png): &nbsp;</label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file" name="auc_photo4" class="form-control float-left" style="width:76%; " >
@@ -1647,7 +1649,7 @@
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label float-left">
-                                                    <label for="" class="float-right"  > Foto 5: &nbsp; </label> 
+                                                    <label for="" class="float-right"  > Foto 5 (.jpg, .png): &nbsp; </label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file" name="auc_photo5"  class="form-control float-left" style="width:76%; " >

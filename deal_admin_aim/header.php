@@ -10,6 +10,19 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<!-- VENDOR CSS -->
+	
+	<!-- JQUERY CONFIRM -->
+	<link rel="stylesheet" id="bs-stylesheet" href="assets/confirm/bs3.css">
+    <link rel="stylesheet" href="assets/confirm/bundled.css">
+    <script src="assets/confirm/bundled.js"></script>
+    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+    <link rel="stylesheet" href="assets/confirm/demo.css">
+    <script>
+        var version = '3.3.4';
+    </script>
+    <link rel="stylesheet" type="text/css" href="assets/confirm/jquery-confirm.css"/>
+    <script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script>
+
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
@@ -31,6 +44,7 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="../img/logo/logo_circle.ico">
+	
 
     <style>
 	.table-wrapper-scroll-y {
