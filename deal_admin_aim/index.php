@@ -61,14 +61,14 @@ require_once '../db.php';
             <img src="../img/profile_pictures/<?php echo $row_adm['profile_pic']; ?>" class="img-responsive img-circle user-photo" alt="User Profile Picture" style="width:80%; height:20rem;">
             <div class="dropdown">
             <a href="#" class="dropdown-toggle user-name" data-toggle="dropdown">Përshëndetje, <strong><?php echo $row_adm['first_name'] . " ". $row_adm['last_name']; ?></strong> <i class="fa fa-caret-down"></i></a>
-                <ul class="dropdown-menu dropdown-menu-right account">
-                    <li><a href="myprofile.php"><i class="fa fa-user-circle"></i> Profili im</a></li>
-                    <li><a href="messages.php"><i class="fa fa-envelope" style="color:black;"></i> Mesazhet</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../logout.php">Çkyçu</a></li>
-                </ul>
-            </div>
+            <ul class="dropdown-menu dropdown-menu-right account">
+                <li><a href="myprofile.php"><i class="fa fa-user-circle"></i> Profili im</a></li>
+                <li><a href="messages.php"><i class="fa fa-envelope" style="color:black;"></i> Mesazhet</a></li>
+                <li class="divider"></li>
+                <li><a href="../logout.php">Çkyçu</a></li>
+            </ul>
         </div>
+    </div>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
 				<li class="active"><a href="index.php"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>

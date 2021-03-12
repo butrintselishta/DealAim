@@ -2393,7 +2393,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         defaultMessage: "This value seems to be invalid.",
         type: {
             email: "This value should be a valid email.",
-            url: "This value should be a valid url.",
+            url: "Kjo fushë pranon vetëm një link valid.",
             number: "This value should be a valid number.",
             integer: "This value should be a valid integer.",
             digits: "This value should be digits.",

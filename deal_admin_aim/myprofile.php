@@ -62,7 +62,7 @@ require_once '../db.php';
         }
 
 		if($user_usname == $username && empty($user_pass) && $user_fname == $fname && $user_lname==$lname &&	$user_email==$email && $user_tel == $tel && $user_bday == date("Y-m-d",strtotime($bday)) && $user_city == $city && $user_postal == $post_code && $user_address == $address && !is_uploaded_file($_FILES['profile_pic']['tmp_name'])){
-            $_SESSION['no_changes_error'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Ju nuk keni ndryshuar as një nga të dhënat </a>"; header("location:myprofile.php"); die();
+            $_SESSION['no_changes_error'] = "<a style='color:#fff;'> Ju nuk keni ndryshuar asgjë nga të dhënat tuaja! </a>"; header("location:myprofile.php"); die();
 		}else{
             
             $passwordError = false; $fnameError = false; $lnameError = false; $emailError = false; $phoneError = false; $cityError=false; $postnrError = false; $addressError = false; $bdayError = false; $pidError = false;
@@ -110,14 +110,14 @@ require_once '../db.php';
                             $_SESSION['prep_stmt_error'] = ""; 
                             header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=".$row_adm['user_id'], array($user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address), "ssssssis")){
                             $_SESSION['prep_stmt_error'] = ""; 
                             header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }
@@ -125,24 +125,24 @@ require_once '../db.php';
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "sssssssisii")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
                                 $_SESSION['prep_stmt_error'] = ""; 
                                 header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address, $row_adm['user_id']), "sssssssisi")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
                                 $_SESSION['prep_stmt_error'] = ""; 
                                 header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }elseif(!empty($user_pass) && empty($basename)){
@@ -151,14 +151,14 @@ require_once '../db.php';
                             $_SESSION['prep_stmt_error'] = ""; 
                             header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else {
                         if(!prep_stmt("UPDATE users SET password=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($password_hash, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$row_adm['user_id']), "sssssssisi")){
                             $_SESSION['prep_stmt_error'] = ""; 
                             header("location:myprofile.php"); die();
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }
                 }
@@ -166,24 +166,24 @@ require_once '../db.php';
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET password=?,profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($password_hash,$basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$row_adm['user_id']), "ssssssssisii")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] ="<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                                $_SESSION['user_data_changed'] ="<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
                                 $_SESSION['prep_stmt_error'] = ""; 
                                 header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                            $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                         }
                     }else{
                         if(!prep_stmt("UPDATE users SET password=?,profile_pic=?,first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=? WHERE user_id=?", array($password_hash,$basename, $user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$row_adm['user_id']), "ssssssssisi")){
                             if($basename == $row_adm['profile_pic']){
-                                $_SESSION['user_data_changed'] = "<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
+                                $_SESSION['user_data_changed'] = "<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die(); 
                             }else{
                                 $_SESSION['prep_stmt_error'] = ""; 
                                 header("location:myprofile.php"); die();
                             }
                         }else{
-                            $_SESSION['user_data_changed'] ="<a style='color:#fff;font-weight:800;font-size:1.8rem;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die();  
+                            $_SESSION['user_data_changed'] ="<a style='color:#fff;'> Të dhënat tuaja janë ndryshuar me sukses.</a>"; header("location:myprofile.php"); die();  
                         }
                     }
                 }
@@ -249,9 +249,9 @@ require_once '../db.php';
                         </div>
 					<?php } ?>
 					<?php if(isset($_SESSION['no_changes_error'])){ ?>
-                        <div class="alert alert-info alert-dismissible" role="alert">
+                        <div class="alert alert-warning alert-dismissible" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <i class="fa fa-info-circle"></i> <?php echo $_SESSION['no_changes_error'];?>
+                            <i class="fa fa-warning""></i> <?php echo $_SESSION['no_changes_error'];?>
                         </div>
 					<?php } ?>
 					<?php if(isset($_SESSION['user_data_changed'])){?>
@@ -285,74 +285,86 @@ require_once '../db.php';
 							<h2 class="profile-heading">Të dhënat personale</h2>
 							<div class="clearfix">
 								<!-- LEFT SECTION -->
-								<div class="left" style="width:48%;">
-									<div class="form-group">
-										<label>Përdoruesi</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Përdoruesi</label>
 										<input type="text" value="<?php echo $username; ?>"
-											class="form-control" name="username"
-											style="text-align:center; font-weight:500" readonly>
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("fnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['fnameError']; } else{ echo "Emri"; } ?></label>
-										<input type="text" value="<?php echo $fname; ?>"
-											class="form-control" name="fname"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('fnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("emailError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['emailError']; } else{ echo "Email"; } ?></label>
-										<input type="text" value="<?php echo $email; ?>"
-											class="form-control" name="email"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('emailError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-									<div class="form-group">
-										<label>Datëlindja</label>
-										<input type="text" class="form-control datepicker-3"
-											id="datelindja" name="bday" value="<?php echo $bday; ?>"
-											style="text-align:center;font-size:14px;">
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("cityError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['cityError']; } else{ echo "Qyteti"; } ?></label>
-										<input type="text" name="city" value="<?php echo $city; ?>"
-											class="form-control"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('cityError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-								</div>
-								<!-- END LEFT SECTION -->
-								<!-- RIGHT SECTION -->
-								<div class="right" style="width:48%;">
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("passwordError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['passwordError']; } else{ echo "Fjalëkalimi"; } ?></label>
+                                        class="form-control" name="username"
+                                        style="text-align:center; font-weight:500" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("passwordError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['passwordError']; } else{ echo "Fjalëkalimi"; } ?></label>
 										<input type="password" value="" name="password"
-											class="form-control"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('passwordError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("lnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['lnameError']; } else{ echo "Mbiemri"; } ?></label>
-										<input type="text" value="<?php echo $lname; ?>" name="lname"
-											class="form-control"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('lnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-									<div class="form-group">
-										<label>Numri telefonit <span id="valid-msg" class="hide" style="text-align:center">(✓ Valid)</span><span id="error-msg" class="hide" style="text-align:center"></span></label>
-
-										<input id="phone" type="tel" name="phone" class="form-control" value="<?php echo $tel; ?>" style="text-align:center;">
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("addressError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['addressError']; } else{ echo "Adresa"; } ?></label>
+                                        class="form-control"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('passwordError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("fnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['fnameError']; } else{ echo "Emri"; } ?></label>
+                                        <input type="text" value="<?php echo $fname; ?>"
+                                        class="form-control" name="fname"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('fnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("lnameError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['lnameError']; } else{ echo "Mbiemri"; } ?></label>
+                                        <input type="text" value="<?php echo $lname; ?>" name="lname"
+                                        class="form-control"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('lnameError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("emailError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['emailError']; } else{ echo "Email"; } ?></label>
+										<input type="text" value="<?php echo $email; ?>"
+                                        class="form-control" name="email"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('emailError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Numri telefonit <span id="valid-msg" class="hide" style="text-align:center">(✓ Valid)</span><span id="error-msg" class="hide" style="text-align:center"></span></label>
+                                        <input id="phone" type="tel" name="phone" class="form-control" value="<?php echo $tel; ?>" style="text-align:center;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Datëlindja</label>
+										<input type="text" class="form-control datepicker-3"
+                                        id="datelindja" name="bday" value="<?php echo $bday; ?>"
+                                        style="text-align:center;font-size:14px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("addressError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['addressError']; } else{ echo "Adresa"; } ?></label>
 										<input type="text" value="<?php echo $address; ?>"
-											class="form-control" name="address"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('addressError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-									<div class="form-group">
-										<label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("postnrError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['postnrError']; } else{ echo "Kodi Postar"; } ?></label>
+                                        class="form-control" name="address"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('addressError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("cityError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['cityError']; } else{ echo "Qyteti"; } ?></label>
+										<input type="text" name="city" value="<?php echo $city; ?>"
+                                        class="form-control"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('cityError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><?php if(isset($_SESSION['user_data_errors']) && array_key_exists("postnrError", $_SESSION['user_data_errors'])){ echo $_SESSION['user_data_errors']['postnrError']; } else{ echo "Kodi Postar"; } ?></label>
 										<input type="text" value="<?php echo $post_code; ?>"
-											class="form-control" name="post_code"
-											style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('postnrError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
-									</div>
-								</div>
-								<!-- END RIGHT SECTION -->
+                                        class="form-control" name="post_code"
+                                        style="text-align:center;font-weight:500; <?php if(isset($_SESSION['user_data_errors'])){ if(array_key_exists('postnrError', $_SESSION['user_data_errors'])){ echo "border:1px solid red;";}} ?>">
+                                    </div>
+                                </div>
 							</div>
-							<p class="margin-top-30">
+							<p class="margin-top-30 text-center" >
 								<input type="submit" class="btn btn-primary" id="update_user_data" name="update_user_data" value="Ndrysho">
 							</p>
 						</div>
@@ -371,15 +383,28 @@ require_once '../db.php';
 <!-- END WRAPPER -->
 <!-- Javascript -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
+
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/vendor/metisMenu/metisMenu.js"></script>
 <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/vendor/jquery-sparkline/js/jquery.sparkline.min.js"></script>
+<script src="assets/vendor/bootstrap-progressbar/js/bootstrap-progressbar.min.js"></script>
+<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+<script src="assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.min.js"></script>
+<script src="assets/vendor/chartist-plugin-axistitle/chartist-plugin-axistitle.min.js"></script>
+<script src="assets/vendor/chartist-plugin-legend-latest/chartist-plugin-legend.js"></script>
+<script src="assets/vendor/toastr/toastr.js"></script>
 <script src="assets/scripts/common.js"></script>
-<script src="../js/datepicker/jquery-3.3.1.min.js"></script>
-<script src="../js/datepicker/jquery-ui.min.js"></script>
+<script src="assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script src="assets/vendor/parsleyjs/js/parsley.min.js"></script>
+<script src="assets/vendor/summernote/summernote.min.js"></script>
+<script src="assets/vendor/markdown/markdown.js"></script>
+<script src="assets/vendor/to-markdown/to-markdown.js"></script>
+<script src="assets/vendor/bootstrap-markdown/bootstrap-markdown.js"></script>
+<!-- <script src="../js/datepicker/jquery-3.3.1.min.js"></script> -->
+<!-- <script src="../js/datepicker/jquery-ui.min.js"></script>
 <script src="../js/datepicker/jquery.slicknav.js"></script>
-<script src="../js/datepicker/main.js"></script>	
+<script src="../js/datepicker/main.js"></script>	 -->
 <script>
     $(function() {
         // photo upload

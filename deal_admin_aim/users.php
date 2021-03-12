@@ -169,44 +169,46 @@
         }
     }
 
-    if(isset($_GET['delete'])){
-        $usr_delete = $_GET['delete'];die("asdf");
+    // if(isset($_GET['delete'])){
+    //     $usr_delete = $_GET['delete'];
 
-        $sel_dlt_user = prep_stmt("SELECT * FROM users WHERE user_id = ?", $usr_delete, "i");
-        if(mysqli_num_rows($sel_dlt_user) > 0){    
-            $fetch_dlt_user = mysqli_fetch_array($sel_dlt_user);
-        }
+    //     $sel_dlt_user = prep_stmt("SELECT * FROM users WHERE user_id = ?", $usr_delete, "i");
+    //     if(mysqli_num_rows($sel_dlt_user) > 0){    
+    //         $fetch_dlt_user = mysqli_fetch_array($sel_dlt_user);
+    //     }
 
-        $sel_bal_bank = prep_stmt("SELECT * FROM bank_acc WHERE user_id = ?", $usr_delete, "i");
-        if(mysqli_num_rows($sel_bal_bank) > 0){
-            $fetch_bank = mysqli_fetch_array($sel_bal_bank);
-        }//die(var_dump($fetch_dlt_user['user_balance']));
+    //     $sel_bal_bank = prep_stmt("SELECT * FROM bank_acc WHERE user_id = ?", $usr_delete, "i");
+    //     if(mysqli_num_rows($sel_bal_bank) > 0){
+    //         $fetch_bank = mysqli_fetch_array($sel_bal_bank);
+    //     }//die(var_dump($fetch_dlt_user['user_balance']));
 
-        if($fetch_dlt_user['user_balance'] !== NULL){
-            $full_bank_bal = $fetch_dlt_user['user_balance'] + $fetch_bank['acc_balance'];
-            //die($full_bank_bal);
-            if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id = ?", array($full_bank_bal, $usr_delete), "si")){
-                $_SESSION['data_changed_declined']="";
-                header("location:users.php?user=".$username."#profile");die();
-            }else{
-                if(!prep_stmt("DELETE FROM users WHERE user_id = ?",$usr_delete, "i")){
-                    $_SESSION['data_changed_declined']="";
-                    header("location:users.php?user=".$username."#profile");die();
-                }else{
-                    $_SESSION['data_changed_success']="Llogarija e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u fshijë me sukses!";
-                    header("location:users.php");die();
-                }
-            }
-        }else{
-            if(!prep_stmt("DELETE FROM users WHERE username = ?",$usr_delete, "s")){
-                $_SESSION['data_changed_declined']="";
-                header("location:users.php?user=".$username."#profile");die();
-            }else{
-                $_SESSION['data_changed_success']="Llogarija e përdoruesit <b style='color:#f0ad4e; font-weight:800;font-size:1.8rem;'>$username </b> u fshijë me sukses!";
-                header("location:users.php");die();
-            }
-        }
-    }
+    //     if($fetch_dlt_user['user_balance'] !== NULL){
+    //         $full_bank_bal = $fetch_dlt_user['user_balance'] + $fetch_bank['acc_balance'];
+    //         //die($full_bank_bal);
+    //         if(!prep_stmt("UPDATE bank_acc SET acc_balance=? WHERE user_id = ?", array($full_bank_bal, $usr_delete), "si")){
+    //             $_SESSION['data_changed_declined']="";
+    //             header("location:users.php");die();
+    //         }else{
+    //             $str = prep_stmt("DELETE FROM users WHERE user_id=?",$usr_delete, "i");
+    //             die();
+    //             if(!prep_stmt("DELETE FROM users WHERE user_id=?",$usr_delete, "i")){
+    //                 $_SESSION['data_changed_declined']="";
+    //                 header("location:users.php");die();
+    //             }else{
+    //                 $_SESSION['data_changed_success']="Përdoruesi u fshijë me sukses!";
+    //                 header("location:users.php");die();
+    //             }
+    //         }
+    //     }else{
+    //         if(!prep_stmt("DELETE FROM users WHERE user_id = ?",$usr_delete, "i")){
+    //             $_SESSION['data_changed_declined']="";
+    //             header("location:users.php");die();
+    //         }else{
+    //             $_SESSION['data_changed_success']="Përdoruesi u fshijë me sukses!";
+    //             header("location:users.php");die();
+    //         }
+    //     }
+    // }
 ?>
 <?php require "header.php"; ?>
 <div id="left-sidebar" class="sidebar">
@@ -372,27 +374,34 @@
                                             </form>
                                         </td> -->
                                         <td><a class="btn btn-info btn-sm" href="users.php?user=<?php echo $row_users['username'];?>#profile"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
-                                        <td><a href="users.php?delete=<?php echo $row_users['user_id']?>" class="btn btn-danger btn-sm example20" title="Delete"><span class="sr-only">Fshije</span> <i class="fa fa-trash-o"></i></a></td>
-                                        <script type="text/javascript">
-                                            $('.example20').on('click', function() {
+                                        <!-- <td>
+                                            <input type="button" id="delContact" class="btn btn-danger example20" value="Delete">
+                                        </td> -->
+                                        
+                                        <!-- <script type="text/javascript">
+                                            $('.example20').on('click', function(e) {
+                                                e.preventDefault(); //niher mos vazhdo, shfaq konfirmim
+                                                var trid = $(this).closest('tr').attr('id');
                                                 $.confirm({
-                                                    title: 'Delete user?',
-                                                    content: 'This dialog will automatically trigger \'cancel\' in 6 seconds if you don\'t respond.',
-                                                    autoClose: 'cancelAction|8000',
+                                                    title: 'A jeni të sigurtë?',
+                                                    content: 'Fshirja e përdoruesit do të \'anulohet\' në 8 sekonda nëse nuk reagoni.',
+                                                    autoClose: 'ANULO|8000',
                                                     buttons: {
                                                         deleteUser: {
-                                                            text: 'delete user',
+                                                            text: 'PO',
+                                                            btnClass: 'btn-red',
                                                             action: function() {
-                                                                $.alert('Deleted the user!');
+                                                                $.alert('Fshije!');
+                                                                window.location.replace("<?php echo "users.php?delete=" ?>"+trid);
                                                             }
                                                         },
-                                                        cancelAction: function() {
-                                                            $.alert('action is canceled');
+                                                        ANULO: function() {
+                                                            $.alert('Fshirja e përdoruesit u anulua!');
                                                         }
                                                     }
                                                 });
                                             });
-                                        </script>
+                                        </script> -->
                                     </tr>
                                     <?php } } else { ?>
                                         </tbody>
