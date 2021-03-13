@@ -14,14 +14,12 @@
 	<!-- JQUERY CONFIRM -->
 	<link rel="stylesheet" id="bs-stylesheet" href="assets/confirm/bs3.css">
     <link rel="stylesheet" href="assets/confirm/bundled.css">
-    <script src="assets/confirm/bundled.js"></script>
     <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
     <link rel="stylesheet" href="assets/confirm/demo.css">
     <script>
         var version = '3.3.4';
     </script>
     <link rel="stylesheet" type="text/css" href="assets/confirm/jquery-confirm.css"/>
-    <script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script>
 
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">

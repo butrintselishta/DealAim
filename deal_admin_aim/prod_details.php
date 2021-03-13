@@ -585,7 +585,9 @@ require_once '../db.php';
                     <div class="col-md-12">
                         <div class="panel-content" style="padding:0 0 15px 0">
                             <label> Përshkrimi </label>
-                            <textarea class="note-codable" id="markdown-editor" name="prod_desc" value="" name="markdown-content" data-provide="markdown" rows="10"><?php echo $prod_desc;?></textarea>
+                            <div class="panel-content">
+                                <textarea class="summernote" name="prod_desc"><?php echo $prod_desc; ?></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -1155,6 +1157,27 @@ require_once '../db.php';
 <script src="assets/vendor/to-markdown/to-markdown.js"></script>
 <script src="assets/vendor/bootstrap-markdown/bootstrap-markdown.js"></script>
 <script>
+$(function() {
+    // summernote editor
+    $('.summernote').summernote({
+        height: 300,
+        focus: true,
+        onpaste: function() {
+            alert('You have pasted something to the editor');
+        }
+    });
+
+    // markdown editor
+    var initContent = '<h4>Hello there</h4> ' +
+        '<p>How are you? I have below task for you :</p> ' +
+        '<p>Select from this text... Click the bold on THIS WORD and make THESE ONE italic, ' +
+        'link GOOGLE to google.com, ' +
+        'test to insert image (and try to tab after write the image description)</p>' +
+        '<p>Test Preview And ending here...</p> ' +
+        '<p>Click "List"</p> Enjoy!';
+
+    $('#markdown-editor').text(toMarkdown(initContent));
+});
 $(function() {
     // validation needs name of the element
     $('#food').multiselect();

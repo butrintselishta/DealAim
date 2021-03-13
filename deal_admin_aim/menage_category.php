@@ -97,6 +97,8 @@ require_once '../db.php';
     }
 ?>
 <?php require "header.php"; ?>
+<script src="assets/confirm/bundled.js"></script> 
+<script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script>
 <!-- LEFT SIDEBAR -->
 <div id="left-sidebar" class="sidebar">
     <button type="button" class="btn btn-xs btn-link btn-toggle-fullwidth">
@@ -446,6 +448,8 @@ require_once '../db.php';
 <!-- END WRAPPER -->
 <!-- Javascript -->
 
+
+<!-- <script src="assets/vendor/jquery/jquery.min.js"></script> -->
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/vendor/metisMenu/metisMenu.js"></script>
 <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
