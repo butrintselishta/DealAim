@@ -69,7 +69,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $titleError = true;
-            $_SESSION['add_prod_errors'] += ['titleError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['titleError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë pranon 6 deri 100 karaktere.</li>
+            </ul>"];
         }
         
         if(empty($auc_price)){
@@ -78,7 +80,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $priceError = true;
-            $_SESSION['add_prod_errors'] += ['priceError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['priceError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -222px; '>Kjo fushë nuk mund të jetë e zbrazet.</li>
+            </ul>"];
         }
         else if(!filter_var($auc_price, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){
             $_SESSION['save_price'] = $auc_price;
@@ -87,7 +91,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $priceError = true;
-            $_SESSION['add_prod_errors'] += ['priceError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['priceError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -222px; '>Cmimi dhënë nuk është në formatin e duhur.</li>
+            </ul>"];
         }
         if(empty($start_at)){
             $_SESSION['save_price'] = $auc_price;
@@ -95,7 +101,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $startError = true;
-            $_SESSION['add_prod_errors'] += ['startError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['startError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }
         elseif($start_at < $day_after_today || $start_at > $day_after_sevendays){
             $_SESSION['save_price'] = $auc_price;
@@ -104,7 +112,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $startError = true;
-            $_SESSION['add_prod_errors'] += ['startError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['startError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem datën e fillimit ta zgjedhni vetëm nga nesër deri në 7 ditë pas saj.</li>
+            </ul>"];
         }
         if(empty($auc_end)){
             $_SESSION['save_price'] = $auc_price;
@@ -112,14 +122,18 @@
             $_SESSION['save_start'] = $auc_start;
             $_SESSION['save_desc'] = $auc_desc;
             $endError = true;
-            $_SESSION['add_prod_errors'] += ['endError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['endError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }else if($auc_end > 7){
             $_SESSION['save_price'] = $auc_price;
             $_SESSION['save_title'] = $auc_title;
             $_SESSION['save_start'] = $auc_start;
             $_SESSION['save_desc'] = $auc_desc;
             $endError = true;
-            $_SESSION['add_prod_errors'] += ['endError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['endError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ankandi lejohet të mbyllet maksimumi deri në 7 ditë prej ditës së daljes.</li>
+            </ul>"];
         }
         if(empty($auc_desc)){
             $_SESSION['save_price'] = $auc_price;
@@ -127,7 +141,9 @@
             $_SESSION['save_start'] = $auc_start;
             $_SESSION['save_end'] = $auc_end;
             $descError = true;
-            $_SESSION['add_prod_errors'] += ['descError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['descError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }else if(strlen($auc_desc) < 50){
             $_SESSION['save_price'] = $auc_price;
             $_SESSION['save_title'] = $auc_title;
@@ -135,7 +151,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $descError = true;
-            $_SESSION['add_prod_errors'] += ['descError' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['descError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë duhet ti ketë minimum 50 karaktere.</li>
+            </ul>"];
         }
         if(!is_uploaded_file($_FILES['auc_photo1']['tmp_name'])){
             $_SESSION['save_price'] = $auc_price;
@@ -144,7 +162,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $photo1Error = true;
-            $_SESSION['add_prod_errors'] += ['photo1Error' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['photo1Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }
         if(!is_uploaded_file($_FILES['auc_photo2']['tmp_name'])){
             $_SESSION['save_price'] = $auc_price;
@@ -153,7 +173,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $photo2Error = true;
-            $_SESSION['add_prod_errors'] += ['photo2Error' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['photo2Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }
         if(!is_uploaded_file($_FILES['auc_photo3']['tmp_name'])){
             $_SESSION['save_price'] = $auc_price;
@@ -162,7 +184,9 @@
             $_SESSION['save_end'] = $auc_end;
             $_SESSION['save_desc'] = $auc_desc;
             $photo1Error = true;
-            $_SESSION['add_prod_errors'] += ['photo3Error' => $error_msg];
+            $_SESSION['add_prod_errors'] += ['photo3Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+            <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+            </ul>"];
         }
         
         //nese jon bo uploat filet check
@@ -174,14 +198,16 @@
             $basename_1   = $picname . "." . $imageFileType ;
             $check = getimagesize($pic_1["tmp_name"]);
 
-            if ($check == false) {
+            if($check == false) {
                 $_SESSION['save_price'] = $auc_price;
                 $_SESSION['save_title'] = $auc_title;
                 $_SESSION['save_start'] = $auc_start;
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo1Error = true;
-                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                </ul>"];
             }
             if ($pic_1['size'] > 3000000) {
                 $_SESSION['save_price'] = $auc_price;
@@ -190,7 +216,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo1Error = true;
-                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto është shumë e madhe.</li>
+                </ul>"];
             }
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                 $_SESSION['save_price'] = $auc_price;
@@ -199,7 +227,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo1Error = true;
-                $_SESSION['add_prod_errors'] += ['photo1Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo1Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto duhet të jetë e formatit JPG,JPEG apo PNG</li>
+                </ul>"];
             }
             $source_1 = $pic_1["tmp_name"];
         }
@@ -217,7 +247,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo2Error = true;
-                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                </ul>"];
             }
             if ($pic_2['size'] > 3000000) {
                 $_SESSION['save_price'] = $auc_price;
@@ -226,7 +258,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo2Error = true;
-                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto është shumë e madhe.</li>
+                </ul>"];
             }
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                 $_SESSION['save_price'] = $auc_price;
@@ -235,7 +269,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo2Error = true;
-                $_SESSION['add_prod_errors'] += ['photo2Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo2Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto duhet të jetë e formatit JPG,JPEG apo PNG</li>
+                </ul>"];
             }
             $source_2 = $pic_2["tmp_name"];
         }
@@ -253,7 +289,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo3Error = true;
-                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                </ul>"];
             }
             if ($pic_3['size'] > 3000000) {
                 $_SESSION['save_price'] = $auc_price;
@@ -262,7 +300,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo3Error = true;
-                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto është shumë e madhe.</li>
+                </ul>"];
             }
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                 $_SESSION['save_price'] = $auc_price;
@@ -271,7 +311,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo3Error = true;
-                $_SESSION['add_prod_errors'] += ['photo3Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo3Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto duhet të jetë e formatit JPG,JPEG apo PNG</li>
+                </ul>"];
             }
             $source_3 = $pic_3["tmp_name"];
         }
@@ -289,7 +331,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo4Error = true;
-                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                </ul>"];
             }
             if ($pic_4['size'] > 3000000) {
                 $_SESSION['save_price'] = $auc_price;
@@ -298,7 +342,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo4Error = true;
-                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto është shumë e madhe.</li>
+                </ul>"];
             }
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                 $_SESSION['save_price'] = $auc_price;
@@ -307,7 +353,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo4Error = true;
-                $_SESSION['add_prod_errors'] += ['photo4Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo4Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto duhet të jetë e formatit JPG,JPEG apo PNG</li>
+                </ul>"];
             }
             $source_4 = $pic_4["tmp_name"];
         }
@@ -325,7 +373,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo5Error = true;
-                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                </ul>"];
             }
             if ($pic_5['size'] > 3000000) {
                 $_SESSION['save_price'] = $auc_price;
@@ -334,7 +384,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo5Error = true;
-                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto është shumë e madhe.</li>
+                </ul>"];
             }
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                 $_SESSION['save_price'] = $auc_price;
@@ -343,7 +395,9 @@
                 $_SESSION['save_end'] = $auc_end;
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo5Error = true;
-                $_SESSION['add_prod_errors'] += ['photo5Error' => "asdasf"];
+                $_SESSION['add_prod_errors'] += ['photo5Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto duhet të jetë e formatit JPG,JPEG apo PNG</li>
+                </ul>"];
             }
             $source_5 = $pic_5["tmp_name"];
         }
@@ -1567,6 +1621,13 @@
                                                             echo "border-color:red";
                                                         }
                                                     }?>" value="<?php if(isset($_SESSION['save_title'])){echo $_SESSION['save_title'];} unset($_SESSION['save_title']); ?>" >
+                                                    
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("titleError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['titleError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             <div class="divider"></div>
                                             <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1577,6 +1638,12 @@
                                                 <div class="input-group-prepend" style="padding:0 !important;">
                                                     <div class="input-group-text" style="padding: .375rem .475rem">€</div>
                                                 </div>
+                                                <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("priceError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['priceError'];
+                                                        }
+                                                    }?>
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1584,6 +1651,12 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                 <input type="text" name="auc_start" class="form-control datepicker-2" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("startError", $_SESSION['add_prod_errors'])){ echo "border-color:red;";}} ?>" value="<?php if(isset($_SESSION['save_start'])){echo $_SESSION['save_start'];}else{ echo date("d-m-Y",strtotime("+1day"));} unset($_SESSION['save_start']); ?>">
+                                                <?php 
+                                                if(isset($_SESSION['add_prod_errors'])){
+                                                    if(array_key_exists("startError", $_SESSION['add_prod_errors'])){
+                                                        echo $_SESSION['add_prod_errors']['startError'];
+                                                    }
+                                                }?>
                                             </div>
                                             <p id="demooo"></p>
                                             <div class="divider"></div>
@@ -1601,6 +1674,12 @@
                                                     <option value="6" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 6){ echo "selected"; }  ?>> 6 </option>
                                                     <option value="7" <?php if(isset($_SESSION['save_end']) && $_SESSION['save_end'] == 7){ echo "selected";}  ?>> 7 </option>
                                                 </select>
+                                                <?php 
+                                                if(isset($_SESSION['add_prod_errors'])){
+                                                    if(array_key_exists("endError", $_SESSION['add_prod_errors'])){
+                                                        echo $_SESSION['add_prod_errors']['endError'];
+                                                    }
+                                                }?>
                                                 <?php  unset($_SESSION['save_end']);  ?>
                                             </div>
                                             <div class="divider"></div>
@@ -1609,6 +1688,12 @@
                                             </div>
                                             <div class="col-6" style="padding-bottom:5px;">
                                                 <textarea rows="4" id="auc_description" name="auc_description" class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("descError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" ><?php if(isset($_SESSION['save_desc'])){ echo $_SESSION['save_desc']; } unset($_SESSION['save_desc']);?></textarea>
+                                                <?php 
+                                                if(isset($_SESSION['add_prod_errors'])){
+                                                    if(array_key_exists("descError", $_SESSION['add_prod_errors'])){
+                                                        echo $_SESSION['add_prod_errors']['descError'];
+                                                    }
+                                                }?>
                                             </div>
                                             <div class="divider"></div>
                                             <div class="col-lg-12 col-md-12 col-xs-12"  style="padding-bottom:5px;">
@@ -1617,6 +1702,12 @@
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
                                                     <input type="file" name="auc_photo1" class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['photo1Error'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <div class="divider"></div>
@@ -1625,7 +1716,13 @@
                                                     <label for="" class="float-right"  >Foto 2 (.jpg, .png) <b style='color:red'>*</b>:</label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
-                                                    <input type="file" name="auc_photo2" class="form-control float-left"  style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                    <input type="file" name="auc_photo2" class="form-control float-left"  style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['photo2Error'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <div class="divider"></div>
@@ -1634,7 +1731,13 @@
                                                     <label for="" class="float-right">Foto 3 (.jpg, .png) <b style='color:red'>*</b>: </label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
-                                                    <input type="file"  name="auc_photo3"  class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>" >
+                                                    <input type="file"  name="auc_photo3"  class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['photo3Error'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <div class="divider"></div>
@@ -1643,7 +1746,13 @@
                                                     <label for=""  class="float-right">Foto 4 (.jpg, .png): &nbsp;</label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
-                                                    <input type="file" name="auc_photo4" class="form-control float-left" style="width:76%; " >
+                                                    <input type="file" name="auc_photo4" class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo4Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("photo4Error", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['photo4Error'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <div class="divider"></div>
@@ -1652,11 +1761,17 @@
                                                     <label for="" class="float-right"  > Foto 5 (.jpg, .png): &nbsp; </label> 
                                                 </div>
                                                 <div class="col-lg-8 col-md-8 col-sm-7 col-7 float-right">
-                                                    <input type="file" name="auc_photo5"  class="form-control float-left" style="width:76%; " >
+                                                    <input type="file" name="auc_photo5"  class="form-control float-left" style="width:76%; <?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("photo5Error", $_SESSION['add_prod_errors'])){ echo "border:1px solid red;";}} ?>">
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("photo5Error", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['photo5Error'];
+                                                        }
+                                                    }?>
                                                 </div> 
                                             </div>
                                         </div>
-                                        <?php unset($_SESSION['add_prod_errors']['titleError']);unset($_SESSION['add_prod_errors']['priceError']);unset($_SESSION['add_prod_errors']['startError']); unset($_SESSION['add_prod_errors']['endError']);unset($_SESSION['add_prod_errors']['descError']);unset($_SESSION['add_prod_errors']['photo1Error']);unset($_SESSION['add_prod_errors']['photo2Error']);unset($_SESSION['add_prod_errors']['photo3Error']);?>
+                                        <?php unset($_SESSION['add_prod_errors']['titleError']);unset($_SESSION['add_prod_errors']['priceError']);unset($_SESSION['add_prod_errors']['startError']); unset($_SESSION['add_prod_errors']['endError']);unset($_SESSION['add_prod_errors']['descError']);unset($_SESSION['add_prod_errors']['photo1Error']);unset($_SESSION['add_prod_errors']['photo2Error']);unset($_SESSION['add_prod_errors']['photo3Error']);unset($_SESSION['add_prod_errors']['photo4Error']);unset($_SESSION['add_prod_errors']['photo5Error']);?>
                                         <!--- SPECIIFIKAT -->
                                         <h3 style="text-decoration:underline;" id="spec_h3" > Specifikat </h3>
                                         <!--- SPECIIFIKAT e laptopit-->
