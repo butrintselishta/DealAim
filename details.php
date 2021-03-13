@@ -57,7 +57,8 @@
    
 	require "header.php";
 ?>
- 
+<!-- <script src="assets/confirm/bundled.js"></script> 
+<script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script> -->
  
  <main>
     <?php

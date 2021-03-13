@@ -281,6 +281,15 @@ function getWinnSell($usname){
     <link href="css/error_track.css" rel="stylesheet">
     <link rel="stylesheet" href="css/intlTelInput.css">
     <!-- <link rel="stylesheet" href="css/demo.css"> -->
+    <!-- JQUERY CONFIRM -->
+	<!-- <link rel="stylesheet" id="bs-stylesheet" href="deal_admin_aim/assets/confirm/bs3.css"> -->
+    <link rel="stylesheet" href="deal_admin_aim/assets/confirm/bundled.css">
+    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+    <link rel="stylesheet" href="deal_admin_aim/assets/confirm/demo.css">
+    <script>
+        var version = '3.3.4';
+    </script>
+    <link rel="stylesheet" type="text/css" href="deal_admin_aim/assets/confirm/jquery-confirm.css"/>
 </head>
 
 <body>
