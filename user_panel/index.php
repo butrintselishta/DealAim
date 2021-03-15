@@ -675,7 +675,7 @@
                             <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                                 <?php } ?>
                                 <div id="logo">
-                                    <a href="index.php"><img src="../img/logo/logo_dealaim.png" alt="" width="100" height="35"></a>
+                                    <a href="../index.php"><img src="../img/logo/logo_dealaim.png" alt="" width="100" height="35"></a>
                                 </div>
                             </div>
                             <?php  if(isset($_SESSION['logged']) && $_SESSION['logged'] == true)
@@ -695,7 +695,7 @@
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="index.php"><img src="../img/logo/logo_dealaim_black.png" alt="" width="100"
+                                            <a href="../index.php"><img src="../img/logo/logo_dealaim_black.png" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>

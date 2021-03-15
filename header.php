@@ -427,7 +427,7 @@ function getWinnSell($usname){
                                         <!-- /dropdown-cart-->
                                     <li>
                                         <div class="dropdown dropdown-access">
-                                            <a href="<?php if(isset($_SESSION['logged'])){ echo "user_panel ";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
+                                            <a href="<?php if(isset($_SESSION['logged'])){ echo "user_panel";} else{ echo "signin.php";} ?>" class="access_link" data-toggle="dropdown"><span>Account</span></a>
                                             <div class="dropdown-menu">
                                                 <?php if(isset($_SESSION['logged']) && $_SESSION['logged'] == true){   ?>
                                                 <a style="font-size: 15px;font-weight:italic;">Statusi:
@@ -477,8 +477,11 @@ function getWinnSell($usname){
                                             </div>
                                         </div>
                                         <!-- /dropdown-access-->
-                                    </li>  
-                                  
+                                    </li>
+                                    <!-- <li>
+                                        <a href=""><i class="ti-shift-left-alt"></i><span>Ç'kyçu</span></a>
+                                    </li> -->
+                                    
                                     <!-- <li>
                                         <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
                                     </li> -->
