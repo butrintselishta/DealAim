@@ -384,6 +384,7 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-md-12">
 			<?php 
 				$this_week_pro = "";
 				$this_today = date("l d-M"); ;
@@ -442,25 +443,28 @@
 				$this_w_profit = rtrim($this_w_profit, ",");
 		
 			?>
-			<div class="panel-content">
-				<div class="row margin-bottom-15">
-					<div class="col-md-12 float-left ">
-						<h2 class="heading margin-bottom-50"><i class="fa fa fa-line-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b>(LINE CHART)</b></h2>
-					</div>
-					<div class="col-md-12 col-sm-9 left">
-						<div id="demo-line-chart2" class="ct-chart"></div>
+				<div class="panel-content">
+					<div class="row margin-bottom-15">
+						<div class="col-md-12 float-left ">
+							<h2 class="heading margin-bottom-50"><i class="fa fa fa-line-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b>(LINE CHART)</b></h2>
+						</div>
+						<div class="col-md-12 col-sm-9 left">
+							<div id="demo-line-chart2" class="ct-chart"></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="panel-content">
-				<div class="row margin-bottom-15">
-					<div class="col-md-12 float-left ">
-							<h2 class="heading margin-bottom-50"><i class="fa fa fa-bar-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b> (BAR CHART) </b></h2>
+			<div class="col-md-12">
+				<div class="panel-content">
+					<div class="row margin-bottom-15">
+						<div class="col-md-12 float-left ">
+								<h2 class="heading margin-bottom-50"><i class="fa fa fa-bar-chart" style="color: #82b2f9;font-weight:bold;"></i> &nbsp; Grafiku i të ardhurave për javën e fundit <b> (BAR CHART) </b></h2>
+							</div>
+						<div class="col-md-12 col-sm-9 left">
+							<div id="demo-bar-chart2" class="ct-chart"></div>
 						</div>
-					<div class="col-md-12 col-sm-9 left">
-						<div id="demo-bar-chart2" class="ct-chart"></div>
 					</div>
 				</div>
 			</div>

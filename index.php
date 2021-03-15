@@ -11,7 +11,7 @@ if(isset($_SESSION['user_unconfirmed'])){
         <div class="owl-carousel owl-theme">
         <?php 
                 $last_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id 
-                WHERE prod_from <= NOW() AND prod_to > NOW()
+                WHERE prod_from <= NOW() AND prod_to > NOW() AND prod_isApproved = 1
                 order by prod_id DESC LIMIT 1");
                 if(mysqli_num_rows($last_prod) >0){
                     while($row_last = mysqli_fetch_array($last_prod)){
@@ -63,7 +63,7 @@ if(isset($_SESSION['user_unconfirmed'])){
             </div>
             <?php } ?>
             <?php 
-                $last_3_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_id != (SELECT MAX(prod_id) FROM products) order by prod_id DESC LIMIT 2");
+                $last_3_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_id != (SELECT MAX(prod_id) FROM products) AND prod_from <= NOW() AND prod_to > NOW() AND prod_isApproved = 1 order by prod_id DESC LIMIT 2");
                 if(mysqli_num_rows($last_prod) > 0){
                     while($row_last_3 = mysqli_fetch_array($last_3_prod)){
                         $prod_img = explode("|", $row_last_3['prod_img']);

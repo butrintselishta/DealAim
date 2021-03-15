@@ -136,9 +136,9 @@
                                             <td><span class="text-warning" style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($lastDayProfit,2) . "€" ?></span></td>
                                             <td><span class="text-info"  style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($thisDayProfit,2) . "€" ?></span></td>
                                             <?php if($dayProfitPerc < 0){ 
-                                                echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;'> $dayProfitPerc</span></td>";
+                                                echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;color:crimson'> $dayProfitPerc</span></td>";
                                             }elseif($dayProfitPerc > 0){ 
-                                                echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $dayProfitPerc</span></td>";
+                                                echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;color:#68d400'> +$dayProfitPerc</span></td>";
                                             }else{
                                                 echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $dayProfitPerc</span></td>";
                                             } ?>
@@ -152,8 +152,8 @@
                 <div class="col-md-4">
                     <div class="panel-content">
                         <div class="col-md-12 col-sm-12">
-                            <?php if($thisDayProfit !== 0){ ?>
-                                <p class="metric-inline"><i class="fa fa-euro"  style="color:lawngreen"> 636 </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR SOT</span></p>
+                            <?php if($thisDayProfit > 0){ ?>
+                                <p class="metric-inline"><i class="fa fa-euro"  style="color:#68d400;"> <b style="font-size:4rem"><?php echo number_format($thisDayProfit,2) ?></b> </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR SOT</span></p>
                             <?php } else{ ?>
                                 <p class="metric-inline"><i class="fa fa-euro" style="color:crimson"> <b style="font-size:4rem"><?php echo number_format($thisDayProfit,2) ?> </b></i><span style="font-size: 1.785rem;">TË ARDHURAT PËR SOT</span></p>
                             <?php } ?>
@@ -162,6 +162,11 @@
                 </div>
             </div>
         </div>
+		
+		<div class="panel-content">
+			<h2 class="heading margin-bottom-50"></h2>
+		</div>
+		
         <div class="row">
             <div class="panel-content">
                 <div class="col-md-12 "  style="margin-bottom:-20%;">
@@ -231,9 +236,9 @@
                                         <td><span class="text-warning" style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($lastWeekProfit,2) . "€" ?></span></td>
                                         <td><span class="text-info"  style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($thisWeekProfit,2) . "€" ?></span></td>
                                         <?php if($dayProfitPerc < 0){ 
-                                            echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;'> $weekProfitPerc </span></td>";
+                                            echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;color:crimson'> $weekProfitPerc </span></td>";
                                         }elseif($dayProfitPerc > 0){ 
-                                            echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $weekProfitPerc</span></td>";
+                                            echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;color:#68d400'> +$weekProfitPerc</span></td>";
                                         }else{
                                             echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $weekProfitPerc </span></td>";
                                         } ?>
@@ -247,8 +252,8 @@
             <div class="col-md-4">
                 <div class="panel-content">
                     <div class="col-md-12 col-sm-12">
-                        <?php if($thisWeekProfit !== 0){ ?>
-                            <p class="metric-inline"><i class="fa fa-euro"  style="color:lawngreen"> <b style="font-size:4rem"><?php echo number_format($thisWeekProfit,2) ?></b> </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË JAVË</span></p>
+                        <?php if($thisWeekProfit > 0){ ?>
+                            <p class="metric-inline"><i class="fa fa-euro"  style="color:#68d400;"> <b style="font-size:4rem"><?php echo number_format($thisWeekProfit,2) ?></b> </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË JAVË</span></p>
                         <?php } else{ ?>
                             <p class="metric-inline"><i class="fa fa-euro" style="color:crimson"> <b style="font-size:4rem"><?php echo number_format($thisWeekProfit,2) ?> </b></i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË JAVË</span></p>
                         <?php } ?>
@@ -356,12 +361,14 @@
 			?>
             <div class="col-md-12">
                 <div class="panel-content">
-                    <h2 class="heading margin-bottom-50"></h2>
                     <div id="demo-multiple-chart" class="ct-chart"></div>
                 </div>
             </div>
 		</div>
 
+		<div class="panel-content">
+			<h2 class="heading margin-bottom-50"></h2>
+		</div>
 		<!-- MONTHLY PROFIT -->
 		<div class="row">
             <div class="panel-content">
@@ -428,10 +435,10 @@
                                         <th>Të ardhurat</th>
                                         <td><span class="text-warning" style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($lastMonthProfit,2) . "€" ?></span></td>
                                         <td><span class="text-info"  style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($thisMonthProfit,2) . "€" ?></span></td>
-                                        <?php if($dayProfitPerc < 0){ 
-                                            echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;'> $profitPerc </span></td>";
-                                        }elseif($dayProfitPerc > 0){ 
-                                            echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $profitPerc</span></td>";
+                                        <?php if($profitPerc < 0){ 
+                                            echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;color:crimson'> $profitPerc </span></td>";
+                                        }elseif($profitPerc > 0){ 
+                                            echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;color:#68d400'> +$profitPerc</span></td>";
                                         }else{
                                             echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $profitPerc </span></td>";
                                         } ?>
@@ -445,8 +452,8 @@
             <div class="col-md-4">
                 <div class="panel-content">
                     <div class="col-md-12 col-sm-12">
-                        <?php if($thisWeekProfit !== 0){ ?>
-                            <p class="metric-inline"><i class="fa fa-euro"  style="color:lawngreen"> <b style="font-size:4rem"><?php echo number_format($thisMonthProfit,2) ?></b> </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË MUAJ</span></p>
+                        <?php if($thisWeekProfit > 0){ ?>
+                            <p class="metric-inline"><i class="fa fa-euro"  style="color:#68d400;"> <b style="font-size:4rem"><?php echo number_format($thisMonthProfit,2) ?></b> </i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË MUAJ</span></p>
                         <?php } else{ ?>
                             <p class="metric-inline"><i class="fa fa-euro" style="color:crimson"> <b style="font-size:4rem"><?php echo number_format($thisMonthProfit,2) ?> </b></i><span style="font-size: 1.785rem;">TË ARDHURAT PËR KËTË MUAJ</span></p>
                         <?php } ?>
@@ -561,7 +568,6 @@
 			?>
             <div class="col-md-12">
                 <div class="panel-content">
-                    <h2 class="heading margin-bottom-50"></h2>
                     <div id="demo-multiple-chart2" class="ct-chart"></div>
                 </div>
             </div>
