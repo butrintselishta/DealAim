@@ -206,7 +206,7 @@
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo1Error = true;
                 $_SESSION['add_prod_errors'] += ['photo1Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
-                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është në formatin e duhur.</li>
                 </ul>"];
             }
             if ($pic_1['size'] > 3000000) {
@@ -248,7 +248,7 @@
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo2Error = true;
                 $_SESSION['add_prod_errors'] += ['photo2Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
-                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është në formatin e duhur.</li>
                 </ul>"];
             }
             if ($pic_2['size'] > 3000000) {
@@ -290,7 +290,7 @@
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo3Error = true;
                 $_SESSION['add_prod_errors'] += ['photo3Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
-                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është në formatin e duhur.</li>
                 </ul>"];
             }
             if ($pic_3['size'] > 3000000) {
@@ -332,7 +332,7 @@
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo4Error = true;
                 $_SESSION['add_prod_errors'] += ['photo4Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
-                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është në formatin e duhur.</li>
                 </ul>"];
             }
             if ($pic_4['size'] > 3000000) {
@@ -374,7 +374,7 @@
                 $_SESSION['save_desc'] = $auc_desc;
                 $photo5Error = true;
                 $_SESSION['add_prod_errors'] += ['photo5Error' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
-                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është shumë në formatin e duhur.</li>
+                <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Foto nuk është në formatin e duhur.</li>
                 </ul>"];
             }
             if ($pic_5['size'] > 3000000) {
@@ -445,12 +445,16 @@
                 if(empty($lap_man)){
                     $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapManError = true;
-                    $_SESSION['add_prod_errors'] += ['lapManError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapManError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 else if(array_search($lap_man, $lap_manufacturers) === false){
                     $_SESSION['save_price'] = $auc_price; $_SESSION['save_title'] = $auc_title; $_SESSION['save_end'] = $auc_end; $_SESSION['save_desc'] = $auc_desc; $_SESSION['save_lapMod'] = $lap_mod; $_SESSION['save_lapCon'] = $lap_condition; $_SESSION['save_lapDis'] = $lap_display; $_SESSION['save_lapCol'] = $lap_col; $_SESSION['save_lapProc'] = $lap_proc; $_SESSION['save_lapRam'] = $lap_ram; $_SESSION['save_lapIntMem'] = $lap_intmem; $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space; $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapManError = true;
-                    $_SESSION['add_prod_errors'] += ['lapManError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapManError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem zgjedhni vetëm nga prodhuesit që gjenden në listë.</li>
+                    </ul>"];
                 }
                 if(empty($lap_mod)){
                     $_SESSION['save_price'] = $auc_price;
@@ -466,7 +470,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapModError = true;
-                    $_SESSION['add_prod_errors'] += ['lapModError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapModError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($lap_condition)){
                     $_SESSION['save_price'] = $auc_price;
@@ -483,7 +489,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapConError = true;
-                    $_SESSION['add_prod_errors'] += ['lapConError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapConError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($lap_display)){
                     $_SESSION['save_price'] = $auc_price;
@@ -500,7 +508,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapDisError = true;
-                    $_SESSION['add_prod_errors'] += ['lapDisError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapDisError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($lap_display)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -516,7 +526,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapDisError = true;
-                    $_SESSION['add_prod_errors'] += ['lapDisError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapDisError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shkruani horizontalen e ekranit vetëm përmes numrit, pa karaktere tjera.</li>
+                    </ul>"];
                 }
                 if(empty($lap_col)){
                     $_SESSION['save_price'] = $auc_price;
@@ -533,7 +545,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapColError = true;
-                    $_SESSION['add_prod_errors'] += ['lapColError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapColError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!ctype_alpha($lap_col) && !((strpos($lap_col, 'ë')) || (strpos($lap_col, 'Ë')) || (strpos($lap_col, 'ç')) || (strpos($lap_col, 'Ç')))){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -550,7 +564,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapColError = true;
-                    $_SESSION['add_prod_errors'] += ['lapColError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapColError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë pranon vetëm shkronja në rangun A-ZH.</li>
+                    </ul>"];
                 }
                 if(empty($lap_proc)){
                     $_SESSION['save_price'] = $auc_price;
@@ -567,7 +583,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapProcError = true;
-                    $_SESSION['add_prod_errors'] += ['lapProcError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapProcError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($lap_ram)){
                     $_SESSION['save_price'] = $auc_price;
@@ -585,7 +603,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapRamError = true;
-                    $_SESSION['add_prod_errors'] += ['lapRamError' =>$error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapRamError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($lap_ram)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -602,7 +622,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapRamError = true;
-                    $_SESSION['add_prod_errors'] += ['lapRamError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapRamError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni hapsirën e RAM (në GB) vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($lap_intmem)){
                     $_SESSION['save_price'] = $auc_price;
@@ -619,7 +641,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapIntMemError = true;
-                    $_SESSION['add_prod_errors'] += ['lapIntMemError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapIntMemError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($lap_intmem_space)){
                     $_SESSION['save_price'] = $auc_price;
@@ -637,7 +661,9 @@
                     $_SESSION['save_lapIntMem'] = $lap_intmem;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapIntMemSpaceError = true;
-                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($lap_intmem_space)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -654,7 +680,9 @@
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $_SESSION['save_lapGrap'] = $lap_grap;
                     $lapIntMemSpaceError = true;
-                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapIntMemSpaceError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni hapsirën e RAM (në GB) vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($lap_grap)){
                     $_SESSION['save_price'] = $auc_price;
@@ -672,7 +700,9 @@
                     $_SESSION['save_lapIntMem'] = $lap_intmem;
                     $_SESSION['save_lapIntMemSpace'] = $lap_intmem_space;
                     $lapGrapError = true;
-                    $_SESSION['add_prod_errors'] += ['lapGrapError' => $error_msg];
+                    $_SESSION['add_prod_errors'] += ['lapGrapError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
 
                 if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error || $photo4Error || $photo5Error || $lapManError || $lapModError || $lapModError || $lapConError || $lapDisError || $lapColError || $lapProcError || $lapRamError || $lapIntMemError || $lapIntMemSpaceError || $lapGrapError){
@@ -764,7 +794,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneManError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneManError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneManError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(array_search($phone_man, $phone_manufacturers) === false){
                     $_SESSION['save_price'] = $auc_price; 
                     $_SESSION['save_title'] = $auc_title; 
@@ -780,7 +812,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneManError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneManError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneManError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem zgjedhni vetëm nga prodhuesit që gjenden në listë.</li>
+                    </ul>"];
                 }
                 if(empty($phone_mod)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -796,7 +830,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneModError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneModError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneModError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($phone_con)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -812,7 +848,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneConError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneConError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneConError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($phone_col)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -828,7 +866,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneColError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneColError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneColError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!ctype_alpha($phone_col) && !((strpos($phone_col, 'ë')) || (strpos($phone_col, 'Ë')) || (strpos($phone_col, 'ç')) || (strpos($phone_col, 'Ç')))){
                     $_SESSION['save_price'] = $auc_price; //die(var_dump($phone_col ));
                     $_SESSION['save_title'] = $auc_title; 
@@ -844,7 +884,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneColError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneColError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneColError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë pranon vetëm shkronja në rangun A-ZH.</li>
+                    </ul>"];
                 }
                 if(empty($phone_os)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -860,7 +902,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneOsError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneOsError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneOsError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($phone_ram)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -876,7 +920,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneRamError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneRamError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneRamError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($phone_ram)){
                     $_SESSION['save_price'] = $auc_price; 
                     $_SESSION['save_title'] = $auc_title; 
@@ -892,7 +938,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneIntMemSpaceError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni hapsirën e RAM (në GB) vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($phone_int_mem_space)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -908,7 +956,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneIntMemSpaceError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($phone_int_mem_space)){
                     $_SESSION['save_price'] = $auc_price; 
                     $_SESSION['save_title'] = $auc_title; 
@@ -924,7 +974,9 @@
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneIntMemSpaceError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneIntMemSpaceError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni hapsirën e mbrendshme (në GB) vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($phone_sim)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -940,7 +992,9 @@
                     $_SESSION['save_phoneIntMemSpace'] = $phone_int_mem_space;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneSimError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneSimError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneSimError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($phone_sim)){
                     $_SESSION['save_price'] = $auc_price; 
                     $_SESSION['save_title'] = $auc_title; 
@@ -955,7 +1009,9 @@
                     $_SESSION['save_phoneIntMemSpace'] = $phone_int_mem_space;
                     $_SESSION['save_phoneOrigin'] = $phone_origin;
                     $phoneSimError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneSimError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneSimError"=> "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni numrin e SIM kartelave vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($phone_origin)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -971,7 +1027,9 @@
                     $_SESSION['save_phoneIntMemSpace'] = $phone_int_mem_space;
                     $_SESSION['save_phoneSim'] = $phone_sim;
                     $phoneOriginError = true;
-                    $_SESSION['add_prod_errors'] += ["phoneOriginError"=>""];
+                    $_SESSION['add_prod_errors'] += ["phoneOriginError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 
                 if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error || $photo4Error || $photo5Error || $phoneManError || $phoneModError || $phoneConError || $phoneColError || $phoneOsError || $phoneRamError || $phoneIntMemSpaceError || $phoneSimError || $lapIntMemSpaceError || $phoneOriginError){
@@ -1055,7 +1113,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carManError = true;
-                    $_SESSION['add_prod_errors'] += ["carManError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carManError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(array_search($car_man, $cars_manufacturers) === false){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -1071,7 +1131,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carManError = true;
-                    $_SESSION['add_prod_errors'] += ["carManError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carManError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem zgjedhni vetëm nga prodhuesit që gjenden në listë.</li>
+                    </ul>"];
                 }
                 if(empty($car_mod)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1088,7 +1150,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carModError = true;
-                    $_SESSION['add_prod_errors'] += ["carModError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carModError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($car_km)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1105,8 +1169,10 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carKmError = true;
-                    $_SESSION['add_prod_errors'] += ["carKmError"=>""];
-                }else if(!filter_var($car_km, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){die("asdff");
+                    $_SESSION['add_prod_errors'] += ["carKmError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
+                }else if(!filter_var($car_km, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_THOUSAND)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
                     $_SESSION['save_start'] = $auc_start;
@@ -1122,7 +1188,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carKmError = true;
-                    $_SESSION['add_prod_errors'] += ["carKmError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carKmError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni kilometrazhën e veturës vetëm përmes numrave.</li>
+                    </ul>"];
                 }
                 if(empty($car_yop)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1139,7 +1207,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carYopError = true;
-                    $_SESSION['add_prod_errors'] += ["carYopError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carYopError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($car_yop)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -1156,7 +1226,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carYopError = true;
-                    $_SESSION['add_prod_errors'] += ["carYopError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carYopError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni vitin e prodhimit në formatin e duhur.</li>
+                    </ul>"];
                 }
                 if(empty($car_type)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1173,7 +1245,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carTypeError = true;
-                    $_SESSION['add_prod_errors'] += ["carTypeError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carTypeError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($car_col)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1190,7 +1264,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carColError = true;
-                    $_SESSION['add_prod_errors'] += ["carColError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carColError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!ctype_alpha($car_col) && !((strpos($car_col, 'ë')) || (strpos($car_col, 'Ë')) || (strpos($car_col, 'ç')) || (strpos($car_col, 'Ç')))){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -1207,7 +1283,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carColError = true;
-                    $_SESSION['add_prod_errors'] += ["carColError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carColError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë pranon vetëm shkronja në rangun A-ZH.</li>
+                    </ul>"];
                 }
                 if(empty($car_trans)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1224,7 +1302,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carTransError = true;
-                    $_SESSION['add_prod_errors'] += ["carTransError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carTransError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($car_fuels)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1241,7 +1321,9 @@
                     $_SESSION['save_carTrans'] = $car_trans;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carFuelsError = true;
-                    $_SESSION['add_prod_errors'] += ["carFuelsError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carFuelsError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($car_cub)){
                     $_SESSION['save_price'] = $auc_price;
@@ -1258,7 +1340,9 @@
                     $_SESSION['save_carTrans'] = $car_trans;
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $carCubError = true;
-                    $_SESSION['add_prod_errors'] += ["carCubError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carCubError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }else if(!is_numeric($car_cub)){
                     $_SESSION['save_price'] = $auc_price;
                     $_SESSION['save_title'] = $auc_title;
@@ -1275,7 +1359,9 @@
                     $_SESSION['save_carFuels'] = $car_fuels;
                     $_SESSION['save_carCub'] = $car_cub;
                     $carCubError = true;
-                    $_SESSION['add_prod_errors'] += ["carCubError"=>""];
+                    $_SESSION['add_prod_errors'] += ["carCubError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Ju lutem shënoni kubikazhën e veturës vetëm përmes numrave.</li>
+                    </ul>"];
                 }
 
                 if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error || $photo4Error || $photo5Error || $carManError || $carModError || $carKmError || $carYopError || $carTypeError || $carColError || $carTransError || $carFuelsError || $carCubError){
@@ -1326,8 +1412,7 @@
                     }
                 }
             }
-            else if($_POST['auc_category'] == "Template")
-            {
+            else if($_POST['auc_category'] == "Template"){
                 $ZIP_ERROR = [
                     ZipArchive::ER_EXISTS => 'File already exists.',
                     ZipArchive::ER_INCONS => 'Zip archive inconsistent.',
@@ -1367,7 +1452,9 @@
                     $_SESSION['save_tempLayout'] = $temp_layout;
                     $_SESSION['save_tempDoc'] = $temp_doc;
                     $tempCatError = true;
-                    $_SESSION['add_prod_errors'] += ["tempCatError"=>""];
+                    $_SESSION['add_prod_errors'] += ["tempCatError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($temp_ut)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -1378,7 +1465,9 @@
                     $_SESSION['save_tempLayout'] = $temp_layout;
                     $_SESSION['save_tempDoc'] = $temp_doc;
                     $tempUtError = true;
-                    $_SESSION['add_prod_errors'] += ["tempUtError"=>""];
+                    $_SESSION['add_prod_errors'] += ["tempUtError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($temp_layout)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -1389,7 +1478,9 @@
                     $_SESSION['save_tempUt'] = $temp_ut;
                     $_SESSION['save_tempDoc'] = $temp_doc;
                     $tempLayoutError = true;
-                    $_SESSION['add_prod_errors'] += ["tempLayoutError"=>""];
+                    $_SESSION['add_prod_errors'] += ["tempLayoutError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(empty($temp_doc)){
                     $_SESSION['save_price'] = $auc_price; 
@@ -1400,7 +1491,9 @@
                     $_SESSION['save_tempUt'] = $temp_ut;
                     $_SESSION['save_tempLayout'] = $temp_layout;
                     $tempDocError = true;
-                    $_SESSION['add_prod_errors'] += ["tempDocError"=>""];
+                    $_SESSION['add_prod_errors'] += ["tempDocError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
                 if(!is_uploaded_file($_FILES['template_zip']['tmp_name'])){
                     $_SESSION['save_price'] = $auc_price; 
@@ -1412,7 +1505,9 @@
                     $_SESSION['save_tempLayout'] = $temp_layout;
                     $_SESSION['save_tempDoc'] = $temp_doc;
                     $tempZipError = true;
-                    $_SESSION['add_prod_errors'] += ["tempZipError"=>""];
+                    $_SESSION['add_prod_errors'] += ["tempZipError"=>"<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                    <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Kjo fushë nuk mund jetë e zbrazet.</li>
+                    </ul>"];
                 }
 
                 $temp_name = $_FILES['template_zip']['name'];
@@ -1434,7 +1529,9 @@
                         $_SESSION['save_tempLayout'] = $temp_layout;
                         $_SESSION['save_tempDoc'] = $temp_doc;
                         $tempZipError = true;
-                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                        <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Template nuk është ngarkuar në formatin e duhur.</li>
+                        </ul>"];
                     }
                     if ($template_zip['size'] > 300000000) {
                         $_SESSION['save_price'] = $auc_price; 
@@ -1446,7 +1543,9 @@
                         $_SESSION['save_tempLayout'] = $temp_layout;
                         $_SESSION['save_tempDoc'] = $temp_doc;
                         $tempZipError = true;
-                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                        <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Template është më e madhe se limiti i lejuar.</li>
+                        </ul>"];
                     }
                     if ($imageFileType != "zip") {
                         
@@ -1459,7 +1558,9 @@
                         $_SESSION['save_tempLayout'] = $temp_layout;
                         $_SESSION['save_tempDoc'] = $temp_doc;
                         $tempZipError = true;
-                        $_SESSION['add_prod_errors'] += ['tempZipError' => ""];
+                        $_SESSION['add_prod_errors'] += ['tempZipError' => "<ul class='parsley-errors-list filled' id='parsley-id-5' style=' margin: 0; text-align: left; color: #de4848; list-style-type: none;'>
+                        <li class='parsley-required' style=' float: left; text-align: left; margin: 0 0px 5px -40px; '>Template duhet të jetë vetëm në formatin ZIP.</li>
+                        </ul>"];
                     }
                     $source_temp = $template_zip["tmp_name"];
                 }
@@ -1467,13 +1568,14 @@
                 if($titleError || $priceError || $startError || $endError || $descError || $photo1Error || $photo2Error || $photo3Error || $photo4Error || $photo5Error || $tempCatError || $tempUtError || $tempLayoutError || $tempDocError || $tempZipError){
                     header("location:myauctions.php"); die();
                 }else{
-                    if (is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
+                    if(is_uploaded_file($_FILES['template_zip']['tmp_name'])) {
                         $target_dir_temp = "img/products/templates/$basename_temp";
                         if(move_uploaded_file($source_temp, $target_dir_temp) === true){
                             $trg = dirname(__FILE__) . "/img/products/templates/template_" . $unique_id.".zip"; 
                             $r = openZip($trg); 
                         }else{
-                            die("gabim");
+                            $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim në ngarkimin e fajllit, ju lutem kthehuni dhe provoni më vonë! </p>"; 
+                            header("location:myauctions.php"); die();
                         }
                     }
                     //get the name of the folder and the basename -> e 1-ra per preview e 2-ta per download
@@ -1525,7 +1627,7 @@
                 }
             }
         }else{
-            die("keqqqq");
+            $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D; font-weight:600;'> Ju lutem zgjedhni vetëm nga kategoritë që janë në listë! </p>"; header("location:myauctions.php"); die();
         }
 
     }
@@ -1553,6 +1655,15 @@
                                     <span style="background-color:#fff">Vendose produktin tënd në ankand</span>
                                 </div>
                                 <?php
+                                if(isset($_SESSION['insertion_success'])){
+                                    echo "<div class='sukses'>";
+                                    echo $_SESSION['insertion_success'];
+                                    echo "</div>";
+                                }else if(isset($_SESSION['insertion_error'])){
+                                    echo "<div class='gabim'>";
+                                    echo $_SESSION['insertion_error'];
+                                    echo "</div>";
+                                }
                                 if(isset($_SESSION['add_prod_errors'])){
                                     if(array_key_exists("titleError", $_SESSION['add_prod_errors']) || array_key_exists("priceError", $_SESSION['add_prod_errors']) || array_key_exists("startError", $_SESSION['add_prod_errors']) || array_key_exists("endError", $_SESSION['add_prod_errors']) || array_key_exists("descError", $_SESSION['add_prod_errors']) || array_key_exists("photo1Error", $_SESSION['add_prod_errors']) || array_key_exists("photo2Error", $_SESSION['add_prod_errors']) || array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){
                                         echo "<div class='gabim'>";
@@ -1575,15 +1686,6 @@
                                         echo "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;font-weight:600;'> Fushat me të kuqe janë të zbrazëta ose nuk janë të shënuara në formatin e duhur. Ju lutem mbushini fushat sipas kërkesave! </p>";
                                         echo "</div>";
                                     }
-                                }
-                                if(isset($_SESSION['insertion_success'])){
-                                    echo "<div class='sukses'>";
-                                    echo $_SESSION['insertion_success'];
-                                    echo "</div>";
-                                }else if(isset($_SESSION['insertion_error'])){
-                                    echo "<div class='gabim'>";
-                                    echo $_SESSION['insertion_error'];
-                                    echo "</div>";
                                 }
                                 ?>
                                 <?php 
@@ -1705,6 +1807,7 @@
                                                     <?php 
                                                     if(isset($_SESSION['add_prod_errors'])){
                                                         if(array_key_exists("photo1Error", $_SESSION['add_prod_errors'])){
+                                                            echo "<br/><br/>";
                                                             echo $_SESSION['add_prod_errors']['photo1Error'];
                                                         }
                                                     }?>
@@ -1720,6 +1823,7 @@
                                                     <?php 
                                                     if(isset($_SESSION['add_prod_errors'])){
                                                         if(array_key_exists("photo2Error", $_SESSION['add_prod_errors'])){
+                                                            echo "<br/><br/>";
                                                             echo $_SESSION['add_prod_errors']['photo2Error'];
                                                         }
                                                     }?>
@@ -1735,6 +1839,7 @@
                                                     <?php 
                                                     if(isset($_SESSION['add_prod_errors'])){
                                                         if(array_key_exists("photo3Error", $_SESSION['add_prod_errors'])){
+                                                            echo "<br/><br/>";
                                                             echo $_SESSION['add_prod_errors']['photo3Error'];
                                                         }
                                                     }?>
@@ -1750,6 +1855,7 @@
                                                     <?php 
                                                     if(isset($_SESSION['add_prod_errors'])){
                                                         if(array_key_exists("photo4Error", $_SESSION['add_prod_errors'])){
+                                                            echo "<br/><br/>";
                                                             echo $_SESSION['add_prod_errors']['photo4Error'];
                                                         }
                                                     }?>
@@ -1765,6 +1871,7 @@
                                                     <?php 
                                                     if(isset($_SESSION['add_prod_errors'])){
                                                         if(array_key_exists("photo5Error", $_SESSION['add_prod_errors'])){
+                                                            echo "<br/><br/>";
                                                             echo $_SESSION['add_prod_errors']['photo5Error'];
                                                         }
                                                     }?>
@@ -1781,7 +1888,7 @@
                                                     <label for="inputEmail3" class="float-right"  >Prodhuesi <b style='color:red'>*</b>:</label> 
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
-                                                    <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } } unset($_SESSION['add_prod_errors']['lapManError']); ?>" <?php if(isset($_SESSION['save_lapMan'])){ echo "value='".$_SESSION['save_lapMan']."'"; } ?>>
+                                                    <select class="form-control" id="lap_manufacturer" name="lap_manufacturer" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapManError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } } ?>" <?php if(isset($_SESSION['save_lapMan'])){ echo "value='".$_SESSION['save_lapMan']."'"; } ?>>
                                                         <?php 
                                                         $sel_man_lap = prep_stmt("SELECT * FROM prod_manufacturers WHERE cat_id = ? ORDER BY prod_manufacturer ASC", 2, 'i');
                                                         echo "<option value=''> Zgjedh prodhuesin </option>";
@@ -1790,6 +1897,11 @@
                                                         }
                                                         ?>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapManError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapManError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1797,6 +1909,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_model" id="lap_model" class="form-control"   placeholder="Modeli laptopit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapModError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapMod'])){ echo "value='".$_SESSION['save_lapMod']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapModError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapModError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1808,7 +1926,12 @@
                                                     <option value="I ri" <?php if(isset($_SESSION['save_lapCon']) && $_SESSION['save_lapCon'] == "I ri"){ echo "selected";} ?>> I ri </option>
                                                     <option value="I përdorur" <?php if(isset($_SESSION['save_lapCon']) && $_SESSION['save_lapCon'] == "I përdorur"){ echo "selected";} ?>> I përdorur </option>
                                                     </select>
-                                                    <?php unset($_SESSION['save_lapCon']); ?>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapConError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapConError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1816,6 +1939,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_display" class="form-control"   placeholder="Diagonalja ekranit (e shprehur me inch).." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapDisError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapDis'])){ echo "value='".$_SESSION['save_lapDis']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapDisError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapDisError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1823,6 +1952,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_color" class="form-control"   placeholder="Ngjyra.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapColError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapCol'])){ echo "value='".$_SESSION['save_lapCol']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapColError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapColError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1830,6 +1965,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_procesor" class="form-control"   placeholder="Procesori.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapProcError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapProc'])){ echo "value='".$_SESSION['save_lapProc']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapProcError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapProcError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1837,6 +1978,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_ram" class="form-control"   placeholder="Hapsira e RAM memorjes (e shprehur në GB)..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapRamError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapRam'])){ echo "value='".$_SESSION['save_lapRam']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapRamError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapRamError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1849,6 +1996,12 @@
                                                     <option value="SSD" <?php if(isset($_SESSION['save_lapIntMem']) && $_SESSION['save_lapIntMem'] == "SSD"){ echo "selected";} ?>> SSD </option>
                                                     <option value="Hybrid" <?php if(isset($_SESSION['save_lapIntMem']) && $_SESSION['save_lapIntMem'] == "Hybrid"){ echo "selected";} ?>> Hybrid </option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapIntMemError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapIntMemError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1856,6 +2009,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme..." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapIntMemSpaceError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>"  <?php if(isset($_SESSION['save_lapIntMemSpace'])){ echo "value='".$_SESSION['save_lapIntMemSpace']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapIntMemSpaceError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapIntMemSpaceError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1863,10 +2022,16 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="lap_graphic_card" class="form-control"   placeholder="Kartela Grafike.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("lapGrapError", $_SESSION['add_prod_errors'])){ echo "border:1px solid red";}} ?>" <?php if(isset($_SESSION['save_lapGrap'])){ echo "value='".$_SESSION['save_lapGrap']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("lapGrapError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['lapGrapError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <?php unset($_SESSION['add_prod_errors']['lapManError']);unset($_SESSION['add_prod_errors']['lapModError']);unset($_SESSION['add_prod_errors']['lapConError']); unset($_SESSION['add_prod_errors']['lapDisError']);unset($_SESSION['add_prod_errors']['lapColError']);unset($_SESSION['add_prod_errors']['lapProcError']);unset($_SESSION['add_prod_errors']['lapRamError']);unset($_SESSION['add_prod_errors']['lapIntMemError']);unset($_SESSION['add_prod_errors']['lapIntMemSpaceError']); unset($_SESSION['add_prod_errors']['lapGrapError']);?>
-                                            <?php unset($_SESSION['save_lapMod']); unset($_SESSION['save_lapDis']); unset($_SESSION['save_lapCol']); unset($_SESSION['save_lapProc']); unset($_SESSION['save_lapRam']);unset($_SESSION['save_lapIntMem']);unset($_SESSION['save_lapIntMemSpace']); unset($_SESSION['save_lapGrap']); ?>
+                                            <?php unset($_SESSION['save_lapMod']);unset($_SESSION['save_lapCon']); unset($_SESSION['save_lapDis']); unset($_SESSION['save_lapCol']); unset($_SESSION['save_lapProc']); unset($_SESSION['save_lapRam']);unset($_SESSION['save_lapIntMem']);unset($_SESSION['save_lapIntMemSpace']); unset($_SESSION['save_lapGrap']); ?>
                                         </div>
                                         <!--- SPECIIFIKAT e telefonit-->
                                         <div id="spec_phone" >
@@ -1884,6 +2049,12 @@
                                                         }
                                                         ?>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneManError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneManError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1891,6 +2062,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="phone_model" class="form-control"   placeholder="Modeli telefonit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneModError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneMod'])){echo "value='".$_SESSION['save_phoneMod']."'";} ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneModError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneModError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1902,6 +2079,12 @@
                                                     <option value="I ri" <?php if(isset($_SESSION['save_phoneCon'])){ if($_SESSION['save_phoneCon'] == "I ri"){echo "selected";}} ?>> I ri </option>
                                                     <option value="I përdorur"  <?php if(isset($_SESSION['save_phoneCon'])){ if($_SESSION['save_phoneCon'] == "I përdorur"){echo "selected";}} ?>> I përdorur </option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneConError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneConError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1909,6 +2092,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="phone_color" class="form-control"   placeholder="Ngjyra"  style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneColError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneCol'])){echo "value='".$_SESSION['save_phoneCol']."'";} ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneColError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneColError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1920,6 +2109,12 @@
                                                     <option value="IOS" <?php if(isset($_SESSION['save_phoneOs'])){ if($_SESSION['save_phoneOs'] == "IOS"){echo "selected";}} ?>> IOS </option>
                                                     <option value="Android" <?php if(isset($_SESSION['save_phoneOs'])){ if($_SESSION['save_phoneOs'] == "Android"){echo "selected";}} ?>> Android </option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneOsError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneOsError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1927,6 +2122,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="phone_ram" class="form-control"   placeholder="Memorja RAM (e shprehur ne GB).." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneRamError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_phoneRam'])){echo "value='".$_SESSION['save_phoneRam']."'";} ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneRamError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneRamError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1934,6 +2135,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="phone_internal_memory_space" class="form-control"   placeholder="Hapsira e memorjes së mbrendshme (e shprehur me GB):.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneIntMemSpaceError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>"  <?php if(isset($_SESSION['save_phoneIntMemSpace'])){echo "value='".$_SESSION['save_phoneIntMemSpace']."'";} ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneIntMemSpaceError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneIntMemSpaceError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1945,6 +2152,12 @@
                                                         <option value="1" <?php if(isset($_SESSION['save_phoneSim'])){ if($_SESSION['save_phoneSim'] == "1"){echo "selected";}} ?>> 1 </option>
                                                         <option value="2" <?php if(isset($_SESSION['save_phoneSim'])){ if($_SESSION['save_phoneSim'] == "2"){echo "selected";}} ?>> 2 </option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneSimError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneSimError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1952,6 +2165,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="phone_origin_of_production" class="form-control"   placeholder="Vendi i prodhimit" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("phoneOriginError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>"<?php if(isset($_SESSION['save_phoneOrigin'])){echo "value='".$_SESSION['save_phoneOrigin']."'";} ?> >
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("phoneOriginError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['phoneOriginError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <?php unset($_SESSION['add_prod_errors']['phoneManError']);unset($_SESSION['add_prod_errors']['phoneModError']);unset($_SESSION['add_prod_errors']['phoneConError']);unset($_SESSION['add_prod_errors']['phoneColError']);unset($_SESSION['add_prod_errors']['phoneOsError']);unset($_SESSION['add_prod_errors']['phoneRamError']);unset($_SESSION['add_prod_errors']['phoneIntMemSpaceError']);unset($_SESSION['add_prod_errors']['phoneSimError']);unset($_SESSION['add_prod_errors']['phoneOriginError']);?>
@@ -1973,6 +2192,12 @@
                                                         }
                                                         ?>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carManError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carManError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1980,6 +2205,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="car_model" class="form-control"   placeholder="Modeli veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carModError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carMod'])){ echo "value='".$_SESSION['save_carMod']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carModError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carModError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1987,6 +2218,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="car_km" class="form-control"   placeholder="Kilometrat e kaluara.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carKmError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carKm'])){ echo "value='".$_SESSION['save_carKm']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carKmError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carKmError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -1994,6 +2231,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="car_year_of_production" class="form-control"   placeholder="Viti i prodhimit.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carYopError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carYop'])){ echo "value='".$_SESSION['save_carYop']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carYopError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carYopError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2011,6 +2254,12 @@
                                                         <option value="Kabriolet" <?php if(isset($_SESSION['save_carType'])){ if($_SESSION['save_carType'] == "SUV"){ echo "selected"; } } ?>> SUV</option>
                                                         <option value="Kabriolet" <?php if(isset($_SESSION['save_carType'])){ if($_SESSION['save_carType'] == "Minivan"){ echo "selected"; } } ?>> Minivan</option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carTypeError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carTypeError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2018,6 +2267,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="car_color" class="form-control"   placeholder="Ngjyra veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carColError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carCol'])){ echo "value='".$_SESSION['save_carCol']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carColError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carColError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2030,6 +2285,12 @@
                                                         <option value="Automatik" <?php if(isset($_SESSION['save_carTrans'])){ if($_SESSION['save_carTrans'] == "Automatik"){ echo "selected"; } } ?>> Automatik</option>
                                                         <option value="Gjysmë-automatik" <?php if(isset($_SESSION['save_carTrans'])){ if($_SESSION['save_carTrans'] == "Gjysmë-automatik"){ echo "selected"; } } ?>> Gjysmë-automatik</option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carTransError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carTransError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2043,6 +2304,12 @@
                                                         <option value="Rrymë elektrike" <?php if(isset($_SESSION['save_carFuels'])){ if($_SESSION['save_carFuels'] == "Rrymë elektrike"){ echo "selected"; } } ?>> Rrymë elektrike</option>
                                                         <option value="Gaz natyror i kompresuar" <?php if(isset($_SESSION['save_carFuels'])){ if($_SESSION['save_carFuels'] == "Gaz natyror i kompresuar (CNG)"){ echo "selected"; } } ?>> Gaz natyror i kompresuar (CNG)</option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carFuelsError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carFuelsError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2050,6 +2317,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="car_cubics" class="form-control"   placeholder="Kubikazha e veturës.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("carCubError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_carCub'])){ echo "value='".$_SESSION['save_carCub']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("carCubError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['carCubError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <?php unset($_SESSION['add_prod_errors']['carManError']);unset($_SESSION['add_prod_errors']['carModError']);unset($_SESSION['add_prod_errors']['carKmError']);unset($_SESSION['add_prod_errors']['carYopError']);unset($_SESSION['add_prod_errors']['capColError']);unset($_SESSION['add_prod_errors']['carTransError']);unset($_SESSION['add_prod_errors']['carFuelsError']);unset($_SESSION['add_prod_errors']['carCubError']);?>
@@ -2063,13 +2336,25 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="file" name="template_zip"class="form-control" style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempZipError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" >
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("tempZipError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['tempZipError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
                                                     <label for="" class="float-right">Kategoria e templates <b style='color:red'>*</b>:</label> 
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
-                                                <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempCatError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_tempCat'])){ echo "value='".$_SESSION['save_tempCat']."'"; } ?>>
+                                                    <input type="text" class="form-control" name="template_category"   placeholder="Kategoria e templates.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempCatError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_tempCat'])){ echo "value='".$_SESSION['save_tempCat']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("tempCatError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['tempCatError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2077,6 +2362,12 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-7 col-7 ">
                                                     <input type="text" name="template_used_tech" class="form-control" placeholder="Teknologjitë e përdorura.." style="<?php if(isset($_SESSION['add_prod_errors'])){ if(array_key_exists("tempUtError", $_SESSION['add_prod_errors'])){ echo "border: 1px solid red"; } }?>" <?php if(isset($_SESSION['save_tempUt'])){ echo "value='".$_SESSION['save_tempUt']."'"; } ?>>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("tempUtError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['tempUtError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2088,6 +2379,12 @@
                                                         <option value="Responsivë" <?php if(isset($_SESSION['save_tempLayout'])){ if($_SESSION['save_tempLayout'] == "Responsivë"){ echo "selected"; } } ?>> Responsivë</option>
                                                         <option value="Jo resposivë" <?php if(isset($_SESSION['save_tempLayout'])){ if($_SESSION['save_tempLayout'] == "Jo resposivë"){ echo "selected"; } } ?>> Jo resposivë</option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("tempLayoutError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['tempLayoutError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                                 <div class="divider"></div>
                                                 <div class="col-lg-4 col-md-4 col-sm-5 col-5 col-form-label">
@@ -2099,6 +2396,12 @@
                                                         <option value="I dokumentuar" <?php if(isset($_SESSION['save_tempDoc'])){ if($_SESSION['save_tempDoc'] == "I dokumentuar"){ echo "selected"; } } ?>> I dokumentuar</option>
                                                         <option value="Jo i dokumentuar"  <?php if(isset($_SESSION['save_tempDoc'])){ if($_SESSION['save_tempDoc'] == "Jo i dokumentuar"){ echo "selected"; } } ?>> Jo i dokumentuar</option>
                                                     </select>
+                                                    <?php 
+                                                    if(isset($_SESSION['add_prod_errors'])){
+                                                        if(array_key_exists("tempDocError", $_SESSION['add_prod_errors'])){
+                                                            echo $_SESSION['add_prod_errors']['tempDocError'];
+                                                        }
+                                                    }?>
                                                 </div>
                                             </div>
                                             <?php unset($_SESSION['add_prod_errors']['tempCatError']);unset($_SESSION['add_prod_errors']['tempUtError']);unset($_SESSION['add_prod_errors']['tempLayoutError']);unset($_SESSION['add_prod_errors']['tempDocError']);unset($_SESSION['add_prod_errors']['tempZipError']);?>
