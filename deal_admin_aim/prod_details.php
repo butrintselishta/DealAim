@@ -567,7 +567,7 @@ require_once '../db.php';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input2">Çmimi fillestar</label>
-                            <input type="text" id="text-input2" name="prod_price" class="form-control" value="<?php echo $prod_price . " €" ?>" required data-parsley-minlength="1">
+                            <input type="text" id="text-input2" name="prod_price" class="form-control" value="<?php echo number_format($prod_price,2) . " €" ?>" required data-parsley-minlength="1">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -892,7 +892,7 @@ require_once '../db.php';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="text-input2">Çmimi fillestar</label>
-                            <input type="text" id="text-input2" name="prod_price" class="form-control" value="<?php echo $prod_price . " €" ?>" required data-parsley-minlength="1" readonly>
+                            <input type="text" id="text-input2" name="prod_price" class="form-control" value="<?php echo number_format($prod_price,2) . " €" ?>" required data-parsley-minlength="1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -910,7 +910,7 @@ require_once '../db.php';
                     <div class="col-md-12">
                         <div class="panel-content" style="padding:0 0 15px 0">
                             <label> Përshkrimi </label>
-                            <textarea class="note-codable" id="markdown-editor" name="prod_desc" value="" name="markdown-content" data-provide="markdown" readonly rows="10"><?php echo $prod_desc;?></textarea>
+                                <textarea class="summernote" name="prod_desc" disabled><?php echo $prod_desc; ?></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">

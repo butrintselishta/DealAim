@@ -488,9 +488,9 @@
 				<div class="page_header">
 					<div class="breadcrumbs">
 						<ul>
-							<li><a href="#">Home</a></li>
-							<li><a href="#">Category</a></li>
-							<li>Page active</li>
+							<li><a href="#">DealAim</a></li>
+							<li><a href="#">Kyçu</a></li>
+							<li>Faqja Aktive</li>
 						</ul>
 				</div>
 				<h1>Kyçu ose krijo llogari të re</h1>

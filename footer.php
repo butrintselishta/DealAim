@@ -8,11 +8,13 @@
                 <h3 data-target="#collapse_1">Linqe</h3>
                 <div class="collapse dont-collapse-sm links" id="collapse_1">
                     <ul>
-                        <li><a href="about.html">Ballina</a></li>
-                        <li><a href="help.html">Të shitura</a></li>
-                        <li><a href="help.html">Rreth Nesh</a></li>
-                        <li><a href="account.html">Si funksionon?</a></li>
-                        <li><a href="blog.html">Kontakti</a></li>
+                    <?php 
+                        $sel_foot_links = prep_stmt("SELECT * FROM footer WHERE footer_layout = ? order by footer_id desc limit 5","links","s");
+                        if(mysqli_num_rows($sel_foot_links) > 0){
+                            while($row_foot_links = mysqli_fetch_array($sel_foot_links)){
+                    ?>
+                            <li><a href="<?php echo $row_foot_links['footer_link'] ?>"><?php echo $row_foot_links['footer_title'] ?></a></li>
+                    <?php } }?>
                     </ul>
                 </div>
             </div>
@@ -20,11 +22,12 @@
                 <h3 data-target="#collapse_2">Kategorite</h3>
                 <div class="collapse dont-collapse-sm links" id="collapse_2">
                     <ul>
-                        <li><a href="listing-grid-1-full.html">Vetura</a></li>
-                        <li><a href="listing-grid-2-full.html">Motoçikleta (mbi 50cc)</a></li>
-                        <li><a href="listing-grid-1-full.html">Moped (nën 50cc)</a></li>
-                        <li><a href="listing-grid-3.html">Kompjuterë</a></li>
-                        <li><a href="listing-grid-1-full.html">Telefonë</a></li>
+                    <?php 
+                        $sel_cat_footer = prep_stmt("SELECT * FROM categories WHERE parent_id != ? order by cat_id limit 5", 0, "i");
+                        while($row_cat_footer = mysqli_fetch_array($sel_cat_footer)){
+                    ?>
+                        <li><a href="<?php echo $row_cat_footer['cat_link']?>?sub_cat=<?php echo $row_cat_footer['cat_id']?>"><?php echo $row_cat_footer['cat_title']; ?></a></li>
+                    <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -32,33 +35,36 @@
                 <h3 data-target="#collapse_3">Kontaktet</h3>
                 <div class="collapse dont-collapse-sm contacts" id="collapse_3">
                     <ul>
-                        <li><i class="ti-home"></i>97845 Baker st. 567<br>Los Angeles - US</li>
-                        <li><i class="ti-headphone-alt"></i>+94 423-23-221</li>
-                        <li><i class="ti-email"></i><a href="#0">info@dealaim.com</a></li>
+                    <?php 
+                        $sel_foot_contacts = prep_stmt("SELECT * FROM footer WHERE footer_layout = ? order by footer_id desc limit 5","contacts","s");
+                        if(mysqli_num_rows($sel_foot_contacts) > 0){
+                            while($row_foot_contacts = mysqli_fetch_array($sel_foot_contacts)){
+                    ?>
+                        <li><?php echo $row_foot_contacts['footer_link'] ?><?php echo $row_foot_contacts['footer_title'] ?></li>
+                    <?php } }?>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h3 data-target="#collapse_4">ssssssss</h3>
+                <h3 data-target="#collapse_4">Na ndiqni</h3>
                 <div class="collapse dont-collapse-sm" id="collapse_4">
-                    <div id="newsletter">
+                    <!-- <div id="newsletter">
                         <div class="form-group">
                             <input type="email" name="email_newsletter" id="email_newsletter" class="form-control" placeholder="Your email">
                             <button type="submit" id="submit-newsletter"><i class="ti-angle-double-right"></i></button>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="follow_us">
-                        <h5>Na ndiqni</h5>
                         <ul>
+                        <?php 
+                            $sel_foot_icons = prep_stmt("SELECT * FROM footer WHERE footer_layout = ? order by footer_id desc limit 5","icons","s");
+                            if(mysqli_num_rows($sel_foot_icons) > 0){
+                                while($row_foot_icons = mysqli_fetch_array($sel_foot_icons)){
+                        ?>
                             <li>
-                                <a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/twitter_icon.png" alt="" class="lazy"></a>
+                                <a href="<?php echo $row_foot_icons['footer_link'] ?>" target="_blank" style="font-size:1.5rem"><?php echo $row_foot_icons['footer_title'] ?></a>
                             </li>
-                            <li>
-                                <a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/facebook_icon.png" alt="" class="lazy"></a>
-                            </li>
-                            <li>
-                                <a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="img/instagram_icon.png" alt="" class="lazy"style="width:40px;"></a>
-                            </li>
+                        <?php } } ?>
                         </ul>
                     </div>
                 </div>

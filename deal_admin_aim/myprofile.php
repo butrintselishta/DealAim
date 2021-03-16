@@ -21,9 +21,6 @@ require_once '../db.php';
 		$address = $row_adm['address'];
 		$pid = $row_adm['pid_number'];
 	}
-	else{
-		$_SESSION['prep_stmt_error'] = ""; header("location:index.php"); die();
-	}
 
 
 	if(isset($_POST['update_user_data'])){
