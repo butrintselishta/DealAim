@@ -212,8 +212,9 @@ if(isset($_SESSION['user_unconfirmed'])){
      <!-- SELECTING AND SHOWING THE PRODUCTS THAT ARE PUT IN THIS LAST 24 HOURS IN AUCTION -->
     <?php
         $new_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id 
-        WHERE NOW() > products.prod_from
+        WHERE products.prod_from <= NOW() 
         AND products.prod_from > DATE_SUB(NOW(), INTERVAL 1 DAY) 
+        AND NOW() < products.prod_to
         AND prod_isApproved=?
         ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>

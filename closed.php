@@ -20,7 +20,7 @@
 					<h1>TË SHITURA</h1>
 				</div>
 			</div>
-			
+			<img src="img/products/random_1_closed.png" class="img-fluid" alt="">
 		</div>
 		<!-- /top_banner -->
 		<div class="container margin_30">
@@ -91,7 +91,7 @@
 						<div class="grid_item">
 							<div class="gabim" style="overflow-wrap:anywhere">
 								<h4> NUK KA PRODUKTE </h4>
-								<p> Fatkeqësisht nuk ka produkte të kësaj kategorie në ankand për momentin! </p>
+								<p> Ende nuk ka asnjë ankand të mbyllur deri në këtë moment! </p>
 							</div>
 						</div>
 					</div>

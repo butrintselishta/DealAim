@@ -583,7 +583,7 @@
 					<div class="box_account">
 						<h3 class="new_client">Përdorues i ri</h3> <small class="float-right pt-2" style="color:black;"><b style='font-size:15px; color:red;'>* </b> -> Fushat që duhet mbushur detyrimisht</small>
 						<div class="form_container" <?php if(isset($_SESSION['new_user_correct'])) { echo "style='border:2px solid #8EC343'";} if(isset($_SESSION['insert_data_error'])){ echo "style='border:2px solid #E62E2D'";} ?>>
-							<form action="" method="post">
+							<form action="" method="post" autocomplete="off">
 								<?php if(isset($_SESSION['new_user_correct'])){
 										echo "<div class='sukses'>";
 										echo $_SESSION['new_user_correct'];

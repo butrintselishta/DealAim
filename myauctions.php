@@ -1074,7 +1074,8 @@
                     $insert_phone_spec = prep_stmt("INSERT INTO prod_specifications(tel_man, tel_mod,tel_cond, tel_col, tel_im,tel_ram,tel_scn,tel_os, tel_op, prod_unique_id) VALUES(?,?,?,?,?,?,?,?,?,?)", array($phone_man, $phone_mod, $phone_con, $phone_col, $phone_int_mem_space, $phone_ram, $phone_sim, $phone_os, $phone_origin,$unique_id), "ssssssssss");
 
                     if($insert_phone_prod && $insert_phone_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë.<br>
+                        <i style='color:#F0AC1A'><b>LAJMËRIM:</b> Ne rast se produkti nuk pranohet para kohës së dhënë per dalje në ankand, ai do të dal një ditë më vone e që natyrisht përfundon një ditë më vonë se që është parashikuar!</i><br><b> JU FALEMINDERIT! </b></p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -1406,7 +1407,8 @@
                     $insert_car_spec = prep_stmt("INSERT INTO prod_specifications(car_man, car_mod,car_km, car_py, car_type, car_col, car_tra, car_fu, car_cub, prod_unique_id) VALUES(?,?,?,?,?,?,?,?,?,?)", array($car_man, $car_mod, $car_km, $car_yop, $car_type, $car_col, $car_trans, $car_fuels, $car_cub,$unique_id), "ssssssssss");
 
                     if($insert_car_prod && $insert_car_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë.<br>
+                        <i style='color:#F0AC1A'><b>LAJMËRIM:</b> Ne rast se produkti nuk pranohet para kohës së dhënë per dalje në ankand, ai do të dal një ditë më vone e që natyrisht përfundon një ditë më vonë se që është parashikuar!</i><br><b> JU FALEMINDERIT! </b></p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -1620,7 +1622,8 @@
                     $insert_temp_spec = prep_stmt("INSERT INTO prod_specifications(wt_template,wt_cat,wt_ut,wt_lo,wt_doc,prod_unique_id) VALUES(?,?,?,?,?,?)", array($img_temp,$temp_cat, $temp_ut, $temp_layout, $temp_doc, $unique_id), "ssssss");
 
                     if($insert_temp_prod && $insert_temp_spec){
-                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D; font-weight:600;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë. Ju faleminderit! </p>"; header("location:myauctions.php"); die();
+                        $_SESSION['insertion_success'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Produkti juaj është shtuar në databaz tonë. Mbrenda 24 orësh njëri nga administratorët tonë e rishikon dhe nëse gjithçka është në rregull e aprovon atë.<br>
+                        <i style='color:#F0AC1A'><b>LAJMËRIM:</b> Ne rast se produkti nuk pranohet para kohës së dhënë per dalje në ankand, ai do të dal një ditë më vone e që natyrisht përfundon një ditë më vonë se që është parashikuar!</i><br><b> JU FALEMINDERIT! </b></p>"; header("location:myauctions.php"); die();
                     }else {
                         $_SESSION['insertion_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni dhe provoni më vonë! </p>"; header("location:myauctions.php"); die();
                     }
@@ -2490,7 +2493,6 @@
             var auc_desc = document.getElementById("auc_description");
             console.log(auc_desc.value);
             if(auc_desc.value.length < 50 || auc_desc.value.length > 5000){
-
                 document.getElementById("auc_description").style.border = "1px solid red";
             }else{
                 document.getElementById("auc_description").style.border = "1px solid green";

@@ -296,6 +296,12 @@ require_once '../db.php';
                                     </script>
                                 </tbody>
                             </table>
+                            <?php if(mysqli_num_rows($solden_products) == 0){ ?>
+                                <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:-20px;">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                        <i class="fa fa-info-circle"></i> Për momentin nuk ka asnjë produkt të mbyllura <b>(TË SHITURA)</b>.
+                                    </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -368,6 +374,12 @@ require_once '../db.php';
                                     </script>
                                 </tbody>
                             </table>
+                            <?php if(mysqli_num_rows($not_solden_products) == 0){ ?>
+                                <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:-20px;">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                        <i class="fa fa-info-circle"></i> Për momentin nuk ka asnjë produkt të mbyllura <b>(JO TË SHITURA)</b>.
+                                    </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

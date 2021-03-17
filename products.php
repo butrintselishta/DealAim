@@ -11,7 +11,7 @@
 		$cat_ttl = prep_stmt("SELECT cat_title FROM categories WHERE cat_id = ?", $cat_id, "i");
 		$cat_title = mysqli_fetch_array($cat_ttl);
 	}
-	
+
 ?>	
 	<main>
 		<div class="top_banner">

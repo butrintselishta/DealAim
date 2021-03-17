@@ -152,7 +152,7 @@
                 if(empty($user_pass) && empty($basename)){
                     if(isset($_POST['pid'])){
                         if(!prep_stmt("UPDATE users SET first_name=?,last_name=?,email=?,tel_nr=?,birthday=?,city=?,postal_code=?,address=?,pid_number=? WHERE user_id=?", array($user_fname,$user_lname,$user_email,$user_tel,$user_bday,$user_city,$user_postal,$user_address,$user_pid,$stmt_fetch['user_id']), "ssssssisii")){
-                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM1! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+                            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
                         }else{
                             $_SESSION['user_data_changed'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Të dhënat tuaja janë ndryshuar me sukses.</p>"; header("location:index.php"); die(); 
                         }
@@ -242,7 +242,7 @@
 		$acc_expiry = $_POST['expiry'];
 		$acc_cvc = $_POST['cvc'];
 		$user_id = $_POST['user_id'];//die(var_dump($user_id));
-		$euro = rand(10,2000); 
+		$euro = rand(10,20000); 
 		$centa = rand(0,99); 
 		$random = str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
 		$acc_balance_str = $euro . "." . $random; 
@@ -267,7 +267,7 @@
 				$_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
 			}else { 
 				$_SESSION['user']['status'] = BUYER;
-				$_SESSION['insert_bank_acc_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi juaj është ndryshuar në <b style='color:#F0AC1A'> BLERËS </b>, bilanci juaj për momentin është <b style='color:#CF2928'>€0.00</b>. Për ta ndryshuar gjendjen e bilancit shikoni <a href='#'>udhëzimet</a> ose ndryshoni menjëher duke shkuar tek <b style='color:#F0AC1A; text-transform:uppercase'>Llogaria Bankare </b></p>"; header("location:index.php"); die();
+				$_SESSION['insert_bank_acc_correct'] = "<h4 style='color:#60CA0D; font-weight:bold; text-align:center;'> SUKSES! </h4><p style='color:#60CA0D;'> Statusi juaj është ndryshuar në <b style='color:#F0AC1A'> BLERËS </b>, bilanci juaj për momentin është <b style='color:#CF2928'>€0.00</b>. Për ta ndryshuar gjendjen e bilancit shikoni <a href='../faq.php'>udhëzimet</a> ose ndryshoni menjëher duke shkuar tek <b style='color:#F0AC1A; text-transform:uppercase'>Llogaria Bankare </b></p>"; header("location:index.php"); die();
 			}
 		}
 	}
@@ -292,7 +292,7 @@
         if(mysqli_num_rows($balance) > 0){
             $user_balance = mysqli_fetch_array($balance);
         }else{
-            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM1! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
+            $_SESSION['prep_stmt_error'] = "<h4 style='color:#E62E2D; font-weight:bold; text-align:center;'> GABIM! </h4><p style='color:#E62E2D;'> Diçka shkoi gabim, ju lutem kthehuni më vonë! </p>"; header("location:index.php"); die();
         }
         
         if($dep_shuma > $user_balance['acc_balance']){
@@ -894,6 +894,8 @@
                             <?php if($_SESSION['user']['status'] == SELLER) {
                             echo "<li><a href='#active_auc' role='tab' data-toggle='tab'>Ankandet aktive</a></li>";
 					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
+                            } ?>
+                            <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){
 					        echo "<li><a href='#prod_buy' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
 				        	} ?>
                         </ul>
@@ -974,8 +976,7 @@
                                             <div class="checkboxes float-center">
                                                 <br />
                                                 <small style="color:red; font-weight:700;"><i
-                                                        class="ti-hand-point-right" style="color:black;"></i> Ju lutem
-                                                    lexoni me kujdes <a href="#" style="font-weight:900;"> Termet dhe
+                                                        class="ti-hand-point-right" style="color:black;"></i> Ju lutem lexoni me kujdes <a href="../terms_and_conditions.php" style="font-weight:900;"> Termet dhe
                                                         Kushtet</a>, pas pranimit të tyre përgjegjësia është mbi ju.
                                                 </small>
                                             </div>
@@ -1482,7 +1483,8 @@
                                     </div>
                                     <?php }?>
                                 </div>
-
+                            <?php } ?>
+                            <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){ ?>
                                 <?php 
                                      $select_bought_prod = prep_stmt("SELECT * FROM prod_offers 
                                      WHERE user_id=? AND is_sold = ?", array(user_id(),1), "ii");
@@ -1647,7 +1649,7 @@
             document.getElementById("dep_shuma").onkeyup = function () {
                 var depozite_shuma = document.getElementById("dep_shuma");
                 if (depozite_shuma.value.match(/^\d+$/)) {
-                    if (depozite_shuma.value < 5 || depozite_shuma.value > 2000) {
+                    if (depozite_shuma.value < 5 || depozite_shuma.value > 20000) {
                         sh_depozite = false;
                         depozite_shuma.style.border = "2px solid red";
                     } else {
@@ -1788,14 +1790,12 @@
                 var acc_expiry = document.getElementById('expiry');
                 //check 
                 if (acc_expiry.value.length == 9) {
-                    if (acc_expiry.value.substring(5, 9) == 2021 && acc_expiry.value.substring(0, 2) >= 3 &&
-                        acc_expiry.value.substring(0, 2) <= 12) {
+                    if (acc_expiry.value.substring(5, 9) == 2021 && acc_expiry.value.substring(0, 2) >= 4 && acc_expiry.value.substring(0, 2) <= 12) {
                         acc_expiry_valid = true;
                         document.getElementById("cvc").focus();
                         acc_expiry.style.borderColor = "green";
                         acc_expiry.style.color = "green";
-                    } else if (acc_expiry.value.substring(0, 2) >= 01 && acc_expiry.value.substring(0, 2) <= 12 &&
-                        acc_expiry.value.substring(5, 9) >= 2022 && acc_expiry.value.substring(5, 9) <= 2031) {
+                    } else if (acc_expiry.value.substring(0, 2) >= 01 && acc_expiry.value.substring(0, 2) <= 12 && acc_expiry.value.substring(5, 9) >= 2022 && acc_expiry.value.substring(5, 9) <= 2031) {
                         acc_expiry_valid = true;
                         document.getElementById("cvc").focus();
                         acc_expiry.style.borderColor = "green";
