@@ -117,6 +117,7 @@ if(isset($_SESSION['user_unconfirmed'])){
             $prod_hot_id = ""; $prod_hot_title = ""; $prod_hot_img = ""; $prod_hot_price="";$prod_hot_to="";  $hot_seller_user = ""; $hot_cat_id = "";
             while($row_hot_prod = mysqli_fetch_array($hot_prod)){
                 $prod_hot_img = explode("|", $row_hot_prod['prod_img']);
+                $hot_seller_user = getWinnSell($row_hot_prod['username']);
                 $sel_cnt_off = prep_stmt("SELECT count(prod_id) FROM prod_offers WHERE (offer_time >= now() - INTERVAL 24 HOUR) AND prod_id=?", $row_hot_prod['prod_id'], 'i');
                 $cnt_off = mysqli_fetch_array($sel_cnt_off); 
                 if($cnt_off[0] >= 5){ 
@@ -140,7 +141,6 @@ if(isset($_SESSION['user_unconfirmed'])){
                                     <span class='seller' style='color:#d9534f; font-weight:500;'>Shitësi: <a style='font-weight:750;'> $hot_seller_user</a></span><br/>
                             </div>
                             <div class='price_box'>
-                                <span>Çmimi aktual është:</span>
                                 <span class='new_price' style='font-weight:800; font-size:1rem;'>". number_format($row_hot_prod['prod_price'],2) . "€</span>
                             </div>
                         </div>
@@ -169,7 +169,7 @@ if(isset($_SESSION['user_unconfirmed'])){
         ?>
         <!-- NESE NUK KA PRODUKTE TE NXEHTA SHFAQI DISA PRODUKTE RANDOM -->
         <div class="main_title">
-            <h2 style="color:#9933cc;">DISA NGA PRODUKTET AKTIVE Në ANKAND</h2>
+            <h2 style="color:#9933cc;">DISA NGA PRODUKTET AKTIVE NË ANKAND</h2>
             <span>Produktet</span>
             <p>Më poshtë gjenden disa nga produktet të përzgjedhura rastësishtë që janë aktive në ankand!</p>
         </div>
@@ -183,7 +183,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                 <div class="grid_item">
                     <figure>
                         <a href="details.php?prod_details=<?php echo $row_rand['prod_id'] ?>">
-                            <span class="ribbon new">E RE</span>
+                            <span class="ribbon opened">AKTIVE</span>
                             <img class="img-fluid lazy" src="img/products/<?php if($row_rand['cat_id'] == 2){ echo "laptops"; }elseif($row_rand['cat_id'] == 3){echo "phones";} elseif($row_rand['cat_id'] == 5){echo "cars";} elseif($row_rand['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_rand_img[0]; ?>"  alt="">
                             <img class="img-fluid lazy" src="img/products/<?php if($row_rand['cat_id'] == 2){ echo "laptops"; }elseif($row_rand['cat_id'] == 3){echo "phones";} elseif($row_rand['cat_id'] == 5){echo "cars";} elseif($row_rand['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_rand_img[0]; ?>"  alt="">
                         </a>
@@ -289,7 +289,7 @@ if(isset($_SESSION['user_unconfirmed'])){
                 <div class="grid_item">
                     <figure>
                         <a href="details.php?prod_details=<?php echo $row_closing_prod['prod_id'] ?>">
-                            <span class="ribbon off">NË PËRFUNDIM</span>
+                            <span class="ribbon off">NË PËRFUNDIM ⏰</span>
                             <img class="img-fluid lazy" src="img/products/<?php if($row_closing_prod['cat_id'] == 2){ echo "laptops"; }elseif($row_closing_prod['cat_id'] == 3){echo "phones";} elseif($row_closing_prod['cat_id'] == 5){echo "cars";} elseif($row_closing_prod['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_img[0]; ?>"  alt="">
                             <img class="img-fluid lazy" src="img/products/<?php if($row_closing_prod['cat_id'] == 2){ echo "laptops"; }elseif($row_closing_prod['cat_id'] == 3){echo "phones";} elseif($row_closing_prod['cat_id'] == 5){echo "cars";} elseif($row_closing_prod['cat_id'] == 7){echo "templates";} ?>/<?php echo $prod_img[0]; ?>"  alt="">
                         </a>
