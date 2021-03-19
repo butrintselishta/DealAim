@@ -151,7 +151,7 @@ require_once '../db.php';
                         <?php if(isset($_SESSION['no_changes_d'])){ ?>
                         <div class="alert alert-warning alert-dismissible" role="alert">
 								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<i class="fa fa-warning"></i> VËREJTJE: asnjë ndryshim nuk u bë për kategorinë përkatëse
+								<i class="fa fa-warning"></i> VËREJTJE: asnjë ndryshim nuk u krye!
 							</div>
                         <?php } unset($_SESSION['no_changes_d']); ?>
                         <?php if(isset($_SESSION['prep_stmt_error'])){ ?>

@@ -348,7 +348,7 @@ function getWinnSell($usname){
                                                 <a href="closed.php"target="_parent">Të shitura</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
+                                                <a href="about.php"
                                                     target="_parent">Rreth Nesh</a>
                                             </li>
                                             <li>

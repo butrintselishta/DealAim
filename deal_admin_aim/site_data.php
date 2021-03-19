@@ -102,6 +102,21 @@ require_once '../db.php';
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="panel-content">
                             <div class="col-lg-12">
+                                <h3 class="heading"><i class="fa fa-list-alt" style="color:#989898;"></i>Menaxhimi i Rreth Nesh!</h3>
+                                <div style="margin:auto; width:50%;"> 
+                                    <a href="menage_about.php"><img src="img/edit_about.png" width="250" style="display:block; margin-left:auto; margin-right:auto"></a>
+                                    <div class="btn-group btn-group-justified" style="margin-top:5px;">
+                                        <a class="btn btn-primary" href="menage_about.php">MENAXHO RRETH NESH</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:30px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="panel-content">
+                            <div class="col-lg-12">
                                 <h3 class="heading"><i class="fa fa-list-alt" style="color:#989898;"></i>Menaxhimi i footer (fundit të faqes)!</h3>
                                 <div style="margin:auto; width:50%;"> 
                                     <a href="menage_footer.php"><img src="img/edit_footer.png" width="250" style="display:block; margin-left:auto; margin-right:auto"></a>
