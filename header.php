@@ -279,6 +279,7 @@ function getWinnSell($usname){
     <link href="css/account.css" rel="stylesheet">
     <link href="css/checkout.css" rel="stylesheet">
     <link href="css/error_track.css" rel="stylesheet">
+    <link href="css/about.css" rel="stylesheet">
     <link rel="stylesheet" href="css/intlTelInput.css">
     <!-- <link rel="stylesheet" href="css/demo.css"> -->
 
