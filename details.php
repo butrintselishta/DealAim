@@ -57,8 +57,8 @@
    
 	require "header.php";
 ?>
-<!-- <script src="assets/confirm/bundled.js"></script> 
-<script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script> -->
+<script src="deal_admin_aim/assets/confirm/bundled.js"></script> 
+<script type="text/javascript"src="deal_admin_aim/assets/confirm/jquery-confirm.js"></script>
  
  <main>
     <?php
@@ -305,12 +305,7 @@
                                 popup.classList.toggle("show");
                                
                             }
-                            function getPrice() {
-                                var given_price = document.getElementById('get_price').value;
-                                var uniqid = document.getElementById('get_uniqid').value;
-                                var inputOferto = document.getElementById('oferto').value;
-                                updatePrice(given_price,uniqid,inputOferto);
-                            }
+                           
                             function updatePrice(price,id,input) { //tento per me shtu bid
                                 $.ajax({
                                     url: "checkUserPrice.php",
@@ -390,7 +385,43 @@
                                                ?> 
                                         </div> 
                                     </div>
+                                    <script type="text/javascript">
+                                    
+                                        function getPrice() {
+                                            var given_price = document.getElementById('get_price').value;
+                                            var uniqid = document.getElementById('get_uniqid').value;
+                                            var inputOferto = document.getElementById('oferto').value;
+                                            
+                                        }
+                                        $('#oferto').on('click', function(e) {
+                                            e.preventDefault();
+                                            var trid = $(this).closest('tr').attr('id');
 
+                                            $.confirm({
+                                                title: 'Konfirmimi!',
+                                                content: 'Simple confirm!',
+                                                content: 'Fshirja e të dhënave të fundit të faqes do të \'anulohet\' për 8 sekonda nëse nuk reagoni.',
+                                                autoClose: 'cancel|8000',
+                                                buttons: {
+                                                    confirm:{
+                                                        text: 'Fshije',
+                                                        btnClass: 'btn-red',
+                                                        keys: ['enter', 'shift'],
+                                                        action: function(){
+                                                            updatePrice(given_price,uniqid,inputOferto);
+                                                        }
+                                                    },
+                                                    cancel:{
+                                                        text: 'Anulo',
+                                                        keys: ['enter', 'shift'],
+                                                        action: function(){
+                                                            $.alert('Fshirja e të dhënave të fundit të faqes u anulua!');
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    </script>
                                     <script> 
                                         var winner = "<?php echo  $winner; ?>"; 
                                         var winner_price = "<?php echo  $winner_price; ?>"; 
