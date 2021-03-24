@@ -71,7 +71,7 @@
 				<div class="col-6 col-md-4 col-xl-3">
 					<div class="grid_item">
 						<figure>
-							<span class='ribbon <?php echo $prod_sts; ?>'> <?php if($prod_sts == 'hot'){ echo "E NXEHTË 🔥";}elseif($prod_sts == 'new'){ echo "E RE";}else if($prod_sts == 'off'){echo "NË PËRFUNDIM ⏰";}else if($prod_sts == 'closed'){echo "E MBYLLUR";} else{ if($prod_sts == 'opened'){echo "E HAPUR";}}?></span>
+							<span class='ribbon <?php echo $prod_sts; ?>'> <?php if($prod_sts == 'hot'){ echo "E NXEHTË 🔥";}elseif($prod_sts == 'new'){ echo "E RE";}else if($prod_sts == 'off'){echo "NË PËRFUNDIM ⏰";}else if($prod_sts == 'closed'){echo "E MBYLLUR";} else{ if($prod_sts == 'opened'){echo "AKTIVE";}}?></span>
 							<a href="details.php?prod_details=<?php echo $row_prod['prod_id'];?>">
 								<img class="img-fluid lazy" src="img/products/<?php if($cat_id == 2){echo "laptops";}else if($cat_id==3){echo "phones";}else if($cat_id == 5){ echo "cars";}else if($cat_id == 7){ echo "templates";} ?>/<?php echo $prod_pics[0]; ?>"  alt="">
 							</a>

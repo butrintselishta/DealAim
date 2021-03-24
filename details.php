@@ -57,9 +57,9 @@
    
 	require "header.php";
 ?>
-<script src="deal_admin_aim/assets/confirm/bundled.js"></script> 
-<script type="text/javascript"src="deal_admin_aim/assets/confirm/jquery-confirm.js"></script>
- 
+<!-- <script src="assets/confirm/bundled.js"></script> 
+<script type="text/javascript"src="assets/confirm/jquery-confirm.js"></script>
+  -->
  <main>
     <?php
         while($sel_prod_spec = mysqli_fetch_array($select_prod_details)){
@@ -305,7 +305,12 @@
                                 popup.classList.toggle("show");
                                
                             }
-                           
+                            function getPrice() {
+                                var given_price = document.getElementById('get_price').value;
+                                var uniqid = document.getElementById('get_uniqid').value;
+                                var inputOferto = document.getElementById('oferto').value;
+                                updatePrice(given_price,uniqid,inputOferto);
+                            }
                             function updatePrice(price,id,input) { //tento per me shtu bid
                                 $.ajax({
                                     url: "checkUserPrice.php",
@@ -374,54 +379,20 @@
                                     </div>
                                     <div class="col-6 col-md-6 float-right" >
                                         <div class="btn_add_to_cart float-left">
-                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['logged']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
+                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if($_SESSION['logged'] == false || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
                                             <?php 
-                                                if(!isset($_SESSION['logged'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
-                                                }elseif($_SESSION['user']['status'] == CONFIRMED){
+                                                if($_SESSION['logged'] == false){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
+                                                }elseif(isset($_SESSION['user']['status']) && $_SESSION['user']['status'] == CONFIRMED){
                                                     echo "<span class='popuptext' id='myPopup'>Së pari duhet të aplikoni për blerës, pastaj mund të bëni ofertat tuaja!</span>"; 
                                                 }elseif($select_product['user_id'] == user_id()){
                                                     echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni për <b> produktin tuaj </b>!</span>";
-                                                } 
+                                                }else{
+                                                   echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
+                                                }
                                                ?> 
                                         </div> 
                                     </div>
-                                    <script type="text/javascript">
-                                    
-                                        function getPrice() {
-                                            var given_price = document.getElementById('get_price').value;
-                                            var uniqid = document.getElementById('get_uniqid').value;
-                                            var inputOferto = document.getElementById('oferto').value;
-                                            
-                                        }
-                                        $('#oferto').on('click', function(e) {
-                                            e.preventDefault();
-                                            var trid = $(this).closest('tr').attr('id');
 
-                                            $.confirm({
-                                                title: 'Konfirmimi!',
-                                                content: 'Simple confirm!',
-                                                content: 'Fshirja e të dhënave të fundit të faqes do të \'anulohet\' për 8 sekonda nëse nuk reagoni.',
-                                                autoClose: 'cancel|8000',
-                                                buttons: {
-                                                    confirm:{
-                                                        text: 'Fshije',
-                                                        btnClass: 'btn-red',
-                                                        keys: ['enter', 'shift'],
-                                                        action: function(){
-                                                            updatePrice(given_price,uniqid,inputOferto);
-                                                        }
-                                                    },
-                                                    cancel:{
-                                                        text: 'Anulo',
-                                                        keys: ['enter', 'shift'],
-                                                        action: function(){
-                                                            $.alert('Fshirja e të dhënave të fundit të faqes u anulua!');
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        });
-                                    </script>
                                     <script> 
                                         var winner = "<?php echo  $winner; ?>"; 
                                         var winner_price = "<?php echo  $winner_price; ?>"; 

@@ -1,0 +1,190 @@
+.input-group-addon .fancy-radio,
+.input-group-addon .fancy-checkbox {
+    margin: 0;
+    position: relative;
+    top: 1px;
+}
+
+.input-group-addon .fancy-radio input[type="radio"]+span i,
+.input-group-addon .fancy-checkbox input[type="checkbox"]+span {
+    margin: 0;
+}
+
+.input-group-addon .fancy-radio input[type="radio"]+span i:before,
+.input-group-addon .fancy-checkbox input[type="checkbox"]+span:before {
+    margin: 0;
+}
+
+.form-control {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    border-color: #dadada;
+    color: #777;
+}
+
+.form-control:focus {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    border-color: #c1c0c0;
+}
+
+.help-block {
+    font-size: 13px;
+    color: #929292;
+}
+
+
+/* multiselect checkbox */
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a {
+    padding: 3px 20px;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.checkbox {
+    padding-left: 0;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.checkbox:before {
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    position: relative;
+    bottom: 1px;
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li.active>a label.checkbox:before {
+    font-family: FontAwesome;
+    content: '\f00c';
+    font-size: 12px;
+    color: #99A1A7;
+    text-align: center;
+    line-height: 15px;
+    background-color: #EDEDED;
+}
+
+
+/* multiselect radio */
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.radio {
+    padding-left: 0;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.radio:before {
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    position: relative;
+    bottom: 1px;
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li>a label.radio input[type="radio"] {
+    display: none;
+}
+
+.multiselect-custom+.btn-group ul.multiselect-container>li.active>a label.radio:before {
+    font-family: FontAwesome;
+    content: '\f111';
+    color: #99a1a7;
+    font-size: 8px;
+    text-align: center;
+    line-height: 15px;
+}
+
+.multiselect-search {
+    -moz-border-radius-topright: 2px !important;
+    -webkit-border-top-right-radius: 2px !important;
+    border-top-right-radius: 2px !important;
+    -moz-border-radius-bottomright: 2px !important;
+    -webkit-border-bottom-right-radius: 2px !important;
+    border-bottom-right-radius: 2px !important;
+}
+
+.btn.multiselect-clear-filter {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+    background: transparent;
+    z-index: 9 !important;
+    outline: none;
+}
+
+.btn.multiselect-clear-filter:hover,
+.btn.multiselect-clear-filter:focus {
+    background: transparent;
+    outline: none;
+}
+
+
+/* date picker */
+
+.datepicker table tr td.active.active,
+.datepicker table tr td.active.highlighted.active,
+.datepicker table tr td.active.highlighted:active,
+.datepicker table tr td.active.active:active {
+    background-color: #5c8ed4;
+    border-color: #3c78cb;
+}
+
+
+/* parsley js */
+
+.parsley-errors-list {
+    margin-top: 8px;
+}
+
+.parsley-errors-list li {
+    color: #de4848;
+    font-size: 0.9em;
+    margin-top: 3px;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+    background-color: #fbf5f5;
+    border-color: #efd8d8;
+}
+
+.form-control.parsley-error:focus {
+    border-color: #e1b3b3;
+}
+
+.form-control.parsley-success:focus {
+    border-color: #afd99d;
+}

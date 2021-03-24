@@ -92,12 +92,6 @@ require_once '../db.php';
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel-content">
-                        <?php if(isset($_SESSION['data_changed'])){ ?>
-                            <div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<i class="fa fa-check-circle"></i> Konfirmimi i produktit u krye me sukses. <?php if($_SESSION['data_changed'] == 1) { echo "<b style='text-transform:uppercase;'>Produkti doli në ankand! </b>";}else if($_SESSION['data_changed'] == 2){ echo "<b style='text-transform:uppercase;color:#9c1e08;'>Produkti nuk u lejua të dal në ankand! </b>";} ?>
-							</div>
-                         <?php } unset($_SESSION['data_changed']);?>
                         <h3 class="heading"><i class="fa fa-square"></i>Produkte në pritje!</h3>
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
                             <table class="table table-bordered table-striped mb-0">
@@ -107,7 +101,7 @@ require_once '../db.php';
                                         <th>Shitësi </th>
                                         <th>Kategoria </th>
                                         <th>Titulli ankandit</th>
-                                        <th>Çmimi fillestar</th>
+                                        <th>Çmimi</th>
                                         <th>Fillimi ankandit</th>
                                         <th>Statusi</th>
                                         <th></th>
@@ -124,7 +118,7 @@ require_once '../db.php';
                                         <td><b style=' color:#f0ad4e;'><?php echo $row_prod['username']; ?></b></td>
                                         <td><?php echo $row_prod['cat_title']; ?></td>
                                         <td><?php echo $row_prod['prod_title']; ?></td>
-                                        <td><?php echo $row_prod['prod_price'] . " €"; ?></td>
+                                        <td><?php echo number_format($row_prod['prod_price'],2) . " €"; ?></td>
                                         <td><?php echo date("d-M-Y", strtotime($row_prod['prod_from'])); ?></td>
                                         <td><span class="label label-warning">Në pritje</span></td>
                                         <td><a class="btn btn-info btn-sm" href="prod_details.php?prod_det=<?php echo $row_prod['prod_id'];?>"><i class="fa fa-file-text-o"></i>SHIKO DETAJET</a></td>
@@ -185,9 +179,9 @@ require_once '../db.php';
                                         <th>Shitësi </th>
                                         <th>Kategoria </th>
                                         <th>Titulli ankandit</th>
-                                        <th>Çmimi fillestar</th>
+                                        <th>Çmimi </th>
                                         <th>Statusi</th>
-                                        <th>Administratori</th>
+                                        <th>E pranoi</th>
                                         <th></th>
                                     </tr>
                                 </thead>

@@ -284,19 +284,20 @@ function getWinnSell($usname){
     <!-- <link rel="stylesheet" href="css/demo.css"> -->
 
     <!-- JQUERY CONFIRM -->
-	<link rel="stylesheet" id="bs-stylesheet" href="deal_admin_aim/assets/confirm/bs3.css">
-    <link rel="stylesheet" href="deal_admin_aim/assets/confirm/bundled.css">
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <link rel="stylesheet" href="deal_admin_aim/assets/confirm/demo.css">
+	<!-- <link rel="stylesheet" id="bs-stylesheet" href="deal_admin_aim/assets/confirm/bs3.css">
+    <link rel="stylesheet" href="deal_admin_aim/assets/confirm/bundled.css"> -->
+    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+    <!-- <link rel="stylesheet" href="deal_admin_aim/assets/confirm/demo.css">
     <script>
         var version = '3.3.4';
     </script>
-    <link rel="stylesheet" type="text/css" href="deal_admin_aim/assets/confirm/jquery-confirm.css"/>
-
+    <link rel="stylesheet" type="text/css" href="deal_admin_aim/assets/confirm/jquery-confirm.css"/> -->
+<!-- 
     <link rel="stylesheet" href="deal_admin_aim/assets/vendor/parsleyjs/css/parsley.css">
 
-	<link rel="stylesheet" href="deal_admin_aim/assets/css/main.css"> 
-	<link rel="stylesheet" href="deal_admin_aim/assets/css/demo.css">
+	<link rel="stylesheet" href="deal_admin_aim/assets/css/main.css"> -->
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<!-- <link rel="stylesheet" href="deal_admin_aim/assets/css/demo.css"> -->
 </head>
 
 <body>
@@ -335,7 +336,7 @@ function getWinnSell($usname){
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="index.php"><img src="img/logo/dealaim-logo.png" alt="" width="100"
+                                            <a href="index.php"><img src="img/logo/mobile-logo.png" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>

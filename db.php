@@ -104,7 +104,7 @@ session_start();
 		$hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
 		return $iv . $hash . $ciphertext;
 	}
-	//
+	//decrypt txt
 	function decrypt_txt($ivHashCiphertext, $password = KEY) {
 		$method = "AES-128-CBC";
 		$iv = substr($ivHashCiphertext, 0, 16);

@@ -675,7 +675,7 @@
                             <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
                                 <?php } ?>
                                 <div id="logo">
-                                    <a href="../index.php"><img src="../img/logo/logo_dealaim.png" alt="" width="100" height="35"></a>
+                                    <a href="../index.php"><img src="../img/logo/dealaim-logo.png" alt="" width="100" height="35"></a>
                                 </div>
                             </div>
                             <?php  if(isset($_SESSION['logged']) && $_SESSION['logged'] == true)
@@ -695,7 +695,7 @@
                                     <!-- Mobile menu button -->
                                     <div class="main-menu">
                                         <div id="header_menu">
-                                            <a href="../index.php"><img src="../img/logo/logo_dealaim_black.png" alt="" width="100"
+                                            <a href="../index.php"><img src="../img/logo/mobile-logo.png" alt="" width="100"
                                                     height="35"></a>
                                             <a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
                                         </div>
@@ -1263,7 +1263,7 @@
                                 </div>
                                 <div class="">
                                             <div class="clearfix add_bottom_15"
-                                                style="width:90%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
+                                                style="width:55%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
                                                 <div class="checkboxes float-center">
                                                     <small style="color:#000; font-weight:700; font-size:15px;"><i class="ti-hand-point-right" style="color:black;"></i>
                                                         &nbsp Më poshtë mund ta ndryshoni gjendjen e bilancit tuaj
@@ -1284,7 +1284,7 @@
                                             </div>
                                             <div class="form-group" id="depozite_div" style="display:none;">
                                                 <form style="width:100%;background-color:#f8f8f8; float:right; margin-bottom:10px;" method="POST" action="" id="dep_form">
-                                                    <div style="width:100%;">
+                                                    <div style="width:70%;">
                                                         <ul style="list-style: none; color:#000; text-align:left; ">
                                                             <li style="font-weight: 500; padding: 10px 0px 5px 0px; "><i class="ti-hand-point-right" style="color:black;"></i>
                                                                 <i style="font-size:14px;"><b>DEPOZITË PARASH</b> >
@@ -1293,8 +1293,8 @@
                                                                         bankare</b></i>
                                                             </li>
                                                             <li style="font-weight: 500; padding: 5px 0px 10px 0px;"><i class="ti-hand-point-right" style="color:black;"></i>
-                                                            <i style="font-size:14px;"><b>SHUMA MINIMALE </b> për depozitë është <b style="color: #CF2928; font-size:16px;">5euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;">
-                                                            2000 euro </b> </i>
+                                                            <i style="font-size:14px;"><b>SHUMA MINIMALE </b> për depozitë është <b style="color: #CF2928; font-size:16px;"> 5euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;">
+                                                            20,000.00 euro </b> </i>
                                                             </li>
                                                             <li style="font-weight: 500; padding: 5px 0px 10px 0px;"> <i style="font-size:14px;"><i class="ti-hand-point-right" style="color:black;"></i><b>SHUMA DUHET TË JETË FIKSE </b> (p.sh: <b style="color: #5ABC35; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro, 1000 euro... </b>) </i>
                                                             </li>
@@ -1320,11 +1320,11 @@
                                             <div class="form-group" id="terheqje_div" style="display:none;">
                                                 <form style="width:100%;background-color:#f8f8f8;margin-bottom:10px; float:right;"
                                                     method="POST" action="" id="ter_form">
-                                                    <div style="width:100%">
+                                                    <div style="width:70%">
                                                         <ul style="list-style: none; color:#000; text-align:left; ">
                                                             <li style="font-weight: 500; padding: 10px 0px 5px 0px; "> <i style="font-size:14px;"><i class="ti-hand-point-right" style="color:black;"></i><b>TËRHEQJE PARASH</b> > Paratë që dëshironi t'i ktheni në llogarinë tuaj bankare <b>nga llogaria juaj këtu (në DEAL AIM)</b></i>
                                                             </li>
-                                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;"><i style="font-size:14px;"><i class="ti-hand-point-right" style="color:black;"></i><b>SHUMA MINIMALE</b> për tërheqje është <b style="color: #CF2928; font-size:16px;">5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2000 euro </b> </i>
+                                                            <li style="font-weight: 500; padding: 5px 0px 10px 0px;"><i style="font-size:14px;"><i class="ti-hand-point-right" style="color:black;"></i><b>SHUMA MINIMALE</b> për tërheqje është <b style="color: #CF2928; font-size:16px;"> 5 euro</b>, ndërsa ajo maksimale është <b style="color: #CF2928; font-size:16px;"> 2,000 euro </b> </i>
                                                             </li>
                                                         </li>
                                                         <li style="font-weight: 500; padding: 5px 0px 10px 0px;"> <i style="font-size:14px;"><i class="ti-hand-point-right" style="color:black;"></i><b>SHUMA DUHET TË JETË FIKSE </b>(p.sh: <b style="color: #5ABC35; font-size:16px;">5 euro, 7 euro, 10 euro, 100 euro 1000 euro... </b>) </i>
@@ -1538,7 +1538,7 @@
                                         <div class="grid_item" style="margin: 1em 0 1em 0;">
                                             <div class="gabim" style="overflow-wrap:anywhere">
                                                 <h4> NUK KA PRODUKTE </h4>
-                                                <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse </b>!  </p>
+                                                <p> Ju nuk keni blerë ende asnjë produkt!.<br/> Nëse dëshironi të hyni në garë për blerjen e ndonjë produkti shkoni tek <b> Kategoritë > Klikoni te njëra nga kategoritë e shfaqura > pastaj redirektoheni tek faqja me produktet e kategorisë përkatëse > Klikoni në produktin që dëshironi të bleni dhe do redirektoheni tek faqja për ofertim</b>!  </p>
                                             </div>
                                         </div>
                                     <?php } ?>
