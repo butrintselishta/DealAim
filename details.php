@@ -379,9 +379,9 @@
                                     </div>
                                     <div class="col-6 col-md-6 float-right" >
                                         <div class="btn_add_to_cart float-left">
-                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if($_SESSION['logged'] == false || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
+                                            <input type="button" id="oferto" class="btn_1 btn__1" style="padding:4px 25px; font-size:26px;" value="OFERTO" onclick="getPrice(); <?php if(!isset($_SESSION['user']) || $select_product['user_id'] == user_id() || $_SESSION['user']['status'] == CONFIRMED){ echo 'verifyUser();'; } ?>" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled'"; }?>>
                                             <?php 
-                                                if($_SESSION['logged'] == false){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
+                                                if(!isset($_SESSION['user'])){ echo "<span class='popuptext' id='myPopup'>Nuk mund të ofertoni pa pasur llogari!</span>"; 
                                                 }elseif(isset($_SESSION['user']['status']) && $_SESSION['user']['status'] == CONFIRMED){
                                                     echo "<span class='popuptext' id='myPopup'>Së pari duhet të aplikoni për blerës, pastaj mund të bëni ofertat tuaja!</span>"; 
                                                 }elseif($select_product['user_id'] == user_id()){

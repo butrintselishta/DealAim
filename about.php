@@ -31,7 +31,7 @@
 					</div>
 				</div>
 				<?php } else { ?>
-					<div class="row justify-content-center align-items-center">
+				<div class="row justify-content-center align-items-center">
 					<div class="col-lg-5">
 						<div class="box_about">
 							<h2><?php echo $row_who['about_title'] ?></h2>
