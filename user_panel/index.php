@@ -893,7 +893,7 @@
                             <li><a href='#bank_balance' role='tab' data-toggle='tab'>Bilanci im</a></li>"; } ?>
                             <?php if($_SESSION['user']['status'] == SELLER) {
                             echo "<li><a href='#active_auc' role='tab' data-toggle='tab'>Ankandet aktive</a></li>";
-					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Produktet e shitura </a></li>";
+					        echo "<li><a href='#prod_sell' role='tab' data-toggle='tab'>Ankandet e mbyllura</a></li>";
                             } ?>
                             <?php if($_SESSION['user']['status'] == BUYER || $_SESSION['user']['status'] == SELLER){
 					        echo "<li><a href='#prod_buy' role='tab' data-toggle='tab'>Produktet e blera </a></li>";
@@ -967,17 +967,15 @@
                                 <div class="row no-gutters form-container active"  >
                                     <form method="POST" action="" id="form_seller" style="width:100%;">
                                         <small
-                                            style="color:#000; font-weight:700; font-size:15px;text-align:center !important; text-decoration:underline;">
-                                            Aplikimi për tu bërë shitës është i thjeshtë, ju vetëm duhet të shkruani <b
-                                                style="text-transform:uppercase; color:red;">numrin tuaj identifikues
-                                                (ID)</b> dhe të pranoni <a href="#"> TERMET DHE KUSHTET </a></small>
+                                            style="color:#000; font-weight:700; font-size:15px;text-align:center !important; ">
+                                            Aplikimi për tu bërë shitës është i thjeshtë, ju vetëm duhet të jepni <b style="color:#004dda ">ID tuaj identifikues</b> dhe të pranoni <a href="../terms_and_conditions.php"> Termet dhe Kushtet </a> si dhe <a href="../privacy.php"> Politikat e Privatësisë </a> </small>
                                         <div class="clearfix add_bottom_15"
-                                            style="width:42.5%;overflow-wrap: anywhere; text-align:left; background-color:#f9f9f9">
+                                            style="width:42.5%;overflow-wrap: anywhere; text-align:left; ">
                                             <div class="checkboxes float-center">
                                                 <br />
                                                 <small style="color:red; font-weight:700;"><i
                                                         class="ti-hand-point-right" style="color:black;"></i> Ju lutem lexoni me kujdes <a href="../terms_and_conditions.php" style="font-weight:900;"> Termet dhe
-                                                        Kushtet</a>, pas pranimit të tyre përgjegjësia është mbi ju.
+                                                        Kushtet</a> dhe <a href="../privacy.php" style="font-weight:900;"> Politikat e Privatësisë</a>, pas pranimit të tyre përgjegjësia është mbi ju.
                                                 </small>
                                             </div>
                                         </div>
@@ -993,9 +991,9 @@
                                         </div>
                                         <div class="clearfix add_bottom_15">
                                             <div class="checkboxes float-center">
-                                                <label class="container_check" style="color:black;">Duke klikuar këtu,
-                                                    unë i pranoj <a href="#" style="font-weight:900;"> Termet dhe
-                                                        Kushtet. <b style="color:red">*</b></a>
+                                                <label class="container_check" style="color:black;"> <small style="margin-left:60px;">Duke klikuar këtu,
+                                                    unë i pranoj <a href="../terms_and_conditions.php" style="font-weight:900;"> Termet dhe
+                                                        Kushtet </a> dhe <a href="../privacy.php" style="font-weight:900;"> Politikat e Privatësisë</a><b style="color:red">*</b> </small>
                                                     <input type="checkbox" value="" name="check_confirm"
                                                         id="check_confirm" onclick="calc()">
                                                     <span class="checkmark" name="checkmark" id="checkmark"
@@ -1421,7 +1419,7 @@
                                 <div class="tab-pane fade" id="prod_sell">
                                     <div class="divider" style="margin-bottom:50px;">
                                         <span
-                                            style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni shitur përmes ksaj llogarie!
+                                            style="background-color:#fff; text-decoration:underline;">Më poshtë i keni produktet që ju keni vendosur në ankand e që tashmë janë mbyllur!
                                             </b></span>
                                     </div>
                                     <?php   
@@ -1965,8 +1963,8 @@
             </div>
             <div class="col-lg-6">
                 <ul class="additional_links">
-                    <li><a href="#0">Kushtet e përdorimit</a></li>
-                    <li><a href="#0">Privatësia</a></li>
+                    <li><a href="../terms_and_conditions.php">Termet dhe Kushtet e përdorimit</a></li>
+                    <li><a href="../privacy.php">Politikat e privatësisë</a></li>
                     <li><span>© 2020 DealAim</span></li>
                 </ul>
             </div>

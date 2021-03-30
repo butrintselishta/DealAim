@@ -137,7 +137,7 @@
 				</div>
 				<!-- logo -->
 				<div class="navbar-brand" style="padding:8px 15px; max-width:15%;">
-					<a href="index.html"><img src="../img/logo/logo_dealaim_black.png"  class="img-responsive"></a>
+					<a href="index.html"><img src="../img/logo/mobile-logo.png"  class="img-responsive"></a>
 				</div>
 				<!-- end logo -->
 				<div class="navbar-right">

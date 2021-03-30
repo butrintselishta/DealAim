@@ -235,9 +235,9 @@
                                         <th>Të ardhurat</th>
                                         <td><span class="text-warning" style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($lastWeekProfit,2) . "€" ?></span></td>
                                         <td><span class="text-info"  style="font-weight:800;    font-size: 1.785rem;"><?php echo number_format($thisWeekProfit,2) . "€" ?></span></td>
-                                        <?php if($dayProfitPerc < 0){ 
+                                        <?php if($weekProfitPerc < 0){ 
                                             echo "<td><span class='text-danger'  style='font-weight:800;font-size: 1.785rem;color:crimson'> $weekProfitPerc </span></td>";
-                                        }elseif($dayProfitPerc > 0){ 
+                                        }elseif($weekProfitPerc > 0){ 
                                             echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;color:#68d400'> +$weekProfitPerc</span></td>";
                                         }else{
                                             echo "<td><span class='text-success'  style='font-weight:800;font-size: 1.785rem;'> $weekProfitPerc </span></td>";

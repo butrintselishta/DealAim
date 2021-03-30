@@ -78,8 +78,8 @@
             </div>
             <div class="col-lg-6">
                 <ul class="additional_links">
-                    <li><a href="#0">Kushtet e përdorimit</a></li>
-                    <li><a href="#0">Privatësia</a></li>
+                    <li><a href="terms_and_conditions.php">Termet dhe Kushtet e përdorimit</a></li>
+                    <li><a href="privacy.php">Politikat e Privatësisë</a></li>
                     <li><span>© 2020 DealAim</span></li>
                 </ul>
             </div>
