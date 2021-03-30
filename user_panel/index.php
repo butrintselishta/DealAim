@@ -708,8 +708,7 @@
                                                     target="_parent">Të shitura</a>
                                             </li>
                                             <li>
-                                                <a href="../item/allaia-ecommerce-html-template/25781982.html"
-                                                    target="_parent">Rreth Nesh</a>
+                                                <a href="../about.php" target="_parent">Rreth Nesh</a>
                                             </li>
                                             <li>
                                                 <a href="../faq.php"
@@ -1476,7 +1475,7 @@
                                     <div class="grid_item" style="margin: 1em 0 1em 0;">
                                         <div class="gabim" style="overflow-wrap:anywhere">
                                             <h4> NUK KA PRODUKTE </h4>
-                                            <p> Ju nuk keni shitur ende asnjë produkt!.<br/> Nëse dëshironi të vendosni produktin tuaj në ankand kliko <a href="myauctions.php"> këtu </a>  </p>
+                                            <p> Ju nuk keni vendosur ende asnjë produkt në ankand!<br/> Nëse dëshironi të vendosni produktin tuaj në ankand kliko <a href="../myauctions.php"> këtu </a>  </p>
                                         </div>
                                     </div>
                                     <?php }?>

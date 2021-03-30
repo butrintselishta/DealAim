@@ -174,15 +174,43 @@
                 </div>
             </div>
             <?php 
-                $thisWeek = prep_stmt("SELECT * FROM income_ratio
-                WHERE YEAR(date_time) = YEAR(CURRENT_DATE)
-                AND MONTH(date_time) = MONTH(CURRENT_DATE)
-                AND WEEK(date_time) = WEEK(CURRENT_DATE)");
+					$tday = date("l d-M");
+					if(strpos($tday, "Monday") !== FALSE)
+					{ 
+						$thisWeek = prep_stmt("SELECT * 
+						FROM income_ratio 
+						WHERE date(date_time) BETWEEN subdate(curdate(),dayofweek(curdate())+5)
+						and CURRENT_DATE - INTERVAL 1 DAY
+						GROUP BY date(date_time)");
+	
+						$lastWeek = prep_stmt("SELECT *
+						FROM income_ratio 
+						WHERE date(date_time) BETWEEN subdate(curdate(),dayofweek(curdate())+5) - INTERVAL 1 WEEK
+						and CURRENT_DATE - INTERVAL 1 week - INTERVAL 1 DAY
+						GROUP BY date(date_time)");
+					}else{
+						$thisWeek = prep_stmt("SELECT * 
+						FROM income_ratio
+						WHERE YEAR(date_time) = YEAR(CURRENT_DATE)
+						AND MONTH(date_time) = MONTH(CURRENT_DATE)
+						AND WEEK(date_time) = WEEK(CURRENT_DATE)
+						GROUP BY DATE(date_time)");
+	
+						$lastWeek = prep_stmt("SELECT *
+						FROM income_ratio 
+						WHERE date(date_time) BETWEEN subdate(curdate(),dayofweek(curdate())+5)
+						and CURRENT_DATE - INTERVAL 1 week 
+						GROUP BY date(date_time)"); 
+					}
+                // $thisWeek = prep_stmt("SELECT * FROM income_ratio
+                // WHERE YEAR(date_time) = YEAR(CURRENT_DATE)
+                // AND MONTH(date_time) = MONTH(CURRENT_DATE)
+                // AND WEEK(date_time) = WEEK(CURRENT_DATE)");
                 
-                $lastWeek = prep_stmt("SELECT * FROM income_ratio
-                WHERE YEAR(date_time) = YEAR(CURRENT_DATE - INTERVAL 1 WEEK)
-                AND MONTH(date_time) = MONTH(CURRENT_DATE - INTERVAL 1 WEEK)
-                AND WEEK(date_time) = WEEK(CURRENT_DATE - INTERVAL 1 WEEK)");
+                // $lastWeek = prep_stmt("SELECT * FROM income_ratio
+                // WHERE YEAR(date_time) = YEAR(CURRENT_DATE - INTERVAL 1 WEEK)
+                // AND MONTH(date_time) = MONTH(CURRENT_DATE - INTERVAL 1 WEEK)
+                // AND WEEK(date_time) = WEEK(CURRENT_DATE - INTERVAL 1 WEEK)");
 
                 $thisWeekProfit = 0;
                 $lastWeekProfit = 0;
@@ -225,8 +253,28 @@
                                 <thead>
                                     <tr>
                                         <th>&nbsp;</th>
-                                        <th>Java kaluar <br>(<?php if($todayDate_weekprofit == "Monday"){echo "MONDAY";}else{ echo $mondayDate_weekprofit . " - " . $todayDate_weekprofit; } ?>)</th>
-                                        <th>Këtë javë <br>(<?php if($todayDate_weekprofit == "Monday"){echo "MONDAY";}else{ echo $mondayDate_weekprofit . " - " . $todayDate_weekprofit; } ?>)</th>
+										<?php if($todayDate_weekprofit == "Monday"){ ?>
+											<th>
+												<?php $before2week =  date("d-M", strtotime("-2 week"));
+													echo $before2week . " - " . date("d-M", strtotime("$before2week, +6 day")) ?> <br>(<?php echo "E HËNË - E DIEL"; ?>)
+											</th>
+											<th>
+												<?php $before1week =  date("d-M", strtotime("-1 week"));
+													echo $before1week . " - " . date("d-M", strtotime("$before1week, +6 day")) ?> <br>(<?php echo "E HËNË - E DIEL"; ?>)
+											</th>
+										<?php }else{ ?>
+
+										<th>Java kaluar <br>(<?php if ($todayDate_weekprofit == "Monday") {
+                                            echo "MONDAY -";
+                                        } else {
+                                            echo $mondayDate_weekprofit . " - " . $todayDate_weekprofit;
+                                        } ?>)</th>
+                                        <th>Këtë javë <br>(<?php if ($todayDate_weekprofit == "Monday") {
+                                            echo "MONDAY";
+                                        } else {
+                                            echo $mondayDate_weekprofit . " - " . $todayDate_weekprofit;
+                                        } ?>)</th>
+                                        <?php }?>
                                         <th>Performanca (%)</th>
                                     </tr>
                                 </thead>
@@ -294,7 +342,7 @@
 					FROM income_ratio 
 					WHERE date(date_time) BETWEEN subdate(curdate(),dayofweek(curdate())+5)
 					and CURRENT_DATE - INTERVAL 1 week 
-					GROUP BY date(date_time)");
+					GROUP BY date(date_time)"); 
 				}
 				
 				$this_today = date("Y-m-d", strtotime($this_today)); 
@@ -303,7 +351,7 @@
 				$numberDays = intval($date_diff/86400);
 
 				$week_days_pro = array();
-				for($i =0; $i < $numberDays; $i++){
+				for($i =0; $i < $numberDays+1; $i++){
 					$week_days_pro[] .= date('l', strtotime($this_today));
 					$this_today = date('l', strtotime("+1 day", strtotime($this_today)));
 				}

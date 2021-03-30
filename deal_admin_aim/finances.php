@@ -409,7 +409,7 @@
 				$numberDays = intval($date_diff/86400);
 
 				$week_days_pro = array();
-				for($i =0; $i < $numberDays; $i++){
+				for($i =0; $i < $numberDays + 1; $i++){
 					$week_days_pro[] .= date('l d-M', strtotime($this_today));
 					$this_today = date('l d-M', strtotime("+1 day", strtotime($this_today)));
 				}
@@ -454,7 +454,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>	
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel-content">
