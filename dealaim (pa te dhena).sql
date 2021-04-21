@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2021 at 12:25 PM
+-- Generation Time: Apr 21, 2021 at 12:27 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -63,6 +63,13 @@ CREATE TABLE `bank_acc` (
   `acc_balance` float(8,2) NOT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bank_acc`
+--
+
+INSERT INTO `bank_acc` (`bank_id`, `acc_number`, `acc_full_name`, `acc_expiry`, `acc_cvc`, `acc_balance`, `user_id`) VALUES
+(1, '4106711240003923', 'DealAIM Company', '07 / 2030', '298', 0.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -520,7 +527,7 @@ ALTER TABLE `about`
 -- AUTO_INCREMENT for table `bank_acc`
 --
 ALTER TABLE `bank_acc`
-  MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`
