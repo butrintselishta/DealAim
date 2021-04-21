@@ -113,7 +113,86 @@
             $passwordError = false; $fnameError = false; $lnameError = false; $emailError = false; $phoneError = false; $cityError=false; $postnrError = false; $addressError = false; $bdayError = false; $pidError = false;
             $_SESSION['user_data_errors'] = array();
 
-            if (!empty($user_pass) && strlen($user_pass) < 8) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"]; } elseif(!empty($user_pass) && strlen($user_pass) > 50) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"]; } elseif(!empty($user_pass) && !preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $user_pass)) { $passwordError = true; $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi nuk është i shkruar në formatin e duhur!</small>"]; } if (empty($user_fname)) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(strlen($user_fname) < 2) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i shkurtë</small>"]; } elseif(strlen($user_fname) > 15) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i gjatë</small>"]; } elseif(!ctype_alpha($user_fname) && !((strpos($user_fname, 'ë')) || (strpos($user_fname, 'Ë')) || (strpos($user_fname, 'ç')) || (strpos($user_fname, 'Ç')))) { $fnameError = true; $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri duhet të jetë në rangun A-ZH</small>"]; } if (empty($user_lname)) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(strlen($user_lname) < 2) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i shkurtë</small>"]; } elseif(strlen($user_lname) > 15) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i gjatë</small>"]; } elseif(!ctype_alpha($user_lname) && !((strpos($user_lname, 'ë')) || (strpos($user_lname, 'Ë')) || (strpos($user_lname, 'ç')) || (strpos($user_lname, 'Ç')))) { $lnameError = true; $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri duhet të jetë në rangun A-ZH</small>"]; } if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) { $emailError = true; $_SESSION['user_data_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Email nuk është shkruar në formatin e duhur</small>"]; } if (empty($user_city)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!ctype_alpha($user_city)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Qyteti duhet të jetë në rangun A-ZH</small>"]; } elseif((strlen($user_city) < 4) || (strlen($user_city) > 15)) { $cityError = true; $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 4 deri në 15 shkronja</small>"]; } if (empty($user_postal)) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; } elseif(!is_numeric($user_postal)) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"]; } elseif(strlen($user_postal) !== 5) { $postnrError = true; $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm 5 numra</small>"]; } if (empty($user_address)) { $addressError = true; $_SESSION['user_data_errors'] += ["addressError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"]; }
+            if (!empty($user_pass) && strlen($user_pass) < 8) {
+                $passwordError = true;
+                $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi duhet ti ketë të pakten 8 karaktere</small>"];
+            }
+            elseif(!empty($user_pass) && strlen($user_pass) > 50) {
+                $passwordError = true;
+                $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi mund ti ketë më së shumti 50 karaktere</small>"];
+            }
+            elseif(!empty($user_pass) && !preg_match('#(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+#', $user_pass)) {
+                $passwordError = true;
+                $_SESSION['user_data_errors'] += ["passwordError" => "<small class='form-text text-muted' style='font-weight:bold; color:red !important;'>Fjalëkalimi nuk është i shkruar në formatin e duhur!</small>"];
+            }
+            if (empty($user_fname)) {
+                $fnameError = true;
+                $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+            }
+            elseif(strlen($user_fname) < 2) {
+                $fnameError = true;
+                $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i shkurtë</small>"];
+            }
+            elseif(strlen($user_fname) > 15) {
+                $fnameError = true;
+                $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri është shumë i gjatë</small>"];
+            }
+            elseif(!ctype_alpha($user_fname) && !((strpos($user_fname, 'ë')) || (strpos($user_fname, 'Ë')) || (strpos($user_fname, 'ç')) || (strpos($user_fname, 'Ç')))) {
+                $fnameError = true;
+                $_SESSION['user_data_errors'] += ["fnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Emri duhet të jetë në rangun A-ZH</small>"];
+            }
+            if (empty($user_lname)) {
+                $lnameError = true;
+                $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+            }
+            elseif(strlen($user_lname) < 2) {
+                $lnameError = true;
+                $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i shkurtë</small>"];
+            }
+            elseif(strlen($user_lname) > 15) {
+                $lnameError = true;
+                $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri është shumë i gjatë</small>"];
+            }
+            elseif(!ctype_alpha($user_lname) && !((strpos($user_lname, 'ë')) || (strpos($user_lname, 'Ë')) || (strpos($user_lname, 'ç')) || (strpos($user_lname, 'Ç')))) {
+                $lnameError = true;
+                $_SESSION['user_data_errors'] += ["lnameError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Mbiemri duhet të jetë në rangun A-ZH</small>"];
+            }
+            if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+                $emailError = true;
+                $_SESSION['user_data_errors'] += ["emailError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Email nuk është shkruar në formatin e duhur</small>"];
+            }
+            if (empty($user_city)) {
+                $cityError = true;
+                $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+            }
+            elseif(!ctype_alpha($user_city)) {
+                $cityError = true;
+                $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Qyteti duhet të jetë në rangun A-ZH</small>"];
+            }
+            elseif((strlen($user_city) < 4) || (strlen($user_city) > 15)) {
+                $cityError = true;
+                $_SESSION['user_data_errors'] += ["cityError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen 4 deri në 15 shkronja</small>"];
+            }
+            if (empty($user_postal)) {
+                $postnrError = true;
+                $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+            }
+            elseif(!is_numeric($user_postal)) {
+                $postnrError = true;
+                $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Lejohen vetëm numra</small>"];
+            }
+            elseif(strlen($user_postal) < 3) {
+                $postnrError = true;
+                $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kodi postar duhet të ketë të paktën 3 numra!</small>"];
+            }
+            elseif(strlen($user_postal) > 6) {
+                $postnrError = true;
+                $_SESSION['user_data_errors'] += ["postnrError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kodi postar duhet të ketë më së shumti 6 numra!</small>"];
+            }
+            if (empty($user_address)) {
+                $addressError = true;
+                $_SESSION['user_data_errors'] += ["addressError" => "<small id='emailHelp' class='form-text text-muted' style='font-weight:bold; color:red !important;'>Kjo fushë nuk mund të jetë e zbrazët</small>"];
+            }
             if($_SESSION['user']['status'] == SELLER){
                 if (empty($user_pid)) {
                     $pidError = true;
@@ -908,7 +987,7 @@
                                     </div>
                                     <center>
                                         <div class="row no-gutters form-container active"  >
-                                            <form method="POST" action="index.php" id="acc_form" style="width:100%;">
+                                            <form method="POST" action="index.php" id="acc_form" style="width:100%;" autocomplete="off">
                                                 <div class="col-12 pl-1">
                                                     <div class="card-wrapper"></div>
                                                 </div>
@@ -1508,7 +1587,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody style="background:#f4f4f4;border: 0.5px solid #32383E;">
-                                                <?php 
+                                                <?php
                                                 while($row_bought = mysqli_fetch_array($select_bought_prod)){
                                                     $select_prod_b = prep_stmt("SELECT prod_id,username,prod_title,prod_price,prod_to 
                                                     FROM products
@@ -1521,7 +1600,7 @@
                                                 <tr style="color:green;background-color:#D4EDDA;">
                                                     <td><b><?php echo $bought_sell ;  ?></b></td>
                                                     <td><?php echo $fetch_prod_b['prod_title']; ?></td>
-                                                    <td><?php echo date("d-M-Y h:i A", strtotime($fetch_prod_b['prod_to'])); ?></td>
+                                                    <td><?php echo date("d-M-Y H:i A", strtotime($fetch_prod_b['prod_to'])); ?></td>
                                                     <td style="font-weight:900;"><?php echo number_format($row_bought['offer_price'],2) . "€"; ?></td>
                                                     <td style="font-weight:900;"><?php echo $_SESSION['user']['username'] ?></td>
 

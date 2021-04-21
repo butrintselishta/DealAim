@@ -4,33 +4,34 @@
         $prod_details = $_GET['prod_details'];
         $select_prod_data = prep_stmt("SELECT * FROM products WHERE prod_id=?", $prod_details, "i");
         if(mysqli_num_rows($select_prod_data)>0){
-            $select_product = mysqli_fetch_array($select_prod_data); 
+            $select_product = mysqli_fetch_array($select_prod_data);
         }else{
             header("location:404.php");
         }
         if(isset($_GET['down'])){
             $filename = $_GET['down'];
             //Check the file exists or not
-            if (file_exists("img/products/templates/" . $filename)) {
+            if (file_exists("img/products/templates/".$filename)) {
                 //Define header information
+                $filen = __DIR__ . "/img/products/templates/" . $filename;//die(var_dump($filen));
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/octet-stream');
                 header("Cache-Control: no-cache, must-revalidate");
                 header("Expires: 0");
                 header('Content-Disposition: attachment; filename="'.basename($filename).'"');
-                header('Content-Length: '.filesize($filename));
+                header('Content-Length: '.filesize($filen));
                 header('Pragma: public');
 
                 //Clear system output buffer
                 flush();
                 header ("location:details.php?prod_details=".$select_product['prod_id']);
                 //Read the size of the file
-                readfile($filename);
+                readfile($filen);
 
                 //Terminate from the script
                 
             } else {
-                die ("File does not exist.");
+                header("location:details.php?prod_details=".$select_product['prod_id']);
             }
         } 
         if(strtotime(date("Y-m-d h:i:s",strtotime($select_product['prod_from']))) > time()){
@@ -193,7 +194,7 @@
                     <p>
                         <div class="col-lg-12">
                             <h5 style="text-decoration: none;">
-                                <a>Ofertuesit e fundit</a>
+                                <a>Specifikat</a>
                             </h5>
                             
                             <div class="table-responsive">
@@ -264,16 +265,22 @@
                             <!-- /table-responsive -->
                         </div>
                     </p>
-                    <?php if((strtotime($select_product['prod_to'])) <= time()){
-                            if(isset($_SESSION['logged'])){
-                                if($_SESSION['user']['username'] == $winner_username){
-                    ?>
+                    <?php 
+                    if ($select_product['cat_id'] == 7) {
+                        if ((strtotime($select_product['prod_to'])) <= time()) {
+                            if (isset($_SESSION['logged'])) {
+                                if ($_SESSION['user']['username'] == $winner_username) {
+                                    ?>
                     <p>
                         <div clss="col-12"> 
-                            <a href="details.php?prod_details=<?php echo $select_product['prod_id'];?>&down=<?php echo $prev_down[1];?>" class="btn_1" style="display: block; margin: 0 auto;"> SHKARKO </a>
+                            <a href="details.php?prod_details=<?php echo $select_product['prod_id']; ?>&down=<?php echo $prev_down[1]; ?>" class="btn_1" style="display: block; margin: 0 auto;"> SHKARKO </a>
                         </div>
                     </p>
-                    <?php } } }?>
+                    <?php
+                                }
+                            }
+                        }
+                    }?>
                     
                     <div class="row">
                     <script type="text/javascript">
@@ -370,7 +377,7 @@
                                     <div class="col-6 col-md-6  float-left">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend" style="width:100%;">
-                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled' style='font-weight:800; color:green;'"; }?>>
+                                                <input type="text" class="form-control form-group1" id="get_price" value="<?php echo number_format($select_product['prod_price'], 2,'.',''); ?>" onkeypress="return isNumberKey(this, event);" <?php if($today >= strtotime($select_product['prod_to'])){ echo "disabled='disabled' style='font-weight:800; color:red;'"; }?>>
                                                 <span class="input-group-text">€</span>
                                                 <input type="hidden" id="get_uniqid" value="<?php echo $select_product['prod_unique_id']; ?>">
                                             </div>

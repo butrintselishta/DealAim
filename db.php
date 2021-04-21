@@ -10,7 +10,7 @@ session_start();
 	DEFINE('BANNED',50);
 	DEFINE('MODERATOR',100);
 	DEFINE('ADMIN', 101);
-	DEFINE('DEVELOPMENT', 1);
+	DEFINE('DEVELOPMENT', 0);
 	DEFINE('KEY', "testtest");
 	if (DEVELOPMENT == 1) {
 		ini_set('display_errors', 1);

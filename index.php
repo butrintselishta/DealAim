@@ -63,7 +63,14 @@ if(isset($_SESSION['user_unconfirmed'])){
             </div>
             <?php } ?>
             <?php 
-                $last_3_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title FROM products LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id WHERE prod_id != (SELECT MAX(prod_id) FROM products) AND prod_from <= NOW() AND prod_to > NOW() AND prod_isApproved = 1 order by prod_id DESC LIMIT 2");
+                $last_3_prod = prep_stmt("SELECT prod_id,prod_img,prod_price,prod_title,cat_title 
+                FROM products 
+                LEFT OUTER JOIN categories ON products.cat_id = categories.cat_id 
+                WHERE prod_id != (SELECT MAX(prod_id) FROM products) 
+                AND prod_from <= NOW() 
+                AND prod_to > NOW() 
+                AND prod_isApproved = ?
+                order by prod_id DESC LIMIT 2", 1, "i");
                 if(mysqli_num_rows($last_prod) > 0){
                     while($row_last_3 = mysqli_fetch_array($last_3_prod)){
                         $prod_img = explode("|", $row_last_3['prod_img']);
@@ -268,6 +275,7 @@ if(isset($_SESSION['user_unconfirmed'])){
     <?php
         $closing_prod = prep_stmt("SELECT prod_id,prod_img,prod_title,prod_price,prod_from,prod_to,username, cat_id FROM products LEFT OUTER JOIN users ON products.user_id = users.user_id 
         WHERE (products.prod_to BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 DAY)) 
+        AND products.prod_from <= NOW()
         AND prod_isApproved=? 
         ORDER BY prod_id DESC LIMIT 4", 1,"i");
     ?>
